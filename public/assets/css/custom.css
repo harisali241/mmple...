@@ -1,0 +1,510 @@
+ul{padding:0px;margin:0px;}
+ul li{float:left; list-style:none;}
+a:hover{text-decoration:none;}
+p{font-family:helvetica;margin-bottom:0px;}
+button{outline:0px!important;}
+.container{width:100%!important;} 
+.latest-combo li{display:block; float:none;}
+.latest-combo {margin-right: 0px;}
+.nopadding{padding-left:0px;padding-right:0px;}
+.main-container{    background-color: #e2e8f6;}
+.top-bar{background:#3a4a63;padding:7px 50px;}
+.user-name{line-height: 14px;color: #dee0e5;font-size: 14px;}
+.user-name span{	font-size: 12px;float: right;}
+.settings{margin-right: 0px;}
+.settings li{	margin-left:20px;}
+.settings .dropdown-menu{background:#3a4a63;}
+.settings .dropdown-menu li {	display: block;float: none;	margin-left:0px;		border-bottom:1px solid #2c3b52;	}
+.settings .dropdown-menu li:last-child{	border-bottom:0px;}
+.settings .dropdown-menu a{	color:#fff;}
+.info_header{	background:#657899;text-align:center;color:#dee0e5;font-size: 16px;padding: 7px;border-right:1px solid #516485;}
+.info_header a{color:#dee0e5;color: #dee0e5;
+    font-weight: bold;
+    font-size: 16px;}
+.info_header a:hover{text-decoration:none;}
+.info_header:last-child{	border-bottom:0px;}
+.info_header:hover{	background:#5d6e8a;}
+.info_header span{   font-size: 12px;    color: #DEE0E5;}
+.info_header p{	margin-bottom:0px;}
+.top-sidebar{background: #292a2e scroll 0 0;color: #b6b6b8;  text-align: center;  overflow: hidden;}
+.top-navigation{  display: inline-block;}
+.top-navigation li{
+	text-align:center;
+	font-size: 14px;
+	
+	border-right:1px solid #1F1D1D;
+	
+	
+}
+
+.top-navigation li:last-child{border-right:0px;}
+
+.top-navigation a{
+	padding: 12px 40px;
+    color: #b3b3b4;
+    display: block;
+    font-size: 15px;
+    font-family: helvetica;
+}
+
+.top-navigation a:hover{background:black;font-weight:bold;color:white;} 
+.top-navigation span{
+	font-size: 12px;
+	
+}
+
+.left-sidebar{
+	
+	background: #292a2e scroll 0 0;
+    color: #b6b6b8;
+    text-align: center;
+    overflow: hidden;
+	padding-bottom: 40px;
+
+}
+
+.left-navigation li{
+	width:100%;
+	display:block;
+	text-align:center;
+	clear:both;
+	font-size: 17px;
+	padding: 23px 10px;
+	background:url('../images/nav-bottom-strip.png') no-repeat center bottom;
+	
+	
+}
+
+.left-navigation li:last-child{background:none!important;}
+
+.left-navigation a{
+	color:#b3b3b4;
+	display: block;
+	font-size: 19px;
+	font-family: helvetica;
+}
+
+
+.left-navigation span{
+	font-size: 12px;
+	
+}
+
+.main-content{
+	
+	background:#e2e8f6;
+	
+}
+
+.drink{
+	background:#015487;
+	color:white;
+	padding: 10px 5px;
+	border-bottom: 1px solid white;
+    border-right: 1px solid white;
+	
+	
+}
+
+.drink-medium{
+	background:#037fb7;
+	}
+	
+.drink-large{
+	background:#01aeef;
+	}
+	
+	
+.drink  .icon{
+	text-align:center;
+	  min-height: 75px;
+}
+
+.popcorn{
+	background:#007236;
+	color:white;
+	padding: 10px 5px;
+
+}
+
+.popcorn-medium{
+	background:#008c44;
+	}
+	
+.popcorn-large{
+	background:#00a651;
+	}
+
+.popcorn  .icon{
+	text-align:center;
+	  min-height: 75px;
+}
+
+.drink p, .popcorn p{
+	
+	margin-bottom:0px;
+	color:white;
+	font-family: helvetica;
+}
+
+.drink a, .popcorn a{
+	
+	color:white;
+}
+
+.drink:hover, .popcorn:hover{
+	background:#3a4a63!important;
+}
+
+
+.drink-size , .drink-price{   font-size: 19px;}
+.drink-volume{font-size:12px; line-height: 11px;}
+.deal-bg{background:#c8d3e5;}
+.add-deals-head{background:#3a4a63;padding: 8px 10px; font-size:12px;  height: auto;}
+.add-deals-head p{margin-bottom:0px;color: white;}
+.padding5{padding-left:7px;padding-right:0px;}
+.add-deals-desc{background:#5d6e8a;padding: 5px 0px;clear:both;height:auto;overflow: hidden;font-size:12px;}
+.add-deals-desc p{color:white;}
+.add-deals-item{border-bottom:1px solid #9dafce;overflow: hidden;font-size: 12px;padding: 0px 5px;    min-height: 36px;}
+
+.add-deals-item p{color:#2B2F35;}
+.add-deals-item img{margin-top:3px;}
+.add-deals-item span{font-size: 11px;line-height: 8px;}
+.add-deal-item-value{font-weight: bold;font-size: 13px;margin-top: 6px;padding:5px;}
+.add-deal-item-name{padding:5px;border-right: 1px solid #9dafce;     min-height: 42px;}
+.combo-tabs {margin-top: 5px;}
+.latest-deals{ background: #ccd2e0;
+    color: black;
+    padding: 6px 20px;
+    margin-top: 5px;
+    margin-bottom: 8px;}
+.latest-deals p{    color: #292a2d;
+    font-size: 18px;
+    font-family: helvetica}
+.latest-deals span{color: #403E3E;
+    font-size: 13px;
+    line-height: 10px;}
+.function-bg2{padding: 5px 0px 2px 0px!important;}
+.combo-tabs  .nav-tabs > li > a {color:#28292d!important;}
+.combo-tabs  .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{color:#fff!important;background-color:#5d6e8a!important;}
+.combo-tabs  .nav > li > a:hover, .nav > li > a:focus{color:#fff!important;background-color:#5d6e8a!important;}
+.combo-tabs  .nav-tabs{background-color:#fcfcff!important; border:1px solid #C7D0DE;}
+.deal-desc{  
+	    min-height: 150px;
+    margin: auto;
+    border-radius: 0px!important;
+    margin-bottom: 15px;
+    overflow: hidden;}
+.deal-img{ min-height: 115px;
+    padding-top: 10px;}
+.deal1{    background-color: #ed1c24;}
+.deal2{    background-color: #149fb0;}
+.deal3{    background-color: #e55e7e;}
+.deal4{    background-color: #03c9ab;}
+.deal5{    background-color: #085fc1;}
+.deal6{    background-color: #e3752c;}
+.setting-icon{    margin-top: 5px;}
+.deal-desc img{margin: auto;}
+.combo-tabs  .tab-content{margin-top:5px;}
+.deal-name{font-size:12px;padding: 5px;margin-left:4px;}
+.deal-name p{
+	color: #fff;
+    display: block;
+    font-size: 19px;
+    font-weight: bold;
+    line-height: 10px}
+.deal-name span{color:#fff; font-size:12px;}
+.deal-price {text-align: left;
+    color: #fff;
+    padding-left: 10px;
+	    padding-bottom: 10px;
+}
+.deal-price p{   
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 18px;}
+.function-bg{
+	border: 1px solid #C8D3E5;
+	overflow: hidden;
+	padding: 7px 0px;
+    text-align: center;
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#dfe5f3+1,c7cddb+100 */
+	background: #dfe5f3; /* Old browsers */
+	background: -moz-linear-gradient(top,  #dfe5f3 1%, #c7cddb 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#dfe5f3), color-stop(100%,#c7cddb)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #dfe5f3 1%,#c7cddb 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #dfe5f3 1%,#c7cddb 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #dfe5f3 1%,#c7cddb 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #dfe5f3 1%,#c7cddb 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dfe5f3', endColorstr='#c7cddb',GradientType=0 ); /* IE6-9 */
+
+	}
+.function-bg-br{border-right:1px solid #C0CEE4;text-align:cemter;}
+.function-bg-br img{margin:auto;display: block;}
+.function-bg-br a{color:black;font-size:12px;}
+.function-bg-br:last-child{border-right:0px;}
+.total-amount{background:#e2e8f6;overflow: hidden;padding: 15px 15px 5px 15px;}
+.total-amount-label{ 
+     color: #28292d;
+    font-size: 23px;
+    font-weight: bold;
+    line-height: 19px;}
+.total-amount-value{  
+    color: black;
+    text-align: right;
+    line-height: 19px;
+	margin-right: 5px;
+	font-size: 33px;
+    font-weight: bold;
+	}
+.preview-order{float:right;}
+.total-amount-value span{font-size:13px; color:gray; }
+.total-amount-label span{
+	font-size: 13px;
+    color: gray;
+    padding-left: 5px;}
+	
+.parameters{  background-color: #DDE3EF; overflow: hidden;    padding: 10px 5px;border-bottom: 10px solid #C8D3E5;}
+.parameters img{margin:auto;}
+
+.payment{  background-color: #DDE3EF; overflow: hidden;    padding: 10px 5px;border-bottom: 10px solid #C8D3E5;}
+.payment img{margin:auto;}
+.hzfax{  display: inline-block;}
+.hzfax li{margin-left: 13px; padding: 10px 0px;}   
+.footer-container{  text-align: center;background: #292a2e;overflow: hidden; color: white;padding: 0px 17px;}
+.footer-menu li{
+    border-left: 1px solid #383737;}
+.footer-menu li:first-child{border-left: 0px ;}
+.footer-menu li a{padding:8px 40px; color:#b3b3b4;font-size: 16px;display:block;}
+.footer-menu li a:hover{background:black;font-weight:bold;color:white;}
+.footer-menu{  display: inline-block; }
+.copyright{background-color: #3a4a63;overflow: hidden;padding: 8px 5px 3px 5px;font-size: 12px;}
+.powerdby{text-align:right;}
+.movies-showing{background:#e7ecf7;padding: 15px 0px;    padding-bottom: 0px;}
+.paddingfive{padding-left:5px;padding-right:5px;}
+.movies-showing .btn-default , .movies-showing  .search-control {
+	padding: 3px 7px;
+    height: auto;
+    font-size: 11px;
+    line-height: 20px;}
+.movie{color: black;font-size: 18px;}
+.search-btn{    background-color: #26272b;}
+.search-btn:hover{    background-color: #26272b;}
+.search-btn img{    background-color: #26272b; padding: 3.5px;}
+.nopaddingleft{padding-left:0px;}
+.now-showing{/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f9f9f8+0,e6e6e6+100 */
+background: rgb(249,249,248); /* Old browsers */
+background: -moz-linear-gradient(top,  rgba(249,249,248,1) 0%, rgba(230,230,230,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(249,249,248,1)), color-stop(100%,rgba(230,230,230,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgba(249,249,248,1) 0%,rgba(230,230,230,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  rgba(249,249,248,1) 0%,rgba(230,230,230,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  rgba(249,249,248,1) 0%,rgba(230,230,230,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom,  rgba(249,249,248,1) 0%,rgba(230,230,230,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f8', endColorstr='#e6e6e6',GradientType=0 ); /* IE6-9 */
+}
+.now-showing .badge{ background:#149fb0;border-radius: 4px; padding: 4px;}
+.upcoming{/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f7f9ff+0,e3e8f4+100 */
+background: rgb(247,249,255); /* Old browsers */
+background: -moz-linear-gradient(top,  rgba(247,249,255,1) 0%, rgba(227,232,244,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(247,249,255,1)), color-stop(100%,rgba(227,232,244,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgba(247,249,255,1) 0%,rgba(227,232,244,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  rgba(247,249,255,1) 0%,rgba(227,232,244,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  rgba(247,249,255,1) 0%,rgba(227,232,244,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom,  rgba(247,249,255,1) 0%,rgba(227,232,244,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f9ff', endColorstr='#e3e8f4',GradientType=0 ); /* IE6-9 */
+}
+.upcoming .badge{background:#ed1c24;border-radius: 4px; padding: 4px;}
+.movies-detail-list li{
+	width: 100%;
+    display: block;
+    padding: 24px 0px 8px 10px;
+    margin-bottom: 10px;
+    position:relative;
+    border: 1px solid #DAD9D9;
+        min-height: 80px;
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#b2b6c2+1,cfd4e0+46,e7ecf8+100 */
+background: rgb(178,182,194); /* Old browsers */
+background: -moz-linear-gradient(left,  rgba(178,182,194,1) 1%, rgba(207,212,224,1) 46%, rgba(231,236,248,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(1%,rgba(178,182,194,1)), color-stop(46%,rgba(207,212,224,1)), color-stop(100%,rgba(231,236,248,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left,  rgba(178,182,194,1) 1%,rgba(207,212,224,1) 46%,rgba(231,236,248,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left,  rgba(178,182,194,1) 1%,rgba(207,212,224,1) 46%,rgba(231,236,248,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left,  rgba(178,182,194,1) 1%,rgba(207,212,224,1) 46%,rgba(231,236,248,1) 100%); /* IE10+ */
+background: linear-gradient(to right,  rgba(178,182,194,1) 1%,rgba(207,212,224,1) 46%,rgba(231,236,248,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b2b6c2', endColorstr='#e7ecf8',GradientType=1 ); /* IE6-9 */
+
+}
+.movies-detail{padding-top: 15px;clear: both;}
+.movie-title p{font-size:12px;color:black;}
+.movie-title{padding-top:7px;}
+.movie-img img{ float: left !important;    width: 35px;
+margin-right: 10px;}
+.movie-select-btn{margin-top:5px;background:#149fb0!important;color:white!important;}
+.movie-detail-btn{margin-top:5px; background:#26272b!important;color:white!important;    padding: 3px 14px!important;}
+.movie-venue{display:none;position: absolute;left: 0;
+    right: 0;
+	margin:auto;
+    top: 65px;
+    z-index: 10000;}
+.venue-head{
+    background: #26272b;
+    clear: both;
+    overflow: hidden;
+    color: white;
+
+    font-size: 12px;
+}
+
+.vanue-plus{text-align:right;}
+.movie-venue-list li{margin-bottom:0px;background-color: #b5b5b5;padding:0px;
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#acacac+0,ededed+100 */
+background: rgb(172,172,172)!important; /* Old browsers */
+background: -moz-linear-gradient(left,  rgba(172,172,172,1) 0%, rgba(237,237,237,1) 100%)!important; /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(172,172,172,1)), color-stop(100%,rgba(237,237,237,1)))!important; /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left,  rgba(172,172,172,1) 0%,rgba(237,237,237,1) 100%)!important; /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left,  rgba(172,172,172,1) 0%,rgba(237,237,237,1) 100%)!important; /* Opera 11.10+ */
+background: -ms-linear-gradient(left,  rgba(172,172,172,1) 0%,rgba(237,237,237,1) 100%)!important; /* IE10+ */
+background: linear-gradient(to right,  rgba(172,172,172,1) 0%,rgba(237,237,237,1) 100%)!important; /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#acacac', endColorstr='#ededed',GradientType=1 )!important; /* IE6-9 */
+border:1px solid #a8a8a8!important;
+    min-height: auto;
+}
+.cinema-name-even{background:#26272b;}
+.cinema-name-odd{background:#3a4a63;}
+.venue-cinema p{font-size:12px;color:black;}
+.cinema-name-even p{color:white;}
+.cinema-name-odd p{color:white;}
+ .venue{padding: 8px 0px 2px 0px;text-align: center;border-right: 1px solid #9C9898;width: 20%;    min-height: 31px;}
+ .book-ticket-btn{
+    padding: 0px 5px!important;
+    border-radius: 0px;
+        margin-top: -8px;
+    background-color: #3A4A63!important;
+    color: white;
+    font-size: 11px!important;
+    border: 0px;
+	min-width:68px;
+	border-radius: 2px;
+    font-style: italic;
+ }
+ .book-ticket-btn:hover{color: white;}
+  .housefull-btn{
+    padding: 0px 5px!important;
+    border-radius: 0px;
+    margin-top: 5px;
+    background-color: #ed1c24!important;
+    color: white;
+    font-size: 11px!important;
+    border: 0px;
+	min-width:68px;
+	border-radius: 2px;
+    font-style: italic;
+ }
+  .housefull-btn:hover{color: white;}
+.add-movie-item img{width:35px; margin-top:5px;}
+.add-movie-item-name {
+    padding: 5px;
+    border-right: 1px solid #9dafce;
+    min-height: 42px;
+	padding-top: 12px;
+}
+.save-cancel{text-align:right;}
+.add-movie-item  p {
+    color: #000000;
+}
+.ticket-type-btn{padding: 5px 20px;
+    overflow: hidden;}
+.ticket-type{
+	padding: 5px;
+    background-color: #3a4a63;
+    overflow: hidden;}
+.ticket-type-label p{  font-size: 13px;color: #dee0e5;}
+.ticket-type-label span{    color:#dee0e5;font-size: 11px;}
+.ticket-type-btn .btn{padding: 1px 15px;min-width: 115px;border: 0px;}
+.stand-btn{    background-color: #62c9ec;color: white;}
+.comp-btn{    background-color: #5d6e8a;color: white;}
+.redem-btn{    background-color: #65789a;color: white;}
+.ticket-save{    
+    background: #26272b;
+    overflow: hidden;
+    padding: 5px;
+    color: white;
+    font-size: 12px;}
+.ticket-save a{color: white;}
+.save-btn{    
+    padding: 0px 15px;
+    background: #149fb0;
+    color: white;
+    border: 0px;
+    margin-left: 10px;}
+.small-delete-icon{   
+     margin-right: 10px;
+    margin-top: -3px;}
+
+.copyright p{    color: #9ea4ae;}	
+
+#fsModal .modal-dialog {
+    width: 1024px;
+    margin: 0px auto!important;
+    height: 100%;}
+	
+#fsModal{margin-left: 0px!important;}    
+#fsModal .modal-content{    height: 100%;border-radius: 0px!important; border: 0px;    padding: 15px 0px 17px 0px;}
+
+
+@media (max-width: 980px){
+.drink , .popcorn {text-align:center;}
+.drink img , .popcorn img {margin:auto;}
+.padding5 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.footer-menu li a {
+   
+    padding: 15px 12px;
+}
+
+.footer-menu li a:hover > li {
+   background-color: black;
+}
+.ticket-type-btn div{text-align:center;}
+.top-navigation li{width:33%;border:0px;}
+.top-sidebar{padding:0px;}
+.left-navigation li{width:33%;float:left;clear:none!important;}
+.left-navigation li:last-child{background:rgba(0, 0, 0, 0) url("../images/nav-bottom-strip.png") no-repeat scroll center bottom!important;}
+.hzfax{  margin-top: 20px;}
+.left-sidebar{padding-bottom:20px;}
+.select-movie{text-align:right;padding-right:10px;}
+}
+#locked_warning{  
+   position: absolute;
+    margin: auto;
+    top: 15px;
+    left: 0;
+    right: 0;
+    width: 240px;
+    padding: 9px 15px;}
+
+.border th, .border td {
+border: 1px dotted black;
+padding: 2px 1px!important;
+}	
+	
+ @media print {
+  body * {
+    visibility: hidden;
+  }
+  .voucher * {
+    visibility: visible;
+  }
+
+  .voucher {
+    visibility: visible;
+  }
+
+  
+  
+}
+
+.owl-item img{max-width:500px;}
