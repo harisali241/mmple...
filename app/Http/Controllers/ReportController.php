@@ -170,16 +170,34 @@ class ReportController extends Controller
         return view('pages.admin.reports.ticketReports.totalSeatBookingByDay');
     }
     public function totalSeatBookingByDayReq(Request $request){
-        //dd($request->date);
         $date = date('Y-m-d', strtotime($request->date));
-        $r_detail = Booking::whereDate('created_at', $date)->where('status', 1)->where('hold', 0)->with('screens', 'show_times')->orderBy('screen_id', 'desc')->get();
-        $screens = Screen::orderBy('id', 'asce')->get();
-        $detail = [];
-
+        $screens = Screen::pluck('id');
+        $screenArray = [];
+        $time = [];
+        $seatQty = [];
         for($i=0; $i<count($screens); $i++){
-            array_push($detail, $screens);
+            $oneScreen = Booking::whereDate('created_at', $date)->where('status', 1)->where('hold', 0)->where('screen_id', $screens[$i])->with('screens', 'show_times')->get();
+            if( count($oneScreen) > 0){
+                array_push($screenArray, $oneScreen[$i]->screens->name);
+            }
         }
 
-        return response()->json($screens);
+        for($x=0; $x<count($screenArray); $x++){
+            $id = Screen::where('name', $screenArray[$x])->pluck('id')->first();
+            $show_time_id = Booking::whereDate('created_at', $date)->where('status', 1)->where('hold', 0)->where('screen_id', $id)->with('screens', 'show_times')->get();
+            $ti = [];
+            for($i=0; $i<count($show_time_id); $i++){
+                if(!in_array(date('h:i a',strtotime($show_time_id[$i]->show_times->time)), $ti)){
+                    array_push($ti, date('h:i a',strtotime($show_time_id[$i]->show_times->time)) );
+                }
+            }
+            $time[$x] = $ti;
+            $qty = [];
+            array_push($qty, count($show_time_id));
+            $seatQty[$x] = $qty;
+        }
+
+        $detail = ['screen'=>$screenArray, 'time'=>$time, 'qty'=>$seatQty];
+        return response()->json($detail);
     }
 }

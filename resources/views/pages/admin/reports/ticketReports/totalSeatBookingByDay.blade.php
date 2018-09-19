@@ -181,7 +181,26 @@
 						$('.admin-table').show();
 						$('.searchable').html('');
 						console.log(seats);
-						
+						var html = '';
+						var html2 = '';
+						for(var i=0; i<seats.screen.length; i++){
+							if(seats.screen.length>0){
+								for (var z=0; z<seats.time[i].length; z++) {
+									html2 += `<td align="center">`+seats.time[i][z]+`</td>`;
+								}
+								var dash = 5 - seats.time[i].length
+								for (var y=0; y<dash; y++) {
+									html2 += `<td align="center">-</td>`;
+								}
+								html += `
+								<tr>
+									<td align="center">`+seats.screen[i]+`</td>`+html2+`<td>`+seats.qty[i]+`</td>
+								</tr>
+								`;
+								var html2 = '';
+							}
+						}
+						$('.searchable').html(html);
 	                	$('#hack').hide();
 	                },
 	            });
