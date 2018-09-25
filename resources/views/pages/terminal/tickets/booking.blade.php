@@ -510,7 +510,7 @@
 	    	}
 	    	var deal;
 	    	var deal_id
-	    	var deal_html = '<option selected style="color:red;">None</option>';
+	    	var deal_html = '<option selected style="color:red;" value="0">None</option>';
 	    	if(dataArray[1].length != 0){
 	    		deal_html = '';
 	    		deal = dataArray[1];
@@ -537,7 +537,7 @@
 								<strong>Activated Deal: <select class="dealSelect">`+deal_html+`</select></strong>
 							</div>
 						</div>
-					</div><br/><br/><br><br>`;
+					</div><br/><br/><br><br><br><br>`;
 	    	var z;
 	    	var indexcolumn;
 	    	var offsetclass = '';

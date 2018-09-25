@@ -98,8 +98,8 @@
 			var multiRemarks = [];
 			$(document).ready(function(){
 				$('.multiCancel').on('click', function(){
-					var checkId = [];
-					var multiRemarks = [];
+					checkId = [];
+					multiRemarks = [];
 					$(".container .allCancel").each(function () {
 						if($(this).is(':checked')){
 							checkId.push($(this).val());
@@ -125,12 +125,12 @@
 					deleteSingle(checkId, multiRemarks);
 					checkId = [];
 					multiRemarks = [];
+
 				}else{
 					var remarks = $('#delete'+id_to_delete).find('.remarks').val();
 					deleteSingle(id_to_delete, remarks);
 				}
 			});
-
 		function deleteSingle(id, remarks){
 			$(document).ready(function(){
 				$.ajax({

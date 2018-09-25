@@ -8,6 +8,21 @@ use App\Models\Item;
 use App\Models\Package;
 use App\Models\PrintedTicket;
 
+function unique_array($arrays){
+	$newArray = [];
+	foreach($arrays as $array){
+        if(!in_array($array, $newArray)){
+            array_push($newArray, $array);
+        }
+    }
+    return $newArray;
+}
+
+function userFirstName($id){
+	$user = User::where('id', $id)->pluck('firstName')->first();
+	return $user;
+}
+
 function checkUserPermission(){
 	$routes = [];
 	$userRoutes = DB::table('permissions')
@@ -22,7 +37,6 @@ function checkUserPermission(){
 					}
 	$data = in_array(Request::route()->getName(), $routes);
 	return $data;
-
 }
 
 function getRoutes(){
@@ -125,7 +139,6 @@ function showTimeColor(){
 	return $showtime_color;
 }
 
-
 function getMovieShowTimes($id){
 	$showTime = ShowTime::where('movie_id', $id)
 						->where('key', 'public')
@@ -136,12 +149,10 @@ function getMovieShowTimes($id){
 	return $showTime;
 }
 
-
 function bookedSeatsQty($id){
 	$booking = Booking::where('show_time_id', $id)->where('status', 1)->get();
 	return $booking;
 }
-
 
 function getUserSelectedSeats(){
     $bookings = Booking::where('user_id', Auth::user()->id)

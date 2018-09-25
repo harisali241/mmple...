@@ -77,18 +77,19 @@ class AjaxController extends Controller
                     if(json_decode(count($deal->days)) != 0){
                         $day = json_decode($deal->days);
                          if(in_array(date('D'), $day)){
-                            if($deal->dayStartTime == null || $deal->dayEndTime == null){
-                                array_push($validDeal, $deal->id);
-                            }else{
-                                $dayStartTime = strtotime($deal->startDateTime.$deal->dayStartTime);
-                                $dayEndTime = strtotime($deal->dayEndTime);
-                                $curentTime = strtotime(date('H:i:s'));
-                                //dd($dayEndTime);
-                                if($curentTime <= $dayStartTime){
-                                    //dd('here');
-                                    array_push($validDeal, $deal->id);
-                                }
-                            }
+                            array_push($validDeal, $deal->id);
+                            // if($deal->dayStartTime == null || $deal->dayEndTime == null){
+                            //     array_push($validDeal, $deal->id);
+                            // }else{
+                            //     $dayStartTime = strtotime($deal->startDateTime.$deal->dayStartTime);
+                            //     $dayEndTime = strtotime($deal->dayEndTime);
+                            //     $curentTime = strtotime(date('H:i:s'));
+                            //     //dd($dayEndTime);
+                            //     // if($curentTime <= $dayStartTime){
+                            //     //     //dd('here');
+                            //     //     array_push($validDeal, $deal->id);
+                            //     // }
+                            // }
                         }
                     }else{
                         array_push($validDeal, $deal->id);
@@ -283,14 +284,13 @@ class AjaxController extends Controller
                 $book->remarks = $request->remarks[$s];
                 $book->cancelUserId = Auth::user()->id;
                 $book->save();
-
             }
-
             return response()->json($request->id);
-
         }else{
             $ticket = PrintedTicket::where('id', $request->id)->get()->first();
-            $seat_id = Seat::where('show_time_id', $ticket->show_time_id)->where('seatNumber', $ticket->seatNumber)->pluck('id')->first();
+            $seat_id = Seat::where('show_time_id', $ticket->show_time_id)
+                        ->where('seatNumber', $ticket->seatNumber)
+                        ->pluck('id')->first();
             Seat::findOrFail($seat_id)->delete();
 
             $tic = PrintedTicket::findOrFail($request->id);

@@ -25,6 +25,7 @@ class CreatePrintedTicketsTable extends Migration
             $table->BigInteger('unique_id')->unique();
             $table->dateTime('showTime');
             $table->integer('price');
+            $table->string('key')->nullable();
             $table->integer('cancel_user_id')->nullable()->unsigned();
             $table->boolean('status');
             $table->timestamps();

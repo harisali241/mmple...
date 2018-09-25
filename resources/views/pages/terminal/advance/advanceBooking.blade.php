@@ -368,9 +368,10 @@
 		$(".movies-showing").on('click', '.book-ticket-btn',function(event) {
 	    	event.preventDefault();
 	    	var id = $(this).next('.screen_id').val();
-	    	$.post('/getScreenSeats', {'screen_id': id, '_token': '{{csrf_token()}}' },  function(data) {
+	    	$.post('/getScreenSeats', {'screen_id': id, '_token': '{{csrf_token()}}' },  function(dataM) {
 		    	//console.log(data);
 	    		//$('.seats-container').html(data.screen_id);
+	    		var data = dataM[0];
 		    	var total_rows =  JSON.parse(data.screens.rows)
 		    	var total_column = JSON.parse(data.screens.columns);
 		    	var rows = total_rows;
@@ -618,27 +619,7 @@
 		 
 
 		$(".seats_btn_cancel").click(function(){
-			var show_id = $('#selected_show').val();
-			$("#hack").show();
-			setTimeout(function(){
-			  if( $("#hack").is(':visible') ){
-				$("#hack").hide(0);
-			  }
-			},5000);
-			$.post('cancelAllSelectedSeats', {'showTime_id': show_id, '_token': '{{csrf_token()}}' }, function(data4){
-				if(data4){
-					$("#hack").hide();
-					$('#fsModal').modal('hide');
-					$('.book-ticket-btn').prop('disabled', false);
-					$('.terminal-adv').html('');
-			  		$('.total-amount-value').text('Rs. 00.00');
-				}
-			})
-			setTimeout(function(){
-			  if( $("#hack").is(':visible') ){		 
-				  $("#hack").hide();
-			  }
-			}, 3000);
+			$('#fsModal').modal('hide');
 		});	
 		
 		$('.container').on('click','#seats_btn',function(e){
@@ -817,7 +798,27 @@
 				
 	 	//all delete function
 	 	$("#all_delete").click(function(){
-			$('.seats_btn_cancel').trigger('click');
+			var show_id = $('#selected_show').val();
+			$("#hack").show();
+			setTimeout(function(){
+			  if( $("#hack").is(':visible') ){
+				$("#hack").hide(0);
+			  }
+			},3000);
+			$.post('cancelAllSelectedSeats', {'showTime_id': show_id, '_token': '{{csrf_token()}}' }, function(data4){
+				if(data4){
+					$("#hack").hide();
+					$('#fsModal').modal('hide');
+					$('.book-ticket-btn').prop('disabled', false);
+					$('.terminal-adv').html('');
+			  		$('.total-amount-value').text('Rs. 00.00');
+				}
+			})
+			setTimeout(function(){
+			  if( $("#hack").is(':visible') ){		 
+				  $("#hack").hide();
+			  }
+			}, 3000);
 		});
 
 

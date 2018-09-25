@@ -56,6 +56,7 @@ class PrintedTicket extends Model
     		$tic->batch_id = $batch_id;
     		$tic->showTime = $book->showTime;
     		$tic->price = $book->price;
+            $tic->key = $book->key;
     		$tic->status = 1;
     		$tic->save();
     	}

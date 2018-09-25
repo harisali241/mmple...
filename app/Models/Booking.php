@@ -45,20 +45,22 @@ class Booking extends Model
     }
 
     public static function holdBooking(Request $request){
-
-        $deal = Deal::where('id', $request->deal_id)->where('status', 1)->get()->first();
-        $deal_type = json_decode($deal->type);
-        $deal_type_name = json_decode($deal->typeName);
-        $deal_qty = json_decode($deal->qty);
-        $deal_ticket_qty = 0;
-        $deal_item_qty = 0;
-        $deal_packge_qty = 0;
-        for($d=0; $d<count($deal_type); $d++){
-            if($deal_type[$d] == 'ticket'){
-                $deal_ticket_qty += $deal_qty[$d];
+        if($request->deal_id != 0){
+            $deal = Deal::where('id', $request->deal_id)->where('status', 1)->get()->first();
+            $deal_type = json_decode($deal->type);
+            $deal_type_name = json_decode($deal->typeName);
+            $deal_qty = json_decode($deal->qty);
+            $deal_ticket_qty = 0;
+            $deal_item_qty = 0;
+            $deal_packge_qty = 0;
+            for($d=0; $d<count($deal_type); $d++){
+                if($deal_type[$d] == 'ticket'){
+                    $deal_ticket_qty += $deal_qty[$d];
+                }
             }
+            $reCount = $deal->buyTicket + $deal_ticket_qty;
         }
-        $reCount = $deal->buyTicket + $deal_ticket_qty;
+        
 
         $seats = Seat::where('show_time_id', $request->showTime_id)->where('user_id', Auth::user()->id)->where('hold', 1)->get();
         $showTimes = ShowTime::where('id', $request->showTime_id)->where('status', 1)->where('key', 'public')->with('movies', 'movies.distributers', 'tickets')->get()->first();
@@ -87,22 +89,24 @@ class Booking extends Model
                     }
                 }
 
-                if($deal->buyTicket < $count){
-                    for($u=0; $u<count($deal_type); $u++){
-                        if($deal_type[$u] == 'ticket'){
-                            $compli = 1;
-                            $deal_id = $deal->id;
-                            $ticket_price = 0;
+                if($request->deal_id != 0){
+                    if($deal->buyTicket < $count){
+                        for($u=0; $u<count($deal_type); $u++){
+                            if($deal_type[$u] == 'ticket'){
+                                $compli = 1;
+                                $deal_id = $deal->id;
+                                $ticket_price = 0;
+                            }
                         }
+                    }else{
+                        $compli = $seat->isComp;
+                        $deal_id = null;
                     }
-                }else{
-                    $compli = $seat->isComp;
-                    $deal_id = null;
-                }
 
-                if($deal->buyTicket == $count){
-                    if(in_array('item', $deal_type) || in_array('package', $deal_type)){
-                        $voucherID = ConcessionMaster::createFreeItem($deal);
+                    if($deal->buyTicket == $count){
+                        if(in_array('item', $deal_type) || in_array('package', $deal_type)){
+                            $voucherID = ConcessionMaster::createFreeItem($deal);
+                        }
                     }
                 }
 
@@ -115,12 +119,18 @@ class Booking extends Model
                 $booking->movie_id = $showTimes->movie_id;
                 $booking->distributer_id = $showTimes->movies->distributer_id;
                 $booking->screen_id = $showTimes->screen_id;
-                $booking->deal_id = $deal_id;
-                if($deal->buyTicket == $count){
-                    $booking->voucher_id = $voucherID;
+                if($request->deal_id != 0){
+                    $booking->deal_id = $deal_id;
+                    if($deal->buyTicket == $count){
+                        $booking->voucher_id = $voucherID;
+                    }
                 }
                 $booking->ticketType = $seat->ticketType;
-                $booking->isComplimentary = $compli;
+                if($request->deal_id != 0){
+                    $booking->isComplimentary = $compli;
+                }else{
+                    $booking->isComplimentary = $seat->isComp;
+                }
                 $booking->seatNumber = $seat->seatNumber;
                 $booking->seatQty = 1;
                 $booking->price = $ticket_price;
@@ -132,10 +142,12 @@ class Booking extends Model
                 $booking->status = 0;
                 $booking->save();
             }
-            if($reCount == $count){
-                $count = 1;
-            }else{
-                $count++;
+            if($request->deal_id != 0){
+                if($reCount == $count){
+                    $count = 1;
+                }else{
+                    $count++;
+                }
             }
         }
        

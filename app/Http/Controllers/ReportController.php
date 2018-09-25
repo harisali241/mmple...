@@ -9,18 +9,21 @@ use App\Models\Movie;
 use App\Models\Package;
 use App\Models\Item;
 use App\Models\Booking;
+use App\Models\AdvanceBooking;
 use App\Models\Screen;
 use App\User;
 use App\Models\ConcessionDetail;
 use App\Models\ConcessionMaster;
 use App\Models\ShowTime;
+use App\Models\Report;
+
 
 class ReportController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
         $this->middleware('userPermission')
-        ->except('movie', 'concession', 'custom','filmsByDistributorReports','showsByTimeReports','weeklyMovieReports','itemSalesReq', 'singleItemSalesReq', 'singleItemSalesByUserReq','packageSalesReq', 'singlePackageSalesReq', 'packageSalesByUserReq','concessionCancellationByDayReq','concessionSaleByAllUserReq', 'totalSeatBookingByDayReq');
+        ->except('movie', 'concession', 'custom','filmsByDistributorReports','showsByTimeReports','weeklyMovieReports','itemSalesReq', 'singleItemSalesReq', 'singleItemSalesByUserReq','packageSalesReq', 'singlePackageSalesReq', 'packageSalesByUserReq','concessionCancellationByDayReq','concessionSaleByAllUserReq', 'totalSeatBookingByDayReq','advanceBookingByDayReq', 'ticketSalesByMovieReq', 'advanceTicketSalesByMovieReq', 'cashInHandByDayReq', 'cashInHandByUserReq', 'ticketCancellationByDayReq');
     }
 
     public function movie(){
@@ -171,9 +174,11 @@ class ReportController extends Controller
     }
     public function totalSeatBookingByDayReq(Request $request){
         $date = date('Y-m-d', strtotime($request->date));
+        $now = date('Y-m-d h:i a');
         $screens = Screen::pluck('id');
         $screenArray = [];
         $time = [];
+        $perSeat = [];
         $seatQty = [];
         for($i=0; $i<count($screens); $i++){
             $oneScreen = Booking::whereDate('created_at', $date)->where('status', 1)->where('hold', 0)->where('screen_id', $screens[$i])->with('screens', 'show_times')->get();
@@ -181,23 +186,241 @@ class ReportController extends Controller
                 array_push($screenArray, $oneScreen[$i]->screens->name);
             }
         }
-
         for($x=0; $x<count($screenArray); $x++){
             $id = Screen::where('name', $screenArray[$x])->pluck('id')->first();
             $show_time_id = Booking::whereDate('created_at', $date)->where('status', 1)->where('hold', 0)->where('screen_id', $id)->with('screens', 'show_times')->get();
             $ti = [];
+            $per = [];
+            $perCount = -1;
             for($i=0; $i<count($show_time_id); $i++){
                 if(!in_array(date('h:i a',strtotime($show_time_id[$i]->show_times->time)), $ti)){
                     array_push($ti, date('h:i a',strtotime($show_time_id[$i]->show_times->time)) );
+                    $perCount++;
+                    $per[$perCount] = 1; 
+                }else{
+                    $per[$perCount] += 1; 
                 }
             }
             $time[$x] = $ti;
+            $perSeat[$x] = $per;
             $qty = [];
             array_push($qty, count($show_time_id));
             $seatQty[$x] = $qty;
         }
 
-        $detail = ['screen'=>$screenArray, 'time'=>$time, 'qty'=>$seatQty];
+        $detail = ['screen'=>$screenArray, 'time'=>$time, 'qty'=>$seatQty, 'seatPerShow'=>$perSeat ,'created_at'=>$date, 'now'=>$now];
         return response()->json($detail);
     }
+
+
+    public function currentSeatBookingByDay(){
+        return view('pages.admin.reports.ticketReports.currentSeatBookingByDay');
+    }
+
+    
+    public function advanceBookingByDay(){
+        $screens = Screen::all();
+        return view('pages.admin.reports.ticketReports.advanceBookingByDay', compact('screens'));
+    }
+    public function advanceBookingByDayReq(Request $request){
+        $date = date('Y-m-d', strtotime($request->date));
+        $now = date('Y-m-d h:i a'); 
+        $adv = AdvanceBooking::whereDate('created_at', $date)->where('cancel', 0)->with('show_times')->get();
+        $show = [];
+        $qty = [];
+        $show_id = [];
+        $screen_id = [];
+        for($i=0; $i<count($adv); $i++){
+            $c_date = date('M-d-Y D h:i a', strtotime($adv[$i]->show_times->dateTime));
+            if(!in_array($c_date, $show)){
+                array_push($show, $c_date);
+                array_push($qty, $adv[$i]->seatQty);
+                array_push($screen_id, $adv[$i]->show_times->screen_id);
+                array_push($show_id, $adv[$i]->show_times->id);
+            }
+        }
+
+        $screens = Screen::all();
+        $detail = ['screens'=>$screens, 'show'=>$show, 'qty'=>$qty, 'id'=>$screen_id, 'created_at'=>$date, 'now'=>$now];
+        return response()->json($detail);
+    }
+
+
+    public function ticketSalesByMovie(){
+        $movies = Movie::all();
+        return view('pages.admin.reports.ticketReports.ticketSalesByMovie', compact('movies'));
+    }
+    public function ticketSalesByMovieReq(Request $request){
+        $date = date('Y-m-d', strtotime($request->date));
+        $now = date('Y-m-d h:i a');
+        $show = PrintedTicket::where('key', 'public')->orWhere('key', null)
+                                ->where('movie_id', $request->id)
+                                ->where('status', 1)
+                                ->whereDate('created_at', $date)
+                                ->with('show_times', 'screens','movies')
+                                ->orderBy('show_time_id', 'asc')
+                                ->get();
+
+        $movie = Movie::where('id', $request->id)->pluck('title');
+        $time = [];
+        $qty = []; 
+        $screens = [];
+        $price = [];
+        for($i=0; $i<count($show); $i++){
+            $c_date = date('M-d-Y D h:i a', strtotime($show[$i]->show_times->dateTime));
+            if(!in_array($c_date, $time)){
+                array_push($time, $c_date);
+                array_push($screens, $show[$i]->screens->name);
+                $index = count($qty);
+                array_push($qty, 1);
+                array_push($price, $show[$i]->price);
+            }else{
+                $qty[$index] += 1;
+                $price[$index] += $show[$i]->price;
+            }
+        }
+
+        $detail = ['screens'=>$screens, 'time'=>$time, 'qty'=>$qty, 'price'=>$price, 'movie'=>$movie , 'created_at'=>$date, 'now'=>$now];
+        return response()->json($detail);
+    }
+
+
+    public function numberOfTicketSalesByMovie(){
+        $movies = Movie::all();
+        return view('pages.admin.reports.ticketReports.numberOfTicketSalesByMovie', compact('movies'));
+    }
+
+    public function advanceTicketSalesByMovie(){
+        $movies = Movie::all();
+        return view('pages.admin.reports.ticketReports.advanceTicketSalesByMovie', compact('movies'));
+    }
+    public function advanceTicketSalesByMovieReq(Request $request){
+        $date = date('Y-m-d', strtotime($request->date));
+        $now = date('Y-m-d h:i a');
+        $show = PrintedTicket::where('key', 'advance')
+                                ->where('movie_id', $request->id)
+                                ->where('status', 1)
+                                ->whereDate('created_at', $date)
+                                ->with('show_times', 'screens','movies')
+                                ->orderBy('show_time_id', 'asc')
+                                ->get();
+
+        $movie = Movie::where('id', $request->id)->pluck('title');
+        $time = [];
+        $qty = []; 
+        $screens = [];
+        $price = [];
+        for($i=0; $i<count($show); $i++){
+            $c_date = date('M-d-Y D h:i a', strtotime($show[$i]->show_times->dateTime));
+            if(!in_array($c_date, $time)){
+                array_push($time, $c_date);
+                array_push($screens, $show[$i]->screens->name);
+                $index = count($qty);
+                array_push($qty, 1);
+                array_push($price, $show[$i]->price);
+            }else{
+                $qty[$index] += 1;
+                $price[$index] += $show[$i]->price;
+            }
+        }
+
+        $detail = ['screens'=>$screens, 'time'=>$time, 'qty'=>$qty, 'price'=>$price, 'movie'=>$movie , 'created_at'=>$date, 'now'=>$now];
+        return response()->json($detail);
+    }
+
+
+    public function numberOfAdvanceTicketSalesByMovie(){
+        $movies = Movie::all();
+        return view('pages.admin.reports.ticketReports.numberOfAdvanceTicketSalesByMovie', compact('movies'));
+    }
+    
+
+    public function cashInHandByDay(){
+        return view('pages.admin.reports.ticketReports.cashInHandByDay');
+    }
+    public function cashInHandByDayReq(Request $request){
+        $date = date('Y-m-d', strtotime($request->date));
+        $now = date('Y-m-d h:i a');
+        $record = [];
+
+        $allUser = PrintedTicket::where('status', 1)->whereDate('created_at', $date)->pluck('user_id')->toArray();
+        $users_id = unique_array($allUser);
+        foreach ($users_id as $id) {
+            array_push($record, ['screen'=> Report::getScreenByUserByDate($id , $date)]);
+        }
+        for ($x=0; $x<count($users_id); $x++) {
+            $ticketQtyArray = [];
+            $ticketPriceArray = [];
+            $name = [];
+            array_push($name, Report::getUserNameById($users_id[$x]) );
+
+            for($i=0; $i<count($record[$x]['screen']); $i++){
+                $ticketQty = Report::getTicketQtyByScreenByUserByDate($users_id[$x] , $date, $record[$x]['screen'][$i]);
+                $ticketPrice = Report::getTicketPriceByScreenByUserByDate($users_id[$x] , $date, $record[$x]['screen'][$i]);
+                array_push($ticketQtyArray, $ticketQty);
+                array_push($ticketPriceArray, $ticketPrice);
+            }
+            $record[$x]['qty'] = $ticketQtyArray;
+            $record[$x]['price'] = $ticketPriceArray;
+            $record[$x]['name'] = $name;
+            $ticketQtyArray = [];
+            $ticketPriceArray = [];
+            $name = [];
+        }
+
+        $detail = ['record'=>$record, 'date'=>$date, 'now'=>$now];
+        return response()->json($detail);
+    }
+
+
+    public function cashInHandByUser(){
+        $users = User::all();
+        return view('pages.admin.reports.ticketReports.cashInHandByUser', compact('users'));
+    }
+    public function cashInHandByUserReq(Request $request){
+        $date = date('Y-m-d', strtotime($request->date));
+        $now = date('Y-m-d h:i a');
+        $record = [];
+
+        array_push($record, ['screen'=> Report::getScreenByUserByDate($request->id , $date)]);
+    
+        $ticketQtyArray = [];
+        $ticketPriceArray = [];
+        $name = [];
+        array_push($name, Report::getUserNameById($request->id) );
+
+        for($i=0; $i<count($record[0]['screen']); $i++){
+            $ticketQty = Report::getTicketQtyByScreenByUserByDate($request->id , $date, $record[0]['screen'][$i]);
+            $ticketPrice = Report::getTicketPriceByScreenByUserByDate($request->id , $date, $record[0]['screen'][$i]);
+            array_push($ticketQtyArray, $ticketQty);
+            array_push($ticketPriceArray, $ticketPrice);
+        }
+        $record[0]['qty'] = $ticketQtyArray;
+        $record[0]['price'] = $ticketPriceArray;
+        $record[0]['name'] = $name;
+        $ticketQtyArray = [];
+        $ticketPriceArray = [];
+        $name = [];
+        
+
+        $detail = ['record'=>$record, 'date'=>$date, 'now'=>$now];
+        return response()->json($detail);
+    }
+
+
+    public function ticketCancellationByDay(){
+        return view('pages.admin.reports.ticketReports.ticketCancellationByDay');
+    }
+    public function ticketCancellationByDayReq(Request $request){
+        $date = date('Y-m-d', strtotime($request->date));
+        $now = date('Y-m-d h:i a');
+
+        $printedTicket = PrintedTicket::where('status', 0)
+                                        ->with('movies', 'screens', 'show_times', 'users', 'bookings')
+                                        ->get();
+
+        $detail = ['record'=>$printedTicket, 'date'=>$date, 'now'=>$now];
+        return response()->json($detail);
+    }
+
 }

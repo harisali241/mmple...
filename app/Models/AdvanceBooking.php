@@ -130,7 +130,6 @@ class AdvanceBooking extends Model
             $booking->reserveBooking = 1;
             $booking->status = 0;
             $booking->save();
-
         }
         
     } 

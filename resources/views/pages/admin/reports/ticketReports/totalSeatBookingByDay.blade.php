@@ -31,7 +31,7 @@
 	<div class="row  no-print">
 		<ol class="breadcrumb">
 		  <li><a href="{{url('/')}}">Home</a></li>
-		  <li><a href="{{url('ticketReport')}}">Reports Ticket</a></li>
+		  <li><a href="{{url('customReport')}}">Reports Ticket</a></li>
 		  <li class="active">Total Seats bookings by day</li>
 		</ol>
 	</div><!--row-->
@@ -140,11 +140,8 @@
 				</tr>
 			</thead>
 			<tbody class="searchable">
-				<tr>
-					<td>screen_name</td>
-					<td></td>
-					<td>final_total += $total</td>
-				</tr>
+
+			</tbody>
 				<tr>
 					<td></td>
 					<td></td>
@@ -152,9 +149,8 @@
 					<td></td>
 					<td></td>
 					<td>Total</td>
-					<td>final_total</td>
+					<td class="grandTotal"></td>
 				</tr>
-			</tbody>
 		</table>
 		
 		<div class="voucher printPirnter border" style="margin-top:5px;"></div>	
@@ -166,12 +162,14 @@
 @section('scripts')
 	
 	<script type="text/javascript">
+		
+
 		$(document).ready(function(){
-			//$('.admin-table').hide();
+			$('.admin-table').hide();
 			$('.save-button').on('click', function(){
 				var date = $('.goDate').val();
 				//console.log(date);
-				//$('#hack').show();
+				$('#hack').show();
 				$.ajax({
 	                url: '/totalSeatBookingByDayReq',
 	                method:'POST',
@@ -180,13 +178,21 @@
 	                success: function (seats) {
 						$('.admin-table').show();
 						$('.searchable').html('');
-						console.log(seats);
+						$('.grandTotal').html('');
+						//console.log(seats);
+						var grandTotal = 0;
 						var html = '';
 						var html2 = '';
+
+						if(seats.screen.length>0){
+							$('.repDate').text(seats.created_at);
+							$('.c_date').text(seats.now);
+						}
+
 						for(var i=0; i<seats.screen.length; i++){
 							if(seats.screen.length>0){
 								for (var z=0; z<seats.time[i].length; z++) {
-									html2 += `<td align="center">`+seats.time[i][z]+`</td>`;
+									html2 += `<td align="center">`+seats.time[i][z]+`<br>Seats: `+seats.seatPerShow[i][z]+`</td>`;
 								}
 								var dash = 5 - seats.time[i].length
 								for (var y=0; y<dash; y++) {
@@ -197,9 +203,11 @@
 									<td align="center">`+seats.screen[i]+`</td>`+html2+`<td>`+seats.qty[i]+`</td>
 								</tr>
 								`;
+								grandTotal += +seats.qty[i];
 								var html2 = '';
 							}
 						}
+						$('.grandTotal').html(grandTotal);
 						$('.searchable').html(html);
 	                	$('#hack').hide();
 	                },

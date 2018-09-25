@@ -137,3 +137,27 @@ Route::post('concessionSaleByAllUserReq', 'ReportController@concessionSaleByAllU
 
 Route::get('totalSeatBookingByDay', 'ReportController@totalSeatBookingByDay')->name('totalSeatBookingByDay');
 Route::post('totalSeatBookingByDayReq', 'ReportController@totalSeatBookingByDayReq');
+
+Route::get('currentSeatBookingByDay', 'ReportController@currentSeatBookingByDay')->name('currentSeatBookingByDay');
+
+Route::get('advanceBookingByDay', 'ReportController@advanceBookingByDay')->name('advanceBookingByDay');
+Route::post('advanceBookingByDayReq', 'ReportController@advanceBookingByDayReq');
+
+Route::get('ticketSalesByMovie', 'ReportController@ticketSalesByMovie')->name('ticketSalesByMovie');
+Route::post('ticketSalesByMovieReq', 'ReportController@ticketSalesByMovieReq');
+
+Route::get('numberOfTicketSalesByMovie', 'ReportController@numberOfTicketSalesByMovie')->name('numberOfTicketSalesByMovie');
+
+Route::get('advanceTicketSalesByMovie', 'ReportController@advanceTicketSalesByMovie')->name('advanceTicketSalesByMovie');
+Route::post('advanceTicketSalesByMovieReq', 'ReportController@advanceTicketSalesByMovieReq');
+
+Route::get('numberOfAdvanceTicketSalesByMovie', 'ReportController@numberOfAdvanceTicketSalesByMovie')->name('numberOfAdvanceTicketSalesByMovie');
+
+Route::get('cashInHandByDay', 'ReportController@cashInHandByDay')->name('cashInHandByDay');
+Route::post('cashInHandByDayReq', 'ReportController@cashInHandByDayReq');
+
+Route::get('cashInHandByUser', 'ReportController@cashInHandByUser')->name('cashInHandByUser');
+Route::post('cashInHandByUserReq', 'ReportController@cashInHandByUserReq');
+
+Route::get('ticketCancellationByDay', 'ReportController@ticketCancellationByDay')->name('ticketCancellationByDay');
+Route::post('ticketCancellationByDayReq', 'ReportController@ticketCancellationByDayReq');
