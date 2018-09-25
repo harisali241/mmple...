@@ -63,9 +63,6 @@ Route::get('/printRecentTicket' , 'PrintedTicketController@printRecentTicket')->
 	/**/Route::get('/movieStatus', 'AjaxController@movieStatus');
 	/**/Route::post('/getItemPrice', 'AjaxController@itemPrice');
 	/**/Route::post('/getTicketPrice', 'AjaxController@ticketPrice');
-	/**/Route::post('filmsByDistributorReports', 'ReportController@filmsByDistributorReports');
-	/**/Route::post('showsByTimeReports', 'ReportController@showsByTimeReports');
-	/**/Route::post('weeklyMovieReports', 'ReportController@weeklyMovieReports');
 	/**/Route::post('getScreenSeats', 'AjaxController@getScreenSeats');
 	/**/Route::post('holdBookingAndGetSeats', 'AjaxController@holdBookingAndGetSeats');
 	/**/Route::post('getAllSeat', 'AjaxController@getAllSeat');
@@ -110,6 +107,10 @@ Route::get('customReport', 'ReportController@custom');
 Route::get('filmsByDistributor', 'ReportController@filmsByDistributor')->name('filmsByDistributor');
 Route::get('showsByTime', 'ReportController@showsByTime')->name('showsByTime');
 Route::get('weeklyMovieReport', 'ReportController@weeklyMovieReport')->name('weeklyMovieReport');
+
+Route::post('filmsByDistributorReports', 'ReportController@filmsByDistributorReports');
+Route::post('showsByTimeReports', 'ReportController@showsByTimeReports');
+Route::post('weeklyMovieReports', 'ReportController@weeklyMovieReports');
 
 Route::get('itemSales', 'ReportController@itemSales')->name('itemSales');
 Route::post('itemSalesReq', 'ReportController@itemSalesReq');
@@ -161,3 +162,6 @@ Route::post('cashInHandByUserReq', 'ReportController@cashInHandByUserReq');
 
 Route::get('ticketCancellationByDay', 'ReportController@ticketCancellationByDay')->name('ticketCancellationByDay');
 Route::post('ticketCancellationByDayReq', 'ReportController@ticketCancellationByDayReq');
+
+Route::get('ticketSalesByUser', 'ReportController@ticketSalesByUser')->name('ticketSalesByUser');
+Route::post('ticketSalesByUserReq', 'ReportController@ticketSalesByUserReq');

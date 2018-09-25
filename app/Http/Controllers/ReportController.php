@@ -16,14 +16,14 @@ use App\Models\ConcessionDetail;
 use App\Models\ConcessionMaster;
 use App\Models\ShowTime;
 use App\Models\Report;
-
+use Carbon\Carbon;
 
 class ReportController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
         $this->middleware('userPermission')
-        ->except('movie', 'concession', 'custom','filmsByDistributorReports','showsByTimeReports','weeklyMovieReports','itemSalesReq', 'singleItemSalesReq', 'singleItemSalesByUserReq','packageSalesReq', 'singlePackageSalesReq', 'packageSalesByUserReq','concessionCancellationByDayReq','concessionSaleByAllUserReq', 'totalSeatBookingByDayReq','advanceBookingByDayReq', 'ticketSalesByMovieReq', 'advanceTicketSalesByMovieReq', 'cashInHandByDayReq', 'cashInHandByUserReq', 'ticketCancellationByDayReq');
+        ->except('movie', 'concession', 'custom','filmsByDistributorReports','showsByTimeReports','weeklyMovieReports','itemSalesReq', 'singleItemSalesReq', 'singleItemSalesByUserReq','packageSalesReq', 'singlePackageSalesReq', 'packageSalesByUserReq','concessionCancellationByDayReq','concessionSaleByAllUserReq', 'totalSeatBookingByDayReq','advanceBookingByDayReq', 'ticketSalesByMovieReq', 'advanceTicketSalesByMovieReq', 'cashInHandByDayReq', 'cashInHandByUserReq', 'ticketCancellationByDayReq', 'ticketSalesByUserReq');
     }
 
     public function movie(){
@@ -48,6 +48,7 @@ class ReportController extends Controller
 
 
     public function showsByTime(){
+
     	return view('pages.admin.reports.movieReports.showsByTime');
     }
     public function showsByTimeReports(Request $request){
@@ -62,30 +63,36 @@ class ReportController extends Controller
         return view('pages.admin.reports.movieReports.weeklyMovieReport', compact('movies'));
     }
     public function weeklyMovieReports(Request $request){
-        $pts = PrintedTicket::where('movie_id', $request->id)->orderBy('created_at' , 'asce')->get();
+        $pts = PrintedTicket::where('movie_id', $request->id)->orderBy('created_at' , 'asc')->pluck('created_at');
+        $ptsDesc = PrintedTicket::where('movie_id', $request->id)->orderBy('created_at' , 'desc')->pluck('created_at')->first();
+
         $weeklyRecord = [];
-        $totalAmount = 0;
-        $preDay = 0;
-        //dd(date('l', strtotime($pts[0]->created_at)));
+        $created_at = '';
+        $fcreated_at = '';
         if(count($pts)>0){
-            for($i=0; $i<count($pts); $i++){
-                $dayNum = date('N', strtotime($pts[$i]->created_at));
-                $totalAmount += $pts[$i]->price;
-                if($dayNum == 5){
-                    $totalAmount += $pts[$i]->price;
-                    array_push($weeklyRecord, [ $fri => $totalAmount]);
-                    $totalAmount = 0;
+            for ($i=0; $i<1000; $i++) {
+                if($created_at == null){
+                    $created_at = $pts[0];
+                }else{
+                    $fcreated_at = last($weeklyRecord)['firstDayOfWeek'];
+                    $created_at = last($weeklyRecord)['lastDayOfWeek'];
                 }
+
+                if($fcreated_at >= date('Y-m-d', strtotime($ptsDesc)) ){ break; }
+                array_push($weeklyRecord, Report::idByWeek($request->id, $created_at));
+                if($created_at >= date('Y-m-d', strtotime($ptsDesc)) ){ break; }
             }
         }
-        
-        dd($weeklyRecord);
-        return response()->json($showTime);
-        //return view('pages.admin.reports.movieReports.showsByTime', compact('showTime'));
+
+        $compPrice = Report::compPrice($request->id);
+        $movie = Movie::where('id', $request->id)->pluck('title')->first();
+        $detail = ['weeklyRecord'=> $weeklyRecord, 'compPrice'=> $compPrice, 'movie'=> $movie];
+        return response()->json($detail);
     }
 
 
     public function itemSales(){
+
         return view('pages.admin.reports.concessionReports.itemSale');
     }
     public function itemSalesReq(Request $request){
@@ -118,6 +125,7 @@ class ReportController extends Controller
 
 
     public function packageSales(){
+
         return view('pages.admin.reports.concessionReports.packageSale');
     }
     public function packageSalesReq(Request $request){
@@ -150,6 +158,7 @@ class ReportController extends Controller
 
 
     public function concessionCancellationByDay(){
+
         return view('pages.admin.reports.concessionReports.concessionCancellationByDay');
     }
     public function concessionCancellationByDayReq(Request $request){
@@ -160,6 +169,7 @@ class ReportController extends Controller
 
 
     public function concessionSaleByAllUser(){
+
         return view('pages.admin.reports.concessionReports.concessionSaleByAllUser');
     }
     public function concessionSaleByAllUserReq(Request $request){
@@ -170,6 +180,7 @@ class ReportController extends Controller
 
 
     public function totalSeatBookingByDay(){
+
         return view('pages.admin.reports.ticketReports.totalSeatBookingByDay');
     }
     public function totalSeatBookingByDayReq(Request $request){
@@ -253,11 +264,11 @@ class ReportController extends Controller
     public function ticketSalesByMovieReq(Request $request){
         $date = date('Y-m-d', strtotime($request->date));
         $now = date('Y-m-d h:i a');
-        $show = PrintedTicket::where('key', 'public')->orWhere('key', null)
+        $show = PrintedTicket::where('key', 'public')
                                 ->where('movie_id', $request->id)
                                 ->where('status', 1)
                                 ->whereDate('created_at', $date)
-                                ->with('show_times', 'screens','movies')
+                                ->with('show_times', 'screens','movies', 'bookings')
                                 ->orderBy('show_time_id', 'asc')
                                 ->get();
 
@@ -266,6 +277,8 @@ class ReportController extends Controller
         $qty = []; 
         $screens = [];
         $price = [];
+        $deal = [];
+        $isComp = [];
         for($i=0; $i<count($show); $i++){
             $c_date = date('M-d-Y D h:i a', strtotime($show[$i]->show_times->dateTime));
             if(!in_array($c_date, $time)){
@@ -273,14 +286,36 @@ class ReportController extends Controller
                 array_push($screens, $show[$i]->screens->name);
                 $index = count($qty);
                 array_push($qty, 1);
+                if($show[$i]->bookings->deal_id == null){
+                    array_push($deal, 0);
+                }else{
+                    array_push($deal, 1);
+                }
+                if($show[$i]->bookings->isComplimentary == 1){
+                    array_push($isComp, 1);
+                }else{
+                    array_push($isComp, 0);
+                }
                 array_push($price, $show[$i]->price);
             }else{
                 $qty[$index] += 1;
+                if($show[$i]->bookings->deal_id == null){
+                    $deal[$index] += 0;
+                }else{
+                    $deal[$index] += 1;
+                }
+                if($show[$i]->bookings->isComplimentary == 1){
+                    $isComp[$index] += 1;
+                }else{
+                    $isComp[$index] += 0;
+                }
                 $price[$index] += $show[$i]->price;
             }
         }
 
-        $detail = ['screens'=>$screens, 'time'=>$time, 'qty'=>$qty, 'price'=>$price, 'movie'=>$movie , 'created_at'=>$date, 'now'=>$now];
+
+
+        $detail = ['screens'=>$screens, 'time'=>$time, 'qty'=>$qty, 'deal'=>$deal, 'isComp'=>$isComp, 'price'=>$price, 'movie'=>$movie , 'created_at'=>$date, 'now'=>$now];
         return response()->json($detail);
     }
 
@@ -289,6 +324,7 @@ class ReportController extends Controller
         $movies = Movie::all();
         return view('pages.admin.reports.ticketReports.numberOfTicketSalesByMovie', compact('movies'));
     }
+
 
     public function advanceTicketSalesByMovie(){
         $movies = Movie::all();
@@ -336,6 +372,7 @@ class ReportController extends Controller
     
 
     public function cashInHandByDay(){
+
         return view('pages.admin.reports.ticketReports.cashInHandByDay');
     }
     public function cashInHandByDayReq(Request $request){
@@ -351,20 +388,25 @@ class ReportController extends Controller
         for ($x=0; $x<count($users_id); $x++) {
             $ticketQtyArray = [];
             $ticketPriceArray = [];
+            $dealQtyArray = [];
             $name = [];
             array_push($name, Report::getUserNameById($users_id[$x]) );
 
             for($i=0; $i<count($record[$x]['screen']); $i++){
                 $ticketQty = Report::getTicketQtyByScreenByUserByDate($users_id[$x] , $date, $record[$x]['screen'][$i]);
                 $ticketPrice = Report::getTicketPriceByScreenByUserByDate($users_id[$x] , $date, $record[$x]['screen'][$i]);
+                $dealQty = Report::getDealQtyByScreenByUserByDate($users_id[$x] , $date, $record[$x]['screen'][$i]);
                 array_push($ticketQtyArray, $ticketQty);
                 array_push($ticketPriceArray, $ticketPrice);
+                array_push($dealQtyArray, $dealQty);
             }
             $record[$x]['qty'] = $ticketQtyArray;
             $record[$x]['price'] = $ticketPriceArray;
+            $record[$x]['dealQty'] = $dealQtyArray;
             $record[$x]['name'] = $name;
             $ticketQtyArray = [];
             $ticketPriceArray = [];
+            $dealQtyArray = [];
             $name = [];
         }
 
@@ -386,20 +428,25 @@ class ReportController extends Controller
     
         $ticketQtyArray = [];
         $ticketPriceArray = [];
+        $dealQtyArray = [];
         $name = [];
         array_push($name, Report::getUserNameById($request->id) );
 
         for($i=0; $i<count($record[0]['screen']); $i++){
             $ticketQty = Report::getTicketQtyByScreenByUserByDate($request->id , $date, $record[0]['screen'][$i]);
             $ticketPrice = Report::getTicketPriceByScreenByUserByDate($request->id , $date, $record[0]['screen'][$i]);
+            $dealQty = Report::getDealQtyByScreenByUserByDate($request->id , $date, $record[0]['screen'][$i]);
             array_push($ticketQtyArray, $ticketQty);
             array_push($ticketPriceArray, $ticketPrice);
+            array_push($dealQtyArray, $dealQty);
         }
         $record[0]['qty'] = $ticketQtyArray;
         $record[0]['price'] = $ticketPriceArray;
+        $record[0]['dealQty'] = $dealQtyArray;
         $record[0]['name'] = $name;
         $ticketQtyArray = [];
         $ticketPriceArray = [];
+        $dealQtyArray = [];
         $name = [];
         
 
@@ -409,6 +456,7 @@ class ReportController extends Controller
 
 
     public function ticketCancellationByDay(){
+
         return view('pages.admin.reports.ticketReports.ticketCancellationByDay');
     }
     public function ticketCancellationByDayReq(Request $request){
@@ -416,11 +464,29 @@ class ReportController extends Controller
         $now = date('Y-m-d h:i a');
 
         $printedTicket = PrintedTicket::where('status', 0)
+                                        ->whereDate('updated_at', $date)
                                         ->with('movies', 'screens', 'show_times', 'users', 'bookings')
+                                        ->orderBy('updated_at', 'asc')
                                         ->get();
+        $cancelUserName = Report::cancelUserName($date);
 
-        $detail = ['record'=>$printedTicket, 'date'=>$date, 'now'=>$now];
+        $detail = ['record'=>$printedTicket, 'cancelUserName'=>$cancelUserName , 'date'=>$date, 'now'=>$now];
         return response()->json($detail);
     }
+
+
+    public function ticketSalesByUser(){
+
+        return view('pages.admin.reports.ticketReports.ticketSalesByUser');
+    }
+    public function ticketSalesByUserReq(Request $request){
+        $date = date('Y-m-d', strtotime($request->date));
+        $now = date('Y-m-d h:i a');
+
+        
+        $detail = ['date'=>$date, 'now'=>$now];
+        return response()->json($detail);
+    }
+
 
 }

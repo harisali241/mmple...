@@ -81,14 +81,14 @@ class AjaxController extends Controller
                             // if($deal->dayStartTime == null || $deal->dayEndTime == null){
                             //     array_push($validDeal, $deal->id);
                             // }else{
-                            //     $dayStartTime = strtotime($deal->startDateTime.$deal->dayStartTime);
-                            //     $dayEndTime = strtotime($deal->dayEndTime);
-                            //     $curentTime = strtotime(date('H:i:s'));
+                            //     $dayStartTime = date('H:i',strtotime($deal->dayStartTime));
+                            //     $dayEndTime = date('H:i',strtotime($deal->dayEndTime));
+                            //     $curentTime = date('H:i');
                             //     //dd($dayEndTime);
-                            //     // if($curentTime <= $dayStartTime){
-                            //     //     //dd('here');
-                            //     //     array_push($validDeal, $deal->id);
-                            //     // }
+                            //     if($dayStartTime <= $curentTime && $dayEndTime >= $curentTime){
+                            //         dd('here');
+                            //         array_push($validDeal, $deal->id);
+                            //     }
                             // }
                         }
                     }else{
@@ -252,11 +252,11 @@ class AjaxController extends Controller
   
     public function searchCancelTicket(Request $request){
         if($request->columToSearch == 'count_asc'){
-            $p_tickets = PrintedTicket::where('status', 1)->with('movies', 'screens', 'seats')->orderBy('id', 'asc')->limit($request->wordToSearch)->get();
+            $p_tickets = PrintedTicket::where('status', 1)->where('showTime' ,'>', date('Y-m-d H:i:s'))->with('movies', 'screens', 'seats')->orderBy('id', 'asc')->limit($request->wordToSearch)->get();
         }elseif($request->columToSearch == 'count_desc'){
-            $p_tickets = PrintedTicket::where('status', 1)->with('movies', 'screens', 'seats')->orderBy('id', 'desc')->limit($request->wordToSearch)->get();
+            $p_tickets = PrintedTicket::where('status', 1)->where('showTime' ,'>', date('Y-m-d H:i:s'))->with('movies', 'screens', 'seats')->orderBy('id', 'desc')->limit($request->wordToSearch)->get();
         }else{
-            $p_tickets = PrintedTicket::where('status', 1)->where($request->columToSearch ,'like', '%'.$request->wordToSearch.'%')->with('movies', 'screens', 'seats')->get();
+            $p_tickets = PrintedTicket::where('status', 1)->where('showTime' ,'>', date('Y-m-d H:i:s'))->where($request->columToSearch ,'like', '%'.$request->wordToSearch.'%')->with('movies', 'screens', 'seats')->get();
         }
 
         $view = View::make('pages.terminal.tickets.cancelRenderView', [

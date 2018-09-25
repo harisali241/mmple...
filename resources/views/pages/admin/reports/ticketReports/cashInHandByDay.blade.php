@@ -77,6 +77,7 @@
 								<th>Users</th>
 								<th>Screen</th>
 								<th>Total tickets</th>
+								<th>Deal tickets</th>
 								<th>Cash</th>
 							</tr>
 						</thead>
@@ -114,6 +115,7 @@
 						<th style="text-align:center;">Users</th>
 						<th style="text-align:center;">Screen</th>
 						<th style="text-align:center;">Total tickets</th>
+						<th style="text-align:center;">Deal tickets</th>
 						<th style="text-align:center;">Cash</th>
 					</tr>
 				</thead>
@@ -146,11 +148,11 @@
 	                data:{'id':id, 'date' : date , '_token': '{{csrf_token()}}'},
 	                success: function (data) {
 	                	var record = data.record;
-	                	//console.log(record);
+	                	console.log(record);
 						$('.admin-table').show();
 						$('.searchable').html('');
 						$('.grandTotal').html('');
-						//console.log(seats);
+
 						var grandTotal = 0;
 						var html = '';
 
@@ -166,6 +168,7 @@
 										<td>`+record[i].name[0]+`</td>
 										<td>`+record[i].screen[x]+`</td>
 										<td>`+record[i].qty[x]+`</td>
+										<td>`+record[i].dealQty[x]+`</td>
 										<td>`+record[i].price[x]+`</td>
 									</tr>
 									`;

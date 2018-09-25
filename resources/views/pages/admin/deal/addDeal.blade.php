@@ -132,7 +132,7 @@
 					
 					<div class="col-sm-12" style="height: 20px;"></div>
 
-					<div class="col-md-12">
+					{{-- <div class="col-md-12">
 						<div class="form-group">
 							<label for="fixed_deal" class="col-sm-4 control-label">Day Timing: </label>
 							<div class="col-sm-3">
@@ -145,7 +145,7 @@
 						</div>
 					</div>
 					<div class="clear"></div>
-
+ --}}
 					<div class="col-md-12">
 						<div class="form-group">
 							<label for="fixed_deal" class="col-sm-4 control-label"><span>*</span>Buy Tickets Qty to Get Free Item: </label>

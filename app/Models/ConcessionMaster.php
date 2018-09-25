@@ -58,7 +58,6 @@ class ConcessionMaster extends Model
 
     public static function createFreeItem($deal){
 
-        $voucherID ;
         $type = json_decode($deal->type);
 
         $conM = new ConcessionMaster;
@@ -100,67 +99,6 @@ class ConcessionMaster extends Model
         }
 
         return $voucherID;
-
-        // $bt = $deal->buyTicket;
-        // $count = 1;
-        // $voucherID = [];
-        // for($x=0; $x<$i; $x++){
-
-        //     if($count > $bt){
-                
-
-        //         $count = 0;
-        //     }
-
-        //     $count++;
-        // }
     }
-
-    // public static function createFreePackage($deal, $i){
-    //     $bt = $deal->buyTicket;
-    //     $count = 1;
-    //     for($x=0; $x<$i; $x++){
-
-    //         if($count > $bt){
-    //             $type = json_decode($deal->type);
-    //             $onetime ='yes';
-    //             for($y=0; $y<count($type); $y++){
-    //                 if($type[$y] == 'package'){
-    //                     if($onetime == 'yes'){
-    //                         $conM = new ConcessionMaster;
-    //                         $conM->user_id = Auth::user()->id;
-    //                         $conM->deal_id = $deal->id;
-    //                         $conM->totalAmount = 0;
-    //                         $conM->status = 1;
-    //                         $conM->save();
-    //                     }
-    //                     $onetime = 'no';
-
-    //                     $id = ConcessionMaster::where('user_id', Auth::user()->id)
-    //                                 ->orderBy('created_at', 'desc')
-    //                                 ->where('totalAmount', 0)
-    //                                 ->pluck('id')
-    //                                 ->first();
-
-    //                     $conD = new ConcessionDetail;
-    //                     $conD->concession_master_id = $id;
-    //                     $conD->user_id = Auth::user()->id;
-    //                     $conD->type = 'item';
-    //                     $conD->package_id = json_decode($deal->typeName)[$y];
-    //                     $conD->price = 0;
-    //                     $conD->qty = json_decode($deal->qty)[$y];
-    //                     $conD->amount = 0;
-    //                     $conD->status = 1;
-    //                     $conD->save();
-    //                 }
-    //             }
-
-    //             $count = 0;
-    //         }
-
-    //         $count++;
-    //     }
-    //     return $voucherID;
-    // }
 
 }

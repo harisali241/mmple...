@@ -42,6 +42,7 @@
 		            <ul class="dropdown-menu advance_li">
 			            @if(in_array('bookConcession',getRoutePath()))<li><a href="{{url('bookConcession')}}">Book Concession</a></li>@endif
 					    @if(in_array('cancelConcession',getRoutePath()))<li><a href="{{url('cancelConcession')}}">Cancel Concession</a></li>@endif
+					    @if(in_array('voucherConcession',getRoutePath()))<li><a href="{{url('voucherConcession')}}">Voucher Concession</a></li>@endif
 					</ul>
 			</div><!-- col-md-4 -->
 				

@@ -91,13 +91,17 @@
 								<th style=" font-size: 14px;"><strong>Report Date : </strong><strong class="repDate"></strong></th>
 								<th style=" font-size: 14px;"></th>
 								<th style=" font-size: 14px;"></th>
+								<th style=" font-size: 14px;"></th>
 								<th style=" font-size: 14px;"><strong> Current time : </strong><strong class="c_date"></strong></th>
+								<th style=" font-size: 14px;"></th>
 
 							</tr>
 							<tr>
 								<td>Showtime </td>
 								<td>Screen </td>
 								<td>Qty</td>
+								<td>Deal Qty</td>
+								<td>Complimentary Qty</td>
 								<td>Price</td>
 							</tr>
 						</thead>
@@ -108,6 +112,8 @@
 							<th></th>
 							<th style=" font-size: 14px;"><strong>Total</strong></th>
 							<th style=" font-size: 14px;"><strong class="s_grandTotal"></strong></th>
+							<th style=" font-size: 14px;"><strong class="d_grandTotal"></strong></th>
+							<th style=" font-size: 14px;"><strong class="c_grandTotal"></strong></th>
 							<th style=" font-size: 14px;"><strong class="p_grandTotal"></strong></th>
 						</tr>
 					</table>
@@ -126,7 +132,7 @@
 					</tr>
 					<th style="width:175px;text-align:center;"><strong>Report Date</strong></th>
 					<th style="width:175px;text-align:center;"><strong class="repDate"></strong></th>
-
+					
 					<th style="width:175px;text-align:center;"><strong>Current Time</strong></th>
 					<th style="width:175px;text-align:center;"><strong class="c_date"></strong></th>
 				</tr>
@@ -140,6 +146,8 @@
 						<td>Showtime </td>
 						<td>Screen </td>
 						<td>Qty</td>
+						<td>Deal Qty</td>
+						<td>Complimentary Qty</td>
 						<td>Price</td>
 					</tr>
 				</thead>
@@ -150,6 +158,8 @@
 					<th></th>
 					<th style=" font-size: 14px;text-align:center;"><strong>Total</strong></th>
 					<th style=" font-size: 14px; text-align: center;"><strong class="s_grandTotal"></strong></th>
+					<th style=" font-size: 14px; text-align: center;"><strong class="d_grandTotal"></strong></th>
+					<th style=" font-size: 14px; text-align: center;"><strong class="c_grandTotal"></strong></th>
 					<th style=" font-size: 14px; text-align: center;"><strong class="p_grandTotal"></strong></th>
 				</tr>
 			</table>
@@ -177,13 +187,15 @@
 	                dataType:'json',
 	                data:{'id':id, 'date' : date , '_token': '{{csrf_token()}}'},
 	                success: function (record) {
-	                	//console.log(record);
+	                	console.log(record);
 						$('.admin-table').show();
 						$('.searchable').html('');
 						$('.grandTotal').html('');
-						//console.log(seats);
+
 						var s_grandTotal = 0;
 						var p_grandTotal = 0;
+						var c_grandTotal = 0;
+						var d_grandTotal = 0;
 						var html = '';
 						$('.movieName').html(record.movie);
 
@@ -198,16 +210,22 @@
 										<td>`+record.time[i]+`</td>
 										<td>`+record.screens[i]+`</td>
 										<td>`+record.qty[i]+`</td>
+										<td>`+record.deal[i]+`</td>
+										<td>`+record.isComp[i]+`</td>
 										<td>`+record.price[i]+`</td>
 									</tr>
 								`;
 								s_grandTotal += record.qty[i];
+								d_grandTotal += record.deal[i];
+								c_grandTotal += record.isComp[i];
 								p_grandTotal += record.price[i];
 							}
 						}
 
 						$('.s_grandTotal').html(s_grandTotal);
+						$('.d_grandTotal').html(d_grandTotal);
 						$('.p_grandTotal').html(p_grandTotal);
+						$('.c_grandTotal').html(c_grandTotal);
 						$('.searchable').html(html);
 	                	$('#hack').hide();
 	                },

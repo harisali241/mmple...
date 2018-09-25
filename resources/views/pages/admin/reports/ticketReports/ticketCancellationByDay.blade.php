@@ -192,11 +192,12 @@
 	                data:{'date' : date , '_token': '{{csrf_token()}}'},
 	                success: function (data) {
 	                	var record = data.record;
-	                	console.log(data);
+	                	//console.log(data);
 						$('.admin-table').show();
 						$('.searchable').html('');
 						//console.log(seats);
 						var html = '';
+						var grandTotal= 0;
 
 						if(record.length>0){
 							$('.repDate').text(data.date);
@@ -206,7 +207,7 @@
 							for(var i=0; i<record.length; i++){
 								html += `
 								<tr>
-									<td>`+record[i].users.firstName+`</td>
+									<td>`+data.cancelUserName[i]+`</td>
 									<td>`+record[i].updated_at+`</td>
 									<td>`+record[i].id+`</td>
 									<td>`+record[i].movies.title+`</td>
@@ -216,9 +217,11 @@
 									<td>`+record[i].bookings.remarks+`</td>
 								</tr>
 								`;
+								grandTotal++;
 							}
 						}
 
+						$('.grandTotal').html(grandTotal);
 						$('.searchable').html(html);
 	                	$('#hack').hide();
 	                },

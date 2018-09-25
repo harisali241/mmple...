@@ -106,6 +106,8 @@ class Booking extends Model
                     if($deal->buyTicket == $count){
                         if(in_array('item', $deal_type) || in_array('package', $deal_type)){
                             $voucherID = ConcessionMaster::createFreeItem($deal);
+                        }else{
+                             $voucherID = null;
                         }
                     }
                 }
