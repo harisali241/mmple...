@@ -19,6 +19,9 @@ class CreateMenusTable extends Migration
             $table->string('path')->nullable();
             $table->string('route')->nullable();
             $table->integer('parent_id')->nullable();
+            $table->integer('type_id')->nullable();
+            $table->integer('sort_order');
+            $table->string('arrange_order')->nullable();
             $table->boolean('status');
             $table->timestamps();
         });

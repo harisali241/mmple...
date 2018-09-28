@@ -12,7 +12,7 @@ use Auth;
 class Deal extends Model
 {
     protected $fillable = [
-        'name', 'user_id', 'item_id', 'dealType', 'ticketBuy', 'ticketGet', 'concessionBuy', 'concessionGet', 'duration', 'day', 'startDate', 'endDate', 'status'
+        'name', 'user_id', 'movie_id', 'show_time_id', 'startDateTime', 'endDateTime', 'days', 'dayStartTime', 'dayEndTime', 'buyTicket', 'type', 'typeName', 'qty', 'status', 'display'
     ];
 
     public function users(){
@@ -21,6 +21,10 @@ class Deal extends Model
 
     public function movies(){
         return $this->belongsTo('App\Models\Movie', 'movie_id');
+    }
+
+    public function show_times(){
+        return $this->belongsTo('App\Models\ShowTime', 'show_time_id');
     }
 
     public static function createDeal(Request $request){

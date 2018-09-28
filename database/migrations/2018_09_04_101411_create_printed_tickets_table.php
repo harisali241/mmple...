@@ -19,10 +19,10 @@ class CreatePrintedTicketsTable extends Migration
             $table->integer('show_time_id')->unsigned();
             $table->integer('movie_id')->unsigned();
             $table->integer('screen_id')->unsigned();
-            $table->string('seatNumber');
             $table->integer('user_id')->unsigned();
+            $table->integer('voucherNo')->nullable();
+            $table->string('seatNumber');
             $table->integer('batch_id');
-            $table->BigInteger('unique_id')->unique();
             $table->dateTime('showTime');
             $table->integer('price');
             $table->string('key')->nullable();
@@ -35,7 +35,6 @@ class CreatePrintedTicketsTable extends Migration
             $table->foreign('movie_id')->references('id')->on('movies');
             $table->foreign('booking_id')->references('id')->on('bookings')->onDelete('cascade');
             $table->foreign('screen_id')->references('id')->on('screens');
-            //$table->foreign('seat_id')->references('id')->on('seats')->onDelete('cascade');
         });
     }
 

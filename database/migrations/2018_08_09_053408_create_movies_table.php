@@ -17,7 +17,6 @@ class CreateMoviesTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->integer('distributer_id')->unsigned();
-            $table->foreign('distributer_id')->references('id')->on('distributers')->onDelete('cascade');
             $table->string('rating')->nullable();
             $table->date('releaseDate')->nullable();
             $table->string('genre');
@@ -35,8 +34,11 @@ class CreateMoviesTable extends Migration
             $table->text('trailor')->nullable();
             $table->tinyInteger('status')->nullable();
             $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('distributer_id')->references('id')->on('distributers')->onDelete('cascade');
+
         });
     }
 

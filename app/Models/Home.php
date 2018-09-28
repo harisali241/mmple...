@@ -5,6 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\ConcessionDetail;
 use App\Models\Package;
+use App\Models\ShowTime;
+use App\Models\Movie;
+use App\Models\Item;
+use App\Models\Home;
+use App\User;
 
 class Home extends Model
 {
@@ -38,4 +43,25 @@ class Home extends Model
     	return $i_item;
     }
 
+    public static function topSellerItem(){
+    	$conM = Item::with('concession_details')->get();
+        $items = [];
+        foreach ($conM as $con) {
+            array_push($items, ['name' => $con->name, 
+                                'qty' => Home::itemQty($con->id, $con->name), 
+                                'price' => Home::itemQty($con->id, $con->name)*$con->defaultPrice]);
+        }
+        $topSellers = array_msort($items, array('price'=>SORT_DESC));
+        return $topSellers;
+    }
+
+    public static function ticketSales(){
+    	$user = User::with('bookings')->get();
+    	return $user;
+    }
+
+    public static function concessionSales(){
+    	$user = User::with('concession_details')->get();
+    	return $user;
+    }
 }

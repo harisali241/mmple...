@@ -22,6 +22,7 @@ class CreateConcessionDetailsTable extends Migration
             $table->integer('item_id')->unsigned()->nullable();
             $table->integer('price')->nullable();
             $table->integer('qty')->nullable();
+            $table->integer('amount')->nullable();
             $table->integer('cancelUserId')->nullable();
             $table->dateTime('cancelDate')->nullable();
             $table->boolean('status');
@@ -30,7 +31,7 @@ class CreateConcessionDetailsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('package_id')->references('id')->on('packages');
             $table->foreign('item_id')->references('id')->on('items');
-            $table->foreign('concession_master_id')->references('id')->on('concession_masters');
+            $table->foreign('concession_master_id')->references('id')->on('concession_masters')->onDelete('cascade');
         });
     }
 

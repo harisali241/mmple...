@@ -29,11 +29,13 @@ class CreateAdvanceBookingsTable extends Migration
             $table->integer('comQty')->nullable();
             $table->text('whichIs');
             $table->text('seatNumber');
+            $table->integer('bookedSeatQty')->nullable();
+            $table->text('bookedSeatNumber')->nullable();
             $table->integer('seatQty');
             $table->integer('totalAmount');
             $table->date('date');
             $table->string('key');
-            $table->boolean('cancel');
+            $table->boolean('cancel')->default(0);
             $table->boolean('status');
             $table->timestamps();
 

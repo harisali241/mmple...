@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 namespace App\Models;
 
@@ -10,7 +10,7 @@ use App\Models\Seat;
 class AdvanceBooking extends Model
 {
     protected $fillable = [
-        'show_time_id', 'movie_id', 'distributer_id', 'seatNumber', 'seatQty', 'price', 'date', 'key', 'status', 'customerName', 'customerPhone', 'customerEmail', 'adultPrice', 'adultQty', 'childQty', 'childPrice', 'comp', 'user_id'
+        'show_time_id', 'movie_id', 'distributer_id', 'seatNumber', 'seatQty', 'price', 'date', 'key', 'status', 'customerName', 'customerPhone', 'customerEmail', 'adultPrice', 'adultQty', 'childQty', 'childPrice', 'comQty','whichIs', 'user_id', 'bookedSeatNumber', 'bookedSeatQty', 'totalAmount', ' cancel'
     ];
 
     public function movies(){

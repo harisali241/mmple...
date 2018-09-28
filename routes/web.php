@@ -58,6 +58,14 @@ Route::get('/reprintConcession/{id}', 'PrintedTicketController@reprintConcession
 Route::get('/printRecentTicket' , 'PrintedTicketController@printRecentTicket')->name('printRecentTicket');
 
 //**************************** Ajax Route *********************************************
+	
+	/**///================= DashBoard ================================//
+	/**/Route::post('/dashbordMovies', 'HomeController@dashbordMovies');
+	/**/Route::post('/dashbordTopSellers', 'HomeController@dashbordTopSellers');
+	/**/Route::post('/dashbordticketSales', 'HomeController@dashbordticketSales');
+	/**/Route::post('/dashbordConSales', 'HomeController@dashbordConSales');
+	/**///================= DashBoard ================================//
+
 	/**///======Booking Ticket================================//
 	// /**/Route::post('/searchShowTime', 'AjaxController@searchShowTime');
 	/**/Route::get('/allMovies', 'AjaxController@allMovies');

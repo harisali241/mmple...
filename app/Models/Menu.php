@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Menu extends Model
 {
     protected $fillable = [
-        'name', 'path', 'route', 'parent_id ', 'status'
+        'name', 'path', 'route', 'parent_id', 'type_id', 'sort_order', 'arrange_order', 'status'
     ];
 
     public function permissions(){

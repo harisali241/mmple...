@@ -7,6 +7,7 @@ use App\Models\ShowTime;
 use App\Models\Movie;
 use App\Models\Item;
 use App\Models\Home;
+use View;
 
 class HomeController extends Controller
 {
@@ -31,16 +32,53 @@ class HomeController extends Controller
         $movies = Movie::with([ 'bookings','show_times' => function($que){
                 $que->where('dateTime', '>=', date('Y-m-d H:i') )->orderBy('dateTime', 'asc')->get();
         }, 'show_times.screens'])->get();
-        $conM = Item::with('concession_details')->get();
-        $items = [];
-        foreach ($conM as $con) {
-            array_push($items, ['name' => $con->name, 
-                                'qty' => Home::itemQty($con->id, $con->name), 
-                                'price' => Home::itemQty($con->id, $con->name)*$con->defaultPrice]);
-        }
+        $topSellers = Home::topSellerItem();
+        $ticketSales = Home::ticketSales();
+        $concessionSales = Home::concessionSales();
 
-        $topSellers = array_msort($items, array('price'=>SORT_DESC));
-        
-        return view('home', compact('showTimes', 'movies', 'topSellers'));
+        return view('home', compact('showTimes', 'movies', 'topSellers', 'ticketSales', 'concessionSales'));
     }
+
+    public function dashbordMovies(){
+        $movies = Movie::with([ 'bookings','show_times' => function($que){
+                $que->where('dateTime', '>=', date('Y-m-d H:i') )->orderBy('dateTime', 'asc')->get();
+        }, 'show_times.screens'])->get();
+
+        $view = View::make('pages.homeRender.moviesRender', [
+            'movies' => $movies
+        ]);
+
+        return $html = $view->render();
+    }
+
+    public function dashbordTopSellers(){
+
+        $topSellers = Home::topSellerItem();
+        $view = View::make('pages.homeRender.topSellerRender', [
+            'topSellers' => $topSellers
+        ]);
+
+        return $html = $view->render();
+    }
+
+    public function dashbordticketSales(){
+
+        $ticketSales = Home::ticketSales();
+        $view = View::make('pages.homeRender.ticketSaleRender', [
+            'ticketSales' => $ticketSales
+        ]);
+
+        return $html = $view->render();
+    }
+
+    public function dashbordConSales(){
+
+        $concessionSales = Home::concessionSales();
+        $view = View::make('pages.homeRender.concessionSaleRender', [
+            'concessionSales' => $concessionSales
+        ]);
+
+        return $html = $view->render();
+    }
+
 }

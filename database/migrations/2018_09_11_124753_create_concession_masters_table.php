@@ -16,6 +16,8 @@ class CreateConcessionMastersTable extends Migration
         Schema::create('concession_masters', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
+            $table->integer('deal_id')->unsigned();
+            $table->integer('voucherNo')->nullable();
             $table->integer('totalAmount');
             $table->integer('cancelUserId')->nullable();
             $table->text('remarks')->nullable();
@@ -24,6 +26,7 @@ class CreateConcessionMastersTable extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('deal_id')->references('id')->on('deals');
         });
     }
 

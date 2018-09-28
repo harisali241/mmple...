@@ -19,7 +19,6 @@ class CreateItemsTable extends Migration
             $table->string('description')->nullable();
             $table->string('measuringUnit');
             $table->integer('foodCategory_id')->unsigned();
-            $table->foreign('foodCategory_id')->references('id')->on('food_categories');
             $table->integer('defaultPrice');
             $table->integer('costPrice');
             $table->string('image');
@@ -27,6 +26,8 @@ class CreateItemsTable extends Migration
             $table->string('bgColor')->nullable();
             $table->tinyInteger('status');
             $table->timestamps();
+
+            $table->foreign('foodCategory_id')->references('id')->on('food_categories');
         });
     }
 

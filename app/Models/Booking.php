@@ -13,7 +13,7 @@ use Auth;
 class Booking extends Model
 {
     protected $fillable = [
-        'show_time_id', 'user_id', 'ticket_id', 'movie_id', 'distributer_id', 'screen_id', 'ticketType', 'isComplimentary', 'seatNumber', 'seatQty', 'price', 'date', 'showDate', 'showTime', 'key', 'hold', 'status', 'cancelUserId', 'cancelUserId'
+        'show_time_id', 'user_id', 'ticket_id', 'movie_id', 'distributer_id', 'voucher_id', 'deal_id', 'screen_id', 'ticketType', 'isComplimentary', 'seatNumber', 'seatQty', 'price', 'date', 'showDate', 'showTime', 'key', 'hold', 'status', 'cancelUserId', 'cancelUserId'
     ];
 
     public function movies(){
@@ -28,12 +28,16 @@ class Booking extends Model
     	return $this->belongsTo('App\Models\User','user_id');
     }
 
+    public function distributers(){
+        return $this->belongsTo('App\Models\Distributer','distributer_id');
+    }
+
     public function tickets(){
     	return $this->belongsTo('App\Models\Ticket','ticket_id');
     }
 
-    public function distributers(){
-    	return $this->belongsTo('App\Models\Distributer','distributer_id');
+    public function deals(){
+    	return $this->belongsTo('App\Models\Deal','deal_id');
     }
 
     public function show_times(){

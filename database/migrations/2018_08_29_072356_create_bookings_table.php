@@ -22,6 +22,8 @@ class CreateBookingsTable extends Migration
             $table->integer('movie_id')->unsigned();
             $table->integer('screen_id')->unsigned();
             $table->integer('distributer_id')->unsigned();
+            $table->integer('deal_id')->unsigned();
+            $table->integer('voucher_id')->unsigned();
             $table->string('ticketType');
             $table->boolean('isComplimentary');
             $table->string('seatNumber');
@@ -31,7 +33,8 @@ class CreateBookingsTable extends Migration
             $table->date('showDate');
             $table->dateTime('showTime');
             $table->string('key');
-            $table->boolean('reserveBooking');
+            $table->boolean('hold');
+            $table->boolean('reserveBooking')->default(0);
             $table->boolean('status');
             $table->integer('cancelUserId')->nullable();
             $table->text('remarks')->nullable();
@@ -43,6 +46,8 @@ class CreateBookingsTable extends Migration
             $table->foreign('ticket_id')->references('id')->on('tickets');
             $table->foreign('screen_id')->references('id')->on('screens');
             $table->foreign('distributer_id')->references('id')->on('distributers');
+            $table->foreign('deal_id')->references('id')->on('deals');
+            $table->foreign('voucher_id')->references('id')->on('concession_masters');
         });
     }
 

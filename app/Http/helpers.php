@@ -7,7 +7,6 @@ use App\Models\Seat;
 use App\Models\Item;
 use App\Models\Package;
 use App\Models\PrintedTicket;
-use Auth;
 
 function unique_array($arrays){
 	$newArray = [];
@@ -19,8 +18,7 @@ function unique_array($arrays){
     return $newArray;
 }
 
-function array_msort($array, $cols)
-{
+function array_msort($array, $cols){
     $colarr = array();
     foreach ($cols as $col => $order) {
         $colarr[$col] = array();
@@ -47,6 +45,27 @@ function array_msort($array, $cols)
 function userFirstName($id){
 	$user = User::where('id', $id)->pluck('firstName')->first();
 	return $user;
+}
+
+function todayTicket($data){
+	$totalTickets = $data->bookings;
+	$todayTicket = 0;
+	for($i=0; $i<count($totalTickets); $i++){
+		if(date('Y-m-d',strtotime($totalTickets[$i]->created_at)) == date('Y-m-d') ){
+			$todayTicket++;
+		}
+	} 
+	return $todayTicket;
+}
+function todayConsession($data){
+	$totalCons = $data->concession_details;
+	$todayCon = 0;
+	for($i=0; $i<count($totalCons); $i++){
+		if(date('Y-m-d',strtotime($totalCons[$i]->created_at)) == date('Y-m-d') ){
+			$todayCon++;
+		}
+	} 
+	return $todayCon;
 }
 
 function checkUserPermission(){

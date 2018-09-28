@@ -19,7 +19,6 @@ class CreatePackagesTable extends Migration
             $table->string('description')->nullable();
             $table->string('measuringUnit');
             $table->integer('foodCategory_id')->unsigned();
-            $table->foreign('foodCategory_id')->references('id')->on('food_categories');
             $table->integer('defaultPrice');
             $table->integer('costPrice');
             $table->string('image');
@@ -28,8 +27,12 @@ class CreatePackagesTable extends Migration
             $table->string('itemName');
             $table->integer('itemPrice');
             $table->integer('itemQty');
+            $table->integer('display')->default(1);
             $table->string('status');
             $table->timestamps();
+
+            $table->foreign('foodCategory_id')->references('id')->on('food_categories');
+
         });
     }
 

@@ -10,7 +10,7 @@ use File;
 class PrintedTicket extends Model
 {
    	protected $fillable = [
-        'booking_id', 'show_time_id', 'movie_id', 'screen_id', 'seat_id', 'user_id', 'batch_id', 'user_id', 'unique_id', 'showTime', 'price', 'cancel_user_id', 'status'
+        'booking_id', 'show_time_id', 'movie_id', 'screen_id', 'user_id', 'batch_id','key', 'showTime', 'price', 'cancel_user_id', 'status'
     ];
 
     public function movies(){
@@ -25,17 +25,17 @@ class PrintedTicket extends Model
         return $this->belongsTo('App\User','user_id');
     }
 
-    public function tickets(){
-        return $this->belongsTo('App\Models\Ticket','ticket_id');
-    }
+    // public function tickets(){
+    //     return $this->belongsTo('App\Models\Ticket','ticket_id');
+    // }
 
     public function bookings(){
         return $this->belongsTo('App\Models\Booking','booking_id');
     }
 
-    public function seats(){
-        return $this->belongsTo('App\Models\Seat','seat_id');
-    }
+    // public function seats(){
+    //     return $this->belongsTo('App\Models\Seat','seat_id');
+    // }
 
     public function show_times(){
         return $this->belongsTo('App\Models\ShowTime','show_time_id');

@@ -10,11 +10,15 @@ use App\Models\ConcessionDetail;
 class ConcessionMaster extends Model
 {
     protected $fillable = [
-        'user_id', 'totalAmount', 'cancelUserId', 'remarks', 'cancelDate', 'status'
+        'user_id', 'deal_id', 'totalAmount', 'cancelUserId', 'voucherNo', 'remarks', 'cancelDate', 'status'
     ];
 
     public function users(){
     	return $this->belongsTo('App\User','user_id');
+    }
+
+    public function deals(){
+        return $this->belongsTo('App\Models\Deal','deal_id');
     }
 
     public function bookings(){

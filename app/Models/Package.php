@@ -13,7 +13,7 @@ use App\Models\ConcessionDetail;
 class Package extends Model
 {
     protected $fillable = [
-        'name', 'description', 'measuringUnit', 'foodCategory_id ', 'defaultPrice', 'costPrice', 'image', 'displayOrder', 'bgColor', 'itemPrice', 'itemName', 'itemQty', 'status'
+        'name', 'description', 'measuringUnit', 'foodCategory_id ', 'defaultPrice', 'costPrice', 'image', 'displayOrder', 'bgColor', 'itemPrice', 'itemName', 'itemQty', 'status', 'display'
     ];
 
     public function food_categories(){
