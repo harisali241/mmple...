@@ -51,6 +51,9 @@ class PrintedTicket extends Model
     		$tic->show_time_id = $book->show_time_id;
     		$tic->movie_id = $book->movie_id;
     		$tic->screen_id = $book->screen_id;
+            if($book->voucher_id != null){
+                $tic->voucherNo = $book->voucher_id;
+            }
     		$tic->seatNumber = $book->seatNumber;
     		$tic->user_id = Auth::user()->id;
     		$tic->batch_id = $batch_id;

@@ -1,3 +1,4 @@
+
 @extends('layouts.master')
 @section('content')
 
@@ -40,7 +41,7 @@
 					<h3>Show times</h3>
 					<div class="search-btn input-group">
 						<input type="text" id="filter" class="form-control search-control" placeholder="Search for...">
-							<span class="input-group-btn">
+						<span class="input-group-btn">
 							<button class="btn btn-default search-btn" type="button"><img  src="{{ asset('assets/images/search-icon.png') }}"/></button>
 						</span>
 					</div><!-- /input-group -->
@@ -53,7 +54,7 @@
 			<div class="form-header-inner">
 				<div class="alert alert-danger" role="alert" style="display:none;">Sorry Showtime has tickets booked! </div>
 				@if(in_array('showTime.create', getRoutes()))<a class="pull-right add-button" href="{{ url('showTime/create') }}">Add Show time </a>@endif
-				<p>Showing {{$showTimesPag->count()}} out of {{$showTimesPag->total()}}</p>
+				{{-- <p>Showing {{$showTimesPag->count()}} out of {{$showTimesPag->total()}}</p> --}}
 			</div>
 		</div><!--col-md-12-->
 	</div><!--row-->
@@ -113,7 +114,7 @@
 					No Record
 				</p>
 			@endif
-			<div style="text-align: center;margin-bottom:10px;">{{$showTimesPag->links()}}</div>
+			{{-- <div style="text-align: center;margin-bottom:10px;">{{$showTimesPag->links()}}</div> --}}
 		</div>
 	</div><!-- Row Close -->
 
@@ -181,7 +182,7 @@
 		        {
 		            'start': new Date({{ $initial_time3 }}), 
 		            'end': new Date({{ $final_time4 }}),
-		            'content': '<a href="{{url('showTime/'.$showTime->id.'/edit')}}">{{ $showtime->movies->title }} ( {{ $showtime->movies->duration }} min)<p class="film_small_desc"> Start Time: {{ $start_label }} End Time: {{ $end_label }}</p></a>',
+		            'content': '<a href="{{url('showTime/'.$showtime->id.'/edit')}}">{{ $showtime->movies->title }} ( {{ $showtime->movies->duration }} min)<p class="film_small_desc"> Start Time: {{ $start_label }} End Time: {{ $end_label }}</p></a>',
 		            'editable': false,
 		            'group': '{{ $showtime->screens->name }}',
 		            'className': 'timeline_film_detail {{ $showtime->color }}'

@@ -44,6 +44,10 @@ class Booking extends Model
         return $this->hasMany('App\Models\PrintedTicket');
     }
 
+    public function concession_masters(){
+        return $this->belongsTo('App\Models\ConcessionMaster','voucher_id');
+    }
+
     public static function holdBooking(Request $request){
         if($request->deal_id != 0){
             $deal = Deal::where('id', $request->deal_id)->where('status', 1)->get()->first();

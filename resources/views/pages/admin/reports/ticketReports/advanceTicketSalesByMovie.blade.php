@@ -59,7 +59,7 @@
 				<div class="form-group">
 					<label for="" class="col-sm-4 control-label"><span>*</span>  Date: </label>
 					<div class="col-sm-8">
-						<input type="text" value="" class="form-control date_pp goDate">
+						<input type="text" value="" class="form-control date_pp goDate" >
 					</div>
 				</div>
 			</div>

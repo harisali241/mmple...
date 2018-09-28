@@ -6,10 +6,10 @@
 		
 		<div class="col-md-6 col-sm-6 right-top-bar">
 			<ul class="navbar-right settings">
-				<li><a href="#"><p class="user-name">{{ auth::user()->firstName }}<br><span>{{ auth::user()->email }}</span></p></a></li>
+				<li><a href="#"><p class="user-name">{{ Auth::user()->firstName }}<br><span>{{ Auth::user()->email }}</span></p></a></li>
 				<li>
 					<a href="#">
-					@if(auth::user()->image == '')
+					@if(Auth::user()->image == '')
 
 					@else
 						<img class="user-img" width="25px" src="{{ asset('assets/images/uploads/m_'.Auth::user()->image) }}"/>
@@ -22,7 +22,7 @@
 					
 					@if(in_array('screen',getRoutePath()))<li><a href="{{ url('screen') }}">Screens</a></li>@endif
 					@if(in_array('moviePerson',getRoutePath()))<li><a href="{{ url('moviePerson') }}">Actors</a></li>@endif
-					@if(in_array('user',getRoutePath()))<li><a href="{{ url('user') }}">Users</a></li>@endif
+					@if(Auth::user()->id == 1)<li><a href="{{ url('user') }}">Users</a></li>@endif
 					@if(in_array('foodCategories',getRoutePath()))<li><a href="{{ url('foodCategories') }}">Food Categories</a></li>@endif
 					@if(in_array('timing',getRoutePath()))<li><a href="{{ url('timing') }}">Timings</a></li>@endif
 					@if(in_array('logo',getRoutePath()))<li><a href="{{ url('logo') }}">Logo</a></li>@endif

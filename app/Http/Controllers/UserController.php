@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Auth;
 use App\Models\Menu;
 use App\Models\Permission;
 
 class UserController extends Controller
 {   
     public function __construct()
-    {
+    {   
         $this->middleware('auth');
         $this->middleware('userPermission')->except('store' , 'update');
     }
@@ -88,7 +89,6 @@ class UserController extends Controller
         foreach($permissions as $per){
            array_push($menus_id, $per->menus->id);
         }
-        //dd($menus_id);
         $menus = Menu::orderBy('sort_order')->get();
         return view('pages.admin.user.editUser', compact('menus', 'user', 'menus_id'));
     }
@@ -103,6 +103,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {   
         $request->validate([
+            'image' => 'required',
             'firstName' => 'required',
             'lastName' => 'required',
             'email' => 'required',

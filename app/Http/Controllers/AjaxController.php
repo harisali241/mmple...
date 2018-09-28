@@ -18,7 +18,18 @@ use Auth;
 use View;
 
 class AjaxController extends Controller
-{	
+{
+
+    // public function searchShowTime(Request $request){
+
+    //     $showTimesPag = ShowTime::where('key', 'private')->with('movies', 'screens', 'vouchers', 'tickets', 'timings')->orderBy('id', 'desc')->paginate(20);
+
+    //     $view = View::make('pages.admin.showTime.viewRenderShowTime', [
+    //         'showTimesPag' => $showTimesPag
+    //     ]);
+
+    //     return $html = $view->render();
+    // }
 
 //*******************************Booking Ticket******************************************//
 
@@ -375,6 +386,18 @@ class AjaxController extends Controller
     public function cancelCon(Request $request){
         ConcessionMaster::cancelCon($request);
         return response()->json(true);
+    }
+
+    public function voucherRecord(Request $request){
+        $res = ConcessionMaster::voucherRecord($request);
+        return response()->json($res);
+    }
+
+    public function printConcession(Request $request){
+        $con = ConcessionMaster::findOrFail($request->id);
+        $con->status = 0;
+        $con->save();
+        return response()->json($request->id);
     }
 
 //******************************* Concesstion Booking ******************************************//

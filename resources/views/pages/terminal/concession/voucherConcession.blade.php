@@ -14,50 +14,43 @@
 		<div class="col-md-12">
 			<div class="form-header-inner">
 				<h3>Voucher Concession</h3>
-				<div class="search-btn input-group">
+				{{--  <div class="search-btn input-group">
 					<input type="text" id="filter" class="form-control search-control" placeholder="Search for...">
 						<span class="input-group-btn">
 						<button class="btn btn-default search-btn" type="button"><img src="{{asset('assets/images/search-icon.png') }}"/></button>
 					</span>
-				</div><!-- /input-group -->
+				</div> --}}
 		 	</div>
 	 	</div>
 	</div><!--row-->
+
+	<div class="col-sm-4"></div>
+	<div class="col-sm-4">
+	  	<div class="search-btn input-group">
+			<input type="text" name="searchFilter" autocomplete="off" class="form-control search-control wordToSearch" placeholder="Enter Voucher No From Ticket ..." style="height: 50px;">
+			<span class="input-group-btn">
+				<button class="btn btn-default search-btn search-btn-ticket" type="button"><img  src="{{ asset('assets/images/search-icon.png') }}"/></button>
+			</span>
+		</div>
+	</div>
+	<div class="col-sm-4"></div>
 	
 	<div class="row">
 		<div class="col-md-12">	
-			@if(count($conM) > 0)
 			<table border="1" id="example" cellpadding="0" cellspacing="0" class="table table-hover tableView admin-table">
 				<thead>
 					<tr>
 						<th>Order Id</th>
-						<th>Sold by</th>
-						<th>Order Amount</th>
+						<th>VoucherNo</th>
+						<th>Items</th>
 						<th>Order time</th>
-						<th>Reprint</th>
-						<th>Cancel</th>
+						<th>print</th>
 					</tr>
 				</thead>
 				<tbody class="searchable">
-					@foreach($conM as $con)
-						<tr class="forRemove{{$con->id}}">
-							<td class="getId">{{$con->id}}</td>
-							<td>{{$con->users->firstName}}</td>
-							<td>{{$con->totalAmount }}</td>
-							<td>{{date('d-M-y h:i', strtotime($con->created_at))}}</td>
-							<td class="alignCenter"><a href="{{url('reprintConcesstion/'.$con->id)}}" target="_blank" class="edit_btn" style="color:white;text-decoration:none;">Reprint</a></td>
-							<td class="alignCenter">
-					            <textarea class="remarks"></textarea><br/><br/>
-					            <input type="hidden" class="id_to_delete" value="{{$con->id}}">
-					            <a style="cursor:pointer;" type="button" class="edit_btn img_delete" data-toggle="modal" data-target=".delete_confirm_modal" >Cancel</a>
-							</td>
-						</tr>
-					@endforeach
+					
 				</tbody>
 			</table>
-			@else
-				<p align="center"> no Record</p>
-			@endif
 		</div>
 	</div><!-- Row Close -->
 
@@ -75,36 +68,75 @@
 	  </div>
 	</div><!-- Modal -->
 		
-		
+
 </div><!-- container -->
 <br><br>
 @endsection
 @section('scripts')
 <script type="text/javascript">
 
-	$(window).load(function(){
-        $('.myModal').modal('show');
-    });
+	$(document).ready(function(){
+		$('.admin-table').hide();
+	});
 	
-	var id;
-	var remarks;
 
-	$(".container").on('click', '.img_delete',function() {
-		id = $(this).parent().find('.id_to_delete').val();
-		remarks  = $(this).parent().find('.remarks').val();
+	$(".search-btn-ticket").on('click',function() {
+		var id = $('.wordToSearch').val();
+		if(id != ''){
+			$.ajax({
+				url: 'voucherRecord',
+				method: 'post',
+				data: {'id':id, '_token': '{{csrf_token()}}' },
+				dataType: 'json',
+				success: function(data){
+					//console.log(data);
+					$('.searchable').html('');
+					var html = '';
+					var html2 = '';
+
+					
+					for(var i=0; i<data.concession_details.length; i++){
+						if(data.concession_details[i].type == 'item'){
+							html2 +=  data.concession_details[i].qty+' '+data.concession_details[i].items.name+'<br>';
+						}else{
+							html2 += '<b>'+data.concession_details[i].qty+' '+data.concession_details[i].packages.name+'</b><br>';
+							var itemName = JSON.parse(data.concession_details[i].packages.itemName);
+							var itemQty = JSON.parse(data.concession_details[i].packages.itemQty);
+							for(var x=0; x<itemName.length; x++){
+								html2 += '&nbsp;&nbsp;&nbsp;'+itemName[x]+' ('+itemQty[x]+')<br>';
+							}
+							
+						}
+					}
+
+					var date = new Date(data.created_at).toDateString();
+
+					html = `
+						<tr>
+							<td align="center" style="vertical-align:middle;">`+data.id+`</td>
+							<td align="center" style="vertical-align:middle;">`+data.voucherNo+`</td>
+							<td>`+html2+`</td>
+							<td align="center" style="vertical-align:middle;">`+date+`</td>
+							<td align="center" style="vertical-align:middle;">
+								<a style="cursor:pointer;" onclick="reprint(`+data.id+`);" class="edit_btn" style="color:white;text-decoration:none;">Reprint</a>
+							</td>
+						</tr>
+					`;
+
+					$('.admin-table').show();
+					$('.searchable').html(html);
+				}
+			});
+		}
 	});
 
-	$(".modal-footer").on('click', '.btn_yes',function() {
-		$.ajax({
-			url: 'cancelCon',
-			method: 'post',
-			data: {'id':id, 'remarks':remarks, '_token': '{{csrf_token()}}' },
-			dataType: 'json',
-			success: function(data){
-				$('.modal').modal('hide');
-				$('.forRemove'+id).remove();
-			}
+	function reprint(id){
+		$.post('printConcession' ,{'id':id, '_token':'{{csrf_token()}}'},  function(href){
+			$('.admin-table').hide();
+			$('.searchable').html('');
+			window.open('reprintConcession/'+href);
 		});
-	});
+	}
+
 </script>
 @endsection

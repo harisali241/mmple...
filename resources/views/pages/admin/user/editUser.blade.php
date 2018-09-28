@@ -148,6 +148,8 @@
 					</div>
 				</div><!-- col-md-6 -->
 
+				@if($user->id != 1)
+
 				<div class="col-xs-12">
 					<div class="form-group">
 						<label for="permission" class="col-sm-4 control-label">Permission Allow: </label><br><br>
@@ -158,6 +160,7 @@
 									@for($i=0; $i < count($mainMenu); $i++)
 									<div class="iamParent">
 										@foreach($menus as $menu)
+
 											@if($menu->id == $mainMenu[$i])
 											<div class="parent-1" style="cursor:pointer;">
 												<b>{{$menu->name}}</b>
@@ -187,7 +190,7 @@
 									@endfor
 								</div>
 							</div>
-
+	
 							<div class="row" style="margin-left: 20px;">
 								<div class="col-md-12">
 									<div class="iamParent">
@@ -204,21 +207,12 @@
 												<div class="child-1">
 													<div class="checkbox">
 													    <label>
-													      <input type="checkbox" class="checkChild" name="permission[]" value="{{ $menu->id }}">{{ $menu->name }}
+													      <input type="checkbox" class="checkChild" name="permission[]" value="{{ $menu->id }}" @if(in_array($menu->id, $menus_id)) checked="checked" @endif>{{ $menu->name }}
 													    </label>
 													</div>	
 												</div>
 											@endif
-											
-											{{-- @if($menu->type_id == 32 && $menu->parent_id != null)
-												<div class="g-child-1 g-child-{{$menu->parent_id}}">
-													<div class="checkbox">
-													    <label>
-													      <input type="checkbox" class="checkboxPer" name="permission[]" value="{{ $menu->id }}" @if(in_array($menu->id, $menus_id)) {{'checked="checked"'}} @endif>{{ $menu->name }}
-													    </label>
-													</div>	
-												</div>
-											@endif --}}
+										
 										
 										@endforeach
 									</div>
@@ -229,29 +223,35 @@
 								<div class="col-md-12">
 									<div class="iamParent">
 										@foreach($menus as $menu)
-											@if($menu->id == 123)
-											<div class="parent-1" style="cursor:pointer;">
-												<b>{{$menu->name}}</b>
-												<input type="checkbox" class="checkParent" value="">
-											</div>
+
+										@if($menu->id != 126)
+											@if($menu->parent_id != 126)
+												@if($menu->id == 123)
+													<div class="parent-1" style="cursor:pointer;">
+														<b>{{$menu->name}}</b>
+														<input type="checkbox" class="checkParent" value="">
+													</div>
+												@endif
+												
+												@if( $menu->type_id == 123 && $menu->parent_id == null )
+													<div class="child-1" data="{{$menu->id}}">
+														<label><b>{{$menu->name}}</b></label>
+														<input type="checkbox" class="checkChild" value="">
+													</div>
+												@endif
+												
+												@if($menu->type_id == 123 && $menu->parent_id != null)
+													<div class="g-child-1 g-child-{{$menu->parent_id}}">
+														<div class="checkbox">
+														    <label>
+														      <input type="checkbox" class="checkboxPer" name="permission[]" value="{{ $menu->id }}" @if(in_array($menu->id, $menus_id)) {{'checked="checked"'}} @endif>{{ $menu->name }}
+														    </label>
+														</div>	
+													</div>
+												@endif
 											@endif
-											
-											@if( $menu->type_id == 123 && $menu->parent_id == null )
-											<div class="child-1" data="{{$menu->id}}">
-												<label><b>{{$menu->name}}</b></label>
-												<input type="checkbox" class="checkChild" value="">
-											</div>
-											@endif
-											
-											@if($menu->type_id == 123 && $menu->parent_id != null)
-												<div class="g-child-1 g-child-{{$menu->parent_id}}">
-													<div class="checkbox">
-													    <label>
-													      <input type="checkbox" class="checkboxPer" name="permission[]" value="{{ $menu->id }}" @if(in_array($menu->id, $menus_id)) {{'checked="checked"'}} @endif>{{ $menu->name }}
-													    </label>
-													</div>	
-												</div>
-											@endif
+										@endif
+
 										@endforeach
 									</div>
 								</div>
@@ -259,7 +259,8 @@
 						</div>
 					</div>
 				</div>
-					
+
+				@endif
 			</div><!-- form-container -->
 		</div><!-- row -->
 	</form>

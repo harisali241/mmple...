@@ -58,7 +58,7 @@ class ShowTime extends Model
     }
 
     public static function fetchPublicShowTimePaginated(){
-    	$showTime = ShowTime::where('key', 'public')->with('movies', 'screens', 'vouchers', 'tickets', 'timings')->orderBy('id', 'desc')->paginate(20);
+    	$showTime = ShowTime::where('key', 'public')->with('movies', 'screens', 'vouchers', 'tickets', 'timings')->orderBy('id', 'desc')->get();
     	return $showTime;
     }
 

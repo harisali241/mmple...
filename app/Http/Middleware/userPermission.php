@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Auth;
 
 class userPermission
 {
@@ -16,6 +17,9 @@ class userPermission
     public function handle($request, Closure $next)
     {   
        if(!checkUserPermission()){
+            if(Auth::user()->id == 1){
+                return $next($request);
+            }
             return redirect()->back()->withErrors('Access Denied');
             //return abort(408);
        }

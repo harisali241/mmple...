@@ -23,17 +23,17 @@ class PrintedTicketController extends Controller
     	if($request->reprint != null){
     		$bookings = Booking::whereIn('seatNumber', json_decode($request->seatNum))
 					    	->where('show_time_id', $request->showid)
-					    	->where('status', 1)
+					    	->where('status', 1)->with('concession_masters')
 					    	->get();
 		}else{
 			
 			$bookings = Booking::whereIn('id', json_decode($request->booking_id))
-					    	->where('status', 1)
+					    	->where('status', 1)->with('concession_masters')
 					    	->get();
 			PrintedTicket::createTickets($bookings);
 
 		}
-
+        //dd($bookings);
     	return view('pages.terminal.tickets.viewBookTicket', compact('bookings', 'print'));
     }
 
@@ -63,7 +63,7 @@ class PrintedTicketController extends Controller
         return view('pages.terminal.concession.printConcession', compact('conD', 'print', 'conTotal'));
     }
 
-    public function reprintConcesstion($id){
+    public function reprintConcession($id){
         $print = '';
         $conD = ConcessionDetail::where('concession_master_id', $id)->with('items', 'packages')->get();
         $conTotal = ConcessionMaster::where('id', $id)->pluck('totalAmount')->first();

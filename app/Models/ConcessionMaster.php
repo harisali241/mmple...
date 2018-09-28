@@ -16,6 +16,11 @@ class ConcessionMaster extends Model
     public function users(){
     	return $this->belongsTo('App\User','user_id');
     }
+
+    public function bookings(){
+        return $this->hasMany('App\Models\Booking','voucher_id');
+    }
+
     public function concession_details(){
     	return $this->hasMany('App\Models\ConcessionDetail');
     }
@@ -53,23 +58,24 @@ class ConcessionMaster extends Model
             $conD->status = 0;
             $conD->save();
         }
-
     }
 
     public static function createFreeItem($deal){
 
         $type = json_decode($deal->type);
-
+        $voucherNo = rand(1000, 100000);
         $conM = new ConcessionMaster;
                     $conM->user_id = Auth::user()->id;
                     $conM->deal_id = $deal->id;
+                    $conM->voucherNo = $voucherNo;
                     $conM->totalAmount = 0;
                     $conM->status = 1;
                     $conM->save();
 
         $id = ConcessionMaster::where('user_id', Auth::user()->id)
-                ->orderBy('created_at', 'desc')
                 ->where('totalAmount', 0)
+                ->where('voucherNo', $voucherNo)
+                ->orderBy('created_at', 'desc')
                 ->pluck('id')
                 ->first();
         $voucherID = $id;
@@ -99,6 +105,11 @@ class ConcessionMaster extends Model
         }
 
         return $voucherID;
+    }
+
+    public static function voucherRecord(Request $request){
+        $voucherDetail = ConcessionMaster::where('voucherNo', $request->id)->where('status', 1)->with('concession_details', 'concession_details.items', 'concession_details.packages')->first();
+        return $voucherDetail;
     }
 
 }

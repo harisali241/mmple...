@@ -49,16 +49,17 @@ Route::get('advBooking', 'AdvanceBookingController@advBooking')->name('advanceBo
 Route::resource('viewReserve', 'AdvanceBookingController');
 Route::get('/bookConcession' , 'BookConcessionController@bookConcession')->name('bookConcession');
 Route::get('/cancelConcession' , 'BookConcessionController@cancelConcession')->name('cancelConcession');
-
+Route::get('/voucherConcession' , 'BookConcessionController@voucherConcession')->name('voucherConcession');
 
 Route::get('/viewAndPrint', 'PrintedTicketController@viewAndPrint');
 Route::get('confrimAdvBooking', 'AdvanceBookingController@confrimAdvBooking')->name('confrimAdvBooking');
 Route::get('/viewAndPrint_c', 'PrintedTicketController@viewAndPrint_c');
-Route::get('/reprintConcesstion/{id}', 'PrintedTicketController@reprintConcesstion')->name('reprintConcesstion');
+Route::get('/reprintConcession/{id}', 'PrintedTicketController@reprintConcession')->name('reprintConcession');
 Route::get('/printRecentTicket' , 'PrintedTicketController@printRecentTicket')->name('printRecentTicket');
 
 //**************************** Ajax Route *********************************************
 	/**///======Booking Ticket================================//
+	// /**/Route::post('/searchShowTime', 'AjaxController@searchShowTime');
 	/**/Route::get('/allMovies', 'AjaxController@allMovies');
 	/**/Route::get('/movieStatus', 'AjaxController@movieStatus');
 	/**/Route::post('/getItemPrice', 'AjaxController@itemPrice');
@@ -91,6 +92,8 @@ Route::get('/printRecentTicket' , 'PrintedTicketController@printRecentTicket')->
 	/**///======Concession booking================================//
 	/**/Route::post('bookCon', 'AjaxController@bookCon');
 	/**/Route::post('cancelCon', 'AjaxController@cancelCon');
+	/**/Route::post('voucherRecord', 'AjaxController@voucherRecord');
+	/**/Route::post('printConcession', 'AjaxController@printConcession');
 	/**///======Concession booking================================//
 
 	/**///======Deals================================//
@@ -163,5 +166,5 @@ Route::post('cashInHandByUserReq', 'ReportController@cashInHandByUserReq');
 Route::get('ticketCancellationByDay', 'ReportController@ticketCancellationByDay')->name('ticketCancellationByDay');
 Route::post('ticketCancellationByDayReq', 'ReportController@ticketCancellationByDayReq');
 
-Route::get('ticketSalesByUser', 'ReportController@ticketSalesByUser')->name('ticketSalesByUser');
-Route::post('ticketSalesByUserReq', 'ReportController@ticketSalesByUserReq');
+// Route::get('ticketSalesByUser', 'ReportController@ticketSalesByUser')->name('ticketSalesByUser');
+// Route::post('ticketSalesByUserReq', 'ReportController@ticketSalesByUserReq');

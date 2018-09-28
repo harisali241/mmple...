@@ -19,7 +19,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.datetimepicker.css') }}"/>
 
 	<script src="{{ asset('assets/js/jquery-1.11.1.js') }}"></script>
-
+	
   </head>
 
   <body>

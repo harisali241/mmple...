@@ -143,6 +143,7 @@
 									@for($i=0; $i < count($mainMenu); $i++)
 									<div class="iamParent">
 										@foreach($menus as $menu)
+
 											@if($menu->id == $mainMenu[$i])
 												<div class="parent-1" style="cursor:pointer;">
 													<b>{{$menu->name}}</b>
@@ -214,29 +215,35 @@
 								<div class="col-md-12">
 									<div class="iamParent">
 										@foreach($menus as $menu)
-											@if($menu->id == 123)
-											<div class="parent-1" style="cursor:pointer;">
-												<b>{{$menu->name}}</b>
-												<input type="checkbox" class="checkParent" value="">
-											</div>
+
+											@if($menu->id != 126)
+												@if($menu->parent_id != 126)
+													@if($menu->id == 123)
+														<div class="parent-1" style="cursor:pointer;">
+															<b>{{$menu->name}}</b>
+															<input type="checkbox" class="checkParent" value="">
+														</div>
+													@endif
+													
+													@if( $menu->type_id == 123 && $menu->parent_id == null )
+														<div class="child-1" data="{{$menu->id}}">
+															<label><b>{{$menu->name}}</b></label>
+															<input type="checkbox" class="checkChild" value="">
+														</div>
+													@endif
+													
+													@if($menu->type_id == 123 && $menu->parent_id != null)
+														<div class="g-child-1 g-child-{{$menu->parent_id}}">
+															<div class="checkbox">
+															    <label>
+															      <input type="checkbox" class="checkboxPer" name="permission[]" value="{{ $menu->id }}">{{ $menu->name }}
+															    </label>
+															</div>	
+														</div>
+													@endif
+												@endif
 											@endif
-											
-											@if( $menu->type_id == 123 && $menu->parent_id == null )
-											<div class="child-1" data="{{$menu->id}}">
-												<label><b>{{$menu->name}}</b></label>
-												<input type="checkbox" class="checkChild" value="">
-											</div>
-											@endif
-											
-											@if($menu->type_id == 123 && $menu->parent_id != null)
-												<div class="g-child-1 g-child-{{$menu->parent_id}}">
-													<div class="checkbox">
-													    <label>
-													      <input type="checkbox" class="checkboxPer" name="permission[]" value="{{ $menu->id }}">{{ $menu->name }}
-													    </label>
-													</div>	
-												</div>
-											@endif
+
 										@endforeach
 									</div>
 								</div>

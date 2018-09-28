@@ -84,7 +84,7 @@
     }
     .con.text3 {
         margin-left: 63px;
-    margin-top: -21px;
+        margin-top: -21px;
     }
     
     .con.text4 {
@@ -142,23 +142,26 @@
 </head>
 <body class="A8">
 @foreach($bookings as $booking)
+
 	<section class="sheet padding-30mm">
 		<div class="new" style="margin-top:-16px;">
-		    <img src="{{asset('asset/ticketresizedsds.jpg')}}" style="  opacity: 0; margin-left: 64px;
+		    <img src="{{asset('assets/ticketresizedsds.jpg')}}" style="  opacity: 0; margin-left: 64px;
 		    margin-top: -24px;">
 		    <h6 class="con text1" style="font-size: 10px; ">{{ $booking->screens->name }}</h6>
 		    <h6 class="con text2" style="font-size: 10px; ">{{ $booking->seatNumber }}</h6>
-		    <h6 class="con text3" style="font-size: 10px; ">{{ date('h:i', strtotime($booking->showtime)) }}</h6>
-		    <h6 class="con text4" style="font-size: 10px; ">{{ date('d/m/y', strtotime($booking->showtime)) }}</h6>
+		    <h6 class="con text3" style="font-size: 10px; ">{{ date('h:i', strtotime($booking->showTime)) }}</h6>
+		    <h6 class="con text4" style="font-size: 10px; ">{{ date('d/m/y', strtotime($booking->showTime)) }}</h6>
 		    <h6 class="con text5" style="font-size: 10px; text-transform:uppercase;">{{ $booking->movies->title }}</h6>
 		    <h6 class="con text6" style="font-size: 8px; ">{{ $booking->screens->name }}{{ ' | Rs. '.$booking->price }}</h6>
-		    <h6 class="con text7" style="font-size: 10px; ">{{ date('h:i', strtotime($booking->showtime)) }}</h6>
-		    <h6 class="con text8" style="font-size: 10px; ">{{ date('d/m/y', strtotime($booking->showtime)) }}</h6>
+		    <h6 class="con text7" style="font-size: 10px; ">{{ date('h:i', strtotime($booking->showTime)) }}</h6>
+		    <h6 class="con text8" style="font-size: 10px; ">{{ date('d/m/y', strtotime($booking->showTime)) }}</h6>
 		    <h6 class="con text9" style="font-size: 10px; ">{{ $booking->seatNumber }}</h6>
 		    <h6 class="con text10" style="font-size: 10px; text-transform:uppercase;">{{ $booking->movies->title }}</h6>
-			<h6 class="con text11" style="font-size: 7px; ">{{ $booking->show_times->key }}</h6>
-			<h6 class="con text12" style="font-size: 7px; ">{{ date("d/m/Y h:s:a", time()) }}></h6>
-			<h6 class="con text13" style="font-size: 7px; ">{{ Auth::user()->username }}</h6>
+  			<h6 class="con text11" style="font-size: 7px; ">
+          @if($booking->concession_masters != null) {{ $booking->concession_masters->voucherNo }}@else {{ $booking->show_times->key }} @endif
+        </h6>
+  			<h6 class="con text12" style="font-size: 7px; ">{{ date("d/m/y h:s:a", time()) }}</h6>
+  			<h6 class="con text13" style="font-size: 7px; ">{{ Auth::user()->username }}</h6>
 
 		</div>
 	</section>

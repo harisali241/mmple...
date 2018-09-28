@@ -23,6 +23,7 @@ class BookConcessionController extends Controller
 
     public function cancelConcession(){
     	$conM = ConcessionMaster::where('status', 1)
+                ->where('deal_id', null)
 		    	->with('concession_details','users', 'concession_details.items', 'concession_details.packages')
                 ->orderBy('id', 'desc')
 		    	->get();
@@ -30,10 +31,6 @@ class BookConcessionController extends Controller
     }
 
     public function voucherConcession(){
-        $conM = ConcessionMaster::where('status', 1)
-                ->with('concession_details','users', 'concession_details.items', 'concession_details.packages')
-                ->orderBy('id', 'desc')
-                ->get();
-        return view('pages.terminal.concession.voucherConcession', compact('conM'));
+        return view('pages.terminal.concession.voucherConcession');
     }
 }

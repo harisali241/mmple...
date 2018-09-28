@@ -29,7 +29,7 @@
 		<div class="col-md-12">
 			<div class="form-header-inner">
 			<div class="alert alert-danger" role="alert" style="display:none;">Error! </div>
-				@if(in_array('user.create', getRoutes()))<a class="pull-right add-button" href="{{url('user/create')}}">Add User</a>@endif
+				@if(Auth::user()->id == 1)<a class="pull-right add-button" href="{{url('user/create')}}">Add User</a>@endif
 			</div>
 		</div><!--col-md-12-->
 	</div><!--row-->
@@ -47,8 +47,8 @@
 				<th>User Name</th>
 				<th>Email</th>
 				<th>Mobile</th>
-				@if(in_array('user.edit', getRoutes()))<th></th>@endif
-				@if(in_array('user.destroy', getRoutes()))<th></th>@endif
+				@if(Auth::user()->id == 1)<th></th>@endif
+				@if(Auth::user()->id == 1)<th></th>@endif
 			</tr>
 			</thead>
 			<tbody class="searchable">
@@ -59,8 +59,8 @@
 						<td>{{ $user->username }}</td>
 						<td>{{ $user->email }}</td>
 						<td>{{ $user->phoneNo }}</td>
-						@if(in_array('user.edit', getRoutes()))<td class="alignCenter"><a class="edit_btn" href="{{ url('user/'.$user->id.'/edit') }}">Edit</a></td>@endif
-						@if(in_array('user.destroy', getRoutes()))
+						@if(Auth::user()->id == 1)<td class="alignCenter"><a class="edit_btn" href="{{ url('user/'.$user->id.'/edit') }}">Edit</a></td>@endif
+						@if(Auth::user()->id == 1)
 						<td class="alignCenter">
 							<form action="{{ url('user/'.$user->id) }}" method="post" id="delete{{$user->id}}">
 		                   		{{ csrf_field() }}

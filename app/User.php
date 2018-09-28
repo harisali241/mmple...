@@ -91,7 +91,7 @@ class User extends Authenticatable
     public static function updateUser(Request $request, User $user){
         $upload_dir = base_path() . '/public/assets/images/uploads/';
 
-          if($request->hasFile('image')){
+        if($request->hasFile('image')){
             File::delete($upload_dir .'/'. $user->image);
             File::delete($upload_dir .'/m_'. $user->image);
             $file = $request->file('image');
