@@ -23,7 +23,7 @@ class ReportController extends Controller
     public function __construct(){
         $this->middleware('auth');
         $this->middleware('userPermission')
-        ->except('movie', 'concession', 'custom','filmsByDistributorReports','showsByTimeReports','weeklyMovieReports','itemSalesReq', 'singleItemSalesReq', 'singleItemSalesByUserReq','packageSalesReq', 'singlePackageSalesReq', 'packageSalesByUserReq','concessionCancellationByDayReq','concessionSaleByAllUserReq', 'totalSeatBookingByDayReq','advanceBookingByDayReq', 'ticketSalesByMovieReq', 'advanceTicketSalesByMovieReq', 'cashInHandByDayReq', 'cashInHandByUserReq', 'ticketCancellationByDayReq', 'ticketSalesByUserReq');
+        ->except('movie', 'concession', 'custom','filmsByDistributorReports','showsByTimeReports','weeklyMovieReports','itemSalesReq', 'singleItemSalesReq', 'singleItemSalesByUserReq','packageSalesReq', 'singlePackageSalesReq', 'packageSalesByUserReq','concessionCancellationByDayReq','concessionSaleByAllUserReq', 'totalSeatBookingByDayReq','advanceBookingByDayReq', 'ticketSalesByMovieReq', 'advanceTicketSalesByMovieReq', 'cashInHandByDayReq', 'cashInHandByUserReq', 'ticketCancellationByDayReq', 'ticketSalesByUserReq', 'dealSaleByMovies', 'ticketSalesByUserReq');
     }
 
     public function movie(){
@@ -97,7 +97,7 @@ class ReportController extends Controller
     }
     public function itemSalesReq(Request $request){
         $date = date('Y-m-d', strtotime($request->date));
-        $c_detail = ConcessionDetail::whereDate('created_at', $date)->where('item_id','!=',null)->where('status', 1)->with('items')->get();
+        $c_detail = ConcessionDetail::whereDate('created_at', $date)->where('item_id','!=',null)->where('status', 1)->with('items', 'concession_masters.deals')->get();
         return response()->json($c_detail);
     }
     
@@ -119,7 +119,7 @@ class ReportController extends Controller
     }
     public function singleItemSalesByUserReq(Request $request){
         $date = date('Y-m-d', strtotime($request->date));
-        $c_detail = ConcessionDetail::whereDate('created_at', $date)->where('item_id','!=',null)->where('status', 1)->where('user_id', $request->id)->with('items')->get();
+        $c_detail = ConcessionDetail::whereDate('created_at', $date)->where('item_id','!=',null)->where('status', 1)->where('user_id', $request->id)->with('items', 'concession_masters.deals')->get();
         return response()->json($c_detail);
     }
 
@@ -130,7 +130,7 @@ class ReportController extends Controller
     }
     public function packageSalesReq(Request $request){
         $date = date('Y-m-d', strtotime($request->date));
-        $c_detail = ConcessionDetail::whereDate('created_at', $date)->where('package_id','!=',null)->with('packages')->where('status', 1)->get();
+        $c_detail = ConcessionDetail::whereDate('created_at', $date)->where('package_id','!=',null)->where('status', 1)->with('packages', 'concession_masters.deals')->get();
         return response()->json($c_detail);
     }
     
@@ -152,7 +152,7 @@ class ReportController extends Controller
     }
     public function packageSalesByUserReq(Request $request){
         $date = date('Y-m-d', strtotime($request->date));
-        $c_detail = ConcessionDetail::whereDate('created_at', $date)->where('package_id','!=',null)->where('user_id', $request->id)->where('status', 1)->with('packages')->get();
+        $c_detail = ConcessionDetail::whereDate('created_at', $date)->where('package_id','!=',null)->where('user_id', $request->id)->where('status', 1)->with('packages' , 'concession_masters.deals')->get();
         return response()->json($c_detail);
     }
 
@@ -191,6 +191,7 @@ class ReportController extends Controller
         $time = [];
         $perSeat = [];
         $seatQty = [];
+        $movie = [];
         for($i=0; $i<count($screens); $i++){
             $oneScreen = Booking::whereDate('created_at', $date)->where('status', 1)->where('hold', 0)->where('screen_id', $screens[$i])->with('screens', 'show_times')->get();
             if( count($oneScreen) > 0){
@@ -199,7 +200,7 @@ class ReportController extends Controller
         }
         for($x=0; $x<count($screenArray); $x++){
             $id = Screen::where('name', $screenArray[$x])->pluck('id')->first();
-            $show_time_id = Booking::whereDate('created_at', $date)->where('status', 1)->where('hold', 0)->where('screen_id', $id)->with('screens', 'show_times')->get();
+            $show_time_id = Booking::whereDate('created_at', $date)->where('status', 1)->where('hold', 0)->where('screen_id', $id)->with('screens', 'show_times', 'movies')->get();
             $ti = [];
             $per = [];
             $perCount = -1;
@@ -218,8 +219,9 @@ class ReportController extends Controller
             array_push($qty, count($show_time_id));
             $seatQty[$x] = $qty;
         }
+        $movie = Report::getMovieOfShow($screenArray, $date);
 
-        $detail = ['screen'=>$screenArray, 'time'=>$time, 'qty'=>$seatQty, 'seatPerShow'=>$perSeat ,'created_at'=>$date, 'now'=>$now];
+        $detail = ['movie'=>$movie,'screen'=>$screenArray, 'time'=>$time, 'qty'=>$seatQty, 'seatPerShow'=>$perSeat ,'created_at'=>$date, 'now'=>$now];
         return response()->json($detail);
     }
 
@@ -475,18 +477,61 @@ class ReportController extends Controller
     }
 
 
-    public function ticketSalesByUser(){
-
-        return view('pages.admin.reports.ticketReports.ticketSalesByUser');
+    public function dealReport(){
+        $movies = Movie::get();
+        $users = User::get();
+        return view('pages.admin.reports.ticketReports.dealReport', compact('movies', 'users'));
     }
-    public function ticketSalesByUserReq(Request $request){
-        $date = date('Y-m-d', strtotime($request->date));
+    public function dealReportReq(Request $request){
+        $startDate = date('Y-M-d', strtotime($request->startDate));
+        $endDate = date('Y-M-d', strtotime($request->endDate));
         $now = date('Y-m-d h:i a');
 
+        $book = Booking::where('user_id', $request->id)
+                        ->whereDate('created_at', '>=', date('Y-m-d',strtotime($request->startDate)) )
+                        ->whereDate('created_at', '<=', date('Y-m-d',strtotime($request->endDate)) )
+                        ->with('users', 'deals')->orderBy('deal_id', 'asc')->get();
         
-        $detail = ['date'=>$date, 'now'=>$now];
+        
+        $deal = Report::dealNames($book);
+        $dealQty = Report::dealQtyById($deal['id']);
+        $dealPrice = Report::dealPriceById($deal['id']);
+
+        $detail = ['name'=>$deal['name'], 'username'=>$deal['username'], 'dealQty'=>$dealQty, 'dealPrice'=>$dealPrice , 'startDate'=>$startDate, 'endDate'=>$endDate, 'now'=>$now];
         return response()->json($detail);
     }
 
+
+    public function ticketSalesByUser(){
+        $users = User::all();
+        $movies = Movie::all();
+        return view('pages.admin.reports.ticketReports.ticketSalesByUser', compact('movies', 'users'));
+    }
+    public function ticketSalesByUserReq(Request $request){
+        $startDate = date('Y-M-d', strtotime($request->startDate));
+        $endDate = date('Y-M-d', strtotime($request->endDate));
+        $now = date('Y-m-d h:i a');
+
+        if($request->movie_id == null){
+            $book = Booking::where('user_id', $request->user_id)
+                        ->whereDate('created_at', '>=', date('Y-m-d',strtotime($request->startDate)) )
+                        ->whereDate('created_at', '<=', date('Y-m-d',strtotime($request->endDate)) )
+                        ->with('users', 'deals', 'movies', 'tickets', 'screens')->orderBy('movie_id', 'asc')->get();
+        }else{
+            $book = Booking::where('user_id', $request->user_id)
+                        ->where('movie_id', $request->movie_id)
+                        ->whereDate('created_at', '>=', date('Y-m-d',strtotime($request->startDate)) )
+                        ->whereDate('created_at', '<=', date('Y-m-d',strtotime($request->endDate)) )
+                        ->with('users', 'deals', 'movies', 'tickets', 'screens')->orderBy('deal_id', 'asc')->get();
+        }
+
+        $userName = User::where('id', $request->user_id)->pluck('firstName')->first();
+
+        $movie = Report::getMovies($book);
+        $qtyNprice = Report::getQtyMovies($movie['movie_id']);
+        
+        $detail = ['movie'=>$movie['movie_name'], 'qtyNprice'=>$qtyNprice, 'startDate'=>$startDate, 'endDate'=>$endDate, 'now'=>$now, 'userName'=>$userName];
+        return response()->json($detail);
+    }
 
 }

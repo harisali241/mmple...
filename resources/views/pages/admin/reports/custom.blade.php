@@ -87,13 +87,19 @@
 					<td class="alignCenter">@if(in_array('ticketCancellationByDay', getRoutePath()))<a class="edit_btn" href="{{ url('ticketCancellationByDay') }}">View</a>@endif</td>
 				</tr>
 
-				{{-- <tr>
+				<tr>
+					<td><strong>Deals Report</strong></td>
+					<td class="alignCenter">@if(in_array('dealReport', getRoutePath()))<a class="edit_btn" href="{{ url('dealReport') }}">View</a>@endif</td>
+				</tr>
+
+				<tr>
 					<td><strong>Ticket Sales by User</strong></td>
 					<td class="alignCenter">@if(in_array('ticketSalesByUser', getRoutePath()))<a class="edit_btn" href="{{ url('ticketSalesByUser') }}">View</a>@endif</td>
-				</tr> --}}
+				</tr>
 			</tbody>
 		</table>
 	</div>
 </div><!-- container -->
+<br><br>
 
 @endsection

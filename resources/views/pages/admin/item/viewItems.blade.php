@@ -88,6 +88,7 @@
 			@endif
 		</div>
 	</div><!-- Row Close -->
+</div>
 
 		<div class="delete_confirm_modal modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 		  <div class="modal-dialog modal-sm">

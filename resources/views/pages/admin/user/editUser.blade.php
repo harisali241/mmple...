@@ -266,6 +266,7 @@
 	</form>
 
 </div>
+<br><br>
 
 @endsection
 @section('scripts')

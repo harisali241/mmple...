@@ -69,12 +69,13 @@ class ConcessionMaster extends Model
         $type = json_decode($deal->type);
         $voucherNo = rand(1000, 100000);
         $conM = new ConcessionMaster;
-                    $conM->user_id = Auth::user()->id;
-                    $conM->deal_id = $deal->id;
-                    $conM->voucherNo = $voucherNo;
-                    $conM->totalAmount = 0;
-                    $conM->status = 1;
-                    $conM->save();
+        
+        $conM->user_id = Auth::user()->id;
+        $conM->deal_id = $deal->id;
+        $conM->voucherNo = $voucherNo;
+        $conM->totalAmount = 0;
+        $conM->status = 1;
+        $conM->save();
 
         $id = ConcessionMaster::where('user_id', Auth::user()->id)
                 ->where('totalAmount', 0)
@@ -114,6 +115,10 @@ class ConcessionMaster extends Model
     public static function voucherRecord(Request $request){
         $voucherDetail = ConcessionMaster::where('voucherNo', $request->id)->where('status', 1)->with('concession_details', 'concession_details.items', 'concession_details.packages')->first();
         return $voucherDetail;
+    }
+
+    public static function deleteCon($id){
+        ConcessionMaster::findOrFail($id)->delete();
     }
 
 }

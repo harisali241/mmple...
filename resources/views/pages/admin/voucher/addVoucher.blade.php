@@ -344,7 +344,7 @@
                 url: '/getTicketPrice',
                 method:'POST',
                 dataType:'json',
-                data:{ 'ticketPrice' : ticketPrice , '_token': {{csrf_token()}} },
+                data:{ 'ticketPrice' : ticketPrice , '_token': '{{csrf_token()}}' },
                 success: function (data) {
                 	//console.log(data);
 			        $('.'+control_id+'price').val(data);

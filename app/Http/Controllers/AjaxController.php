@@ -20,17 +20,6 @@ use View;
 class AjaxController extends Controller
 {
 
-    // public function searchShowTime(Request $request){
-
-    //     $showTimesPag = ShowTime::where('key', 'private')->with('movies', 'screens', 'vouchers', 'tickets', 'timings')->orderBy('id', 'desc')->paginate(20);
-
-    //     $view = View::make('pages.admin.showTime.viewRenderShowTime', [
-    //         'showTimesPag' => $showTimesPag
-    //     ]);
-
-    //     return $html = $view->render();
-    // }
-
 //*******************************Booking Ticket******************************************//
 
 	public function dummyRequest(Request $request){
@@ -42,6 +31,7 @@ class AjaxController extends Controller
         $itemPrice = Item::where('name' , $request->itemName)->pluck('defaultPrice')->first();
         return response()->json($itemPrice);
     }
+
 
     public function ticketPrice(Request $request){
     	//dd($request);
@@ -148,22 +138,37 @@ class AjaxController extends Controller
             $ticket = 'child price';
         }
 
-        $seat = new Seat;
+        $id = Seat::where('show_time_id', $request->showTime_id)
+                    ->where('seatNumber', $request->currentSeatNumber)
+                    ->where('hold', 1)
+                    ->pluck('id')->first();
+        if($id == null){
+            $seat = new Seat;
+            $seat->show_time_id = $request->showTime_id;
+            $seat->seatNumber = $request->currentSeatNumber;
+            $seat->user_id = Auth::user()->id;
+            $seat->isComp = $request->allow_comp;
+            $seat->ticketType = $ticket;
+            $seat->hold = 1;
+            $seat->status = 0;
 
-        $seat->show_time_id = $request->showTime_id;
-        $seat->seatNumber = $request->currentSeatNumber;
-        $seat->user_id = Auth::user()->id;
-        $seat->isComp = $request->allow_comp;
-        $seat->ticketType = $ticket;
-        $seat->hold = 1;
-        $seat->status = 0;
-
-        $seat->save();
+            $seat->save();
+        }
+        
         return response()->json(true);
     }
 
     public function deleteSeat(Request $request){
         $id = Seat::where('show_time_id', $request->showTime_id)->where('seatNumber', $request->currentSeatNumber)->where('hold', 1)->pluck('id')->first();
+        
+        $booking_id = Booking::where('show_time_id', $request->showTime_id)
+                ->where('seatNumber', $request->currentSeatNumber)
+                ->where('hold', 1)->pluck('id')->first();
+        if($booking_id != null){
+            $id_c = Booking::where('id', $booking_id)->pluck('voucher_id')->first();
+            Booking::findOrFail($booking_id)->delete();
+            if($id_c != null){ ConcessionMaster::deleteCon($id_c); }
+        }
 
         Seat::findOrFail($id)->delete();
         return response()->json(true);
@@ -179,7 +184,7 @@ class AjaxController extends Controller
         $booking_id = Booking::where('user_id', Auth::user()->id)
                 ->where('hold',1)
                 ->where('status', 0)
-                ->pluck('id'); 
+                ->pluck('id');
 
         for($i=0; $i<count($id); $i++){
             Seat::findOrFail($id[$i])->delete();
@@ -187,7 +192,9 @@ class AjaxController extends Controller
 
         if(count($booking_id) > 0){
             for($i=0; $i<count($booking_id); $i++){
+                $id_c = Booking::where('id', $booking_id[$i])->pluck('voucher_id')->first();
                 Booking::findOrFail($booking_id[$i])->delete();
+                if($id_c != null){ ConcessionMaster::deleteCon($id_c); }
             }
         }
         
@@ -213,7 +220,9 @@ class AjaxController extends Controller
             Seat::findOrFail($id[$i])->delete();
         }
         for($i=0; $i<count($booking_id); $i++){
+            $id_c = Booking::where('id', $booking_id[$i])->pluck('voucher_id')->first();
             Booking::findOrFail($booking_id[$i])->delete();
+            if($id_c != null){ ConcessionMaster::deleteCon($id_c);  }
         }
 
         return response()->json(true);
@@ -230,17 +239,16 @@ class AjaxController extends Controller
 
     public function searchCancelSeat(Request $request){
         if($request->columToSearch == 'count_asc'){
-            $seats = Seat::where('status', 0)->where('user_id', Auth::user()->idbookTickets)->where('hold', 1)->with('show_times.screens')->orderBy('id', 'asc')->limit($request->wordToSearch)->get();
+            $seats = Seat::where('status', 0)->where('user_id', Auth::user()->id)->where('hold', 1)->with('show_times.screens')->orderBy('id', 'asc')->limit($request->wordToSearch)->get();
         }elseif($request->columToSearch == 'count_desc'){
-            $seats = Seat::where('status', 0)->where('user_id', Auth::user()->idbookTickets)->where('hold', 1)->with('show_times.screens')->orderBy('id', 'desc')->limit($request->wordToSearch)->get();
+            $seats = Seat::where('status', 0)->where('user_id', Auth::user()->id)->where('hold', 1)->with('show_times.screens')->orderBy('id', 'desc')->limit($request->wordToSearch)->get();
         }else{
-            $seats = Seat::where('status', 0)->where('user_id', Auth::user()->idbookTickets)->where('hold', 1)->where($request->columToSearch ,'like', '%'.$request->wordToSearch.'%')->with('show_times.screens')->get();
+            $seats = Seat::where('status', 0)->where('user_id', Auth::user()->id)->where('hold', 1)->where($request->columToSearch ,'like', '%'.$request->wordToSearch.'%')->with('show_times.screens')->get();
         }
 
         $view = View::make('pages.terminal.tickets.cancelSeatsRenderView', [
             'seats' => $seats
         ]);
-
         return $html = $view->render();
     }
 
@@ -262,12 +270,22 @@ class AjaxController extends Controller
 //*******************************Cancel Ticket******************************************//
   
     public function searchCancelTicket(Request $request){
-        if($request->columToSearch == 'count_asc'){
-            $p_tickets = PrintedTicket::where('status', 1)->where('showTime' ,'>', date('Y-m-d H:i:s'))->with('movies', 'screens', 'seats')->orderBy('id', 'asc')->limit($request->wordToSearch)->get();
-        }elseif($request->columToSearch == 'count_desc'){
-            $p_tickets = PrintedTicket::where('status', 1)->where('showTime' ,'>', date('Y-m-d H:i:s'))->with('movies', 'screens', 'seats')->orderBy('id', 'desc')->limit($request->wordToSearch)->get();
+
+        if($request->sqlQuery == null){
+            $p_tickets = PrintedTicket::where('status', 1)->where('showTime' ,'>', date('Y-m-d H:i:s'))->where($request->columToSearch ,'like', '%'.$request->wordToSearch.'%')->with('movies', 'screens', 'users')->get();
         }else{
-            $p_tickets = PrintedTicket::where('status', 1)->where('showTime' ,'>', date('Y-m-d H:i:s'))->where($request->columToSearch ,'like', '%'.$request->wordToSearch.'%')->with('movies', 'screens', 'seats')->get();
+            if($request->c_date == null){
+                $p_tickets = PrintedTicket::where('showTime' ,'>', date('Y-m-d H:i:s'))
+                                ->whereRaw($request->sqlQuery)
+                                ->with('movies', 'screens', 'users')
+                                ->get();
+            }else{
+                $p_tickets = PrintedTicket::where('showTime' ,'>', date('Y-m-d H:i:s'))
+                                ->whereRaw($request->sqlQuery)
+                                ->whereDate('created_at','=', date('Y-m-d', strtotime($request->c_date)))
+                                ->with('movies', 'screens', 'users')
+                                ->get();
+            }
         }
 
         $view = View::make('pages.terminal.tickets.cancelRenderView', [
@@ -295,6 +313,16 @@ class AjaxController extends Controller
                 $book->remarks = $request->remarks[$s];
                 $book->cancelUserId = Auth::user()->id;
                 $book->save();
+
+                if($request->voucherNo[$s] != null){
+                    $conM = ConcessionMaster::findOrFail($request->voucherNo[$s]);
+                    $conM->status = 0;
+                    $conM->remarks = $request->remarks[$s];
+                    $conM->cancelUserId = Auth::user()->id;
+                    $conM->cancelDate = date('Y-m-d');
+                    $conM->save();
+                }
+                
             }
             return response()->json($request->id);
         }else{

@@ -27,6 +27,7 @@ a:active, a:hover , a:focus {
 }
 .edit_btn{
 background-color: #149fb0;
+border:none;
     color: white;
     padding: 5px 25px;
     border-radius: 4px;

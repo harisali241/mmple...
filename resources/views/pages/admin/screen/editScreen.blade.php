@@ -153,6 +153,8 @@
  </div><!-- form-container -->
 
 </div>
+<br><br>
+
 @endsection
 
 @section('scripts')

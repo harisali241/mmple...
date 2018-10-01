@@ -54,6 +54,7 @@ class UserController extends Controller
             'phoneNo' => 'required',
             'city' => 'required',
             'salary' => 'required',
+            'image' => 'required',
         ]);
 
         $error = User::createUser($request);
@@ -103,7 +104,6 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {   
         $request->validate([
-            'image' => 'required',
             'firstName' => 'required',
             'lastName' => 'required',
             'email' => 'required',

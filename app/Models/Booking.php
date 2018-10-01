@@ -25,7 +25,7 @@ class Booking extends Model
     }
 
     public function users(){
-    	return $this->belongsTo('App\Models\User','user_id');
+    	return $this->belongsTo('App\User','user_id');
     }
 
     public function distributers(){
@@ -49,10 +49,54 @@ class Booking extends Model
     }
 
     public function concession_masters(){
-        return $this->belongsTo('App\Models\ConcessionMaster','voucher_id');
+        return $this->belongsTo('App\Models\ConcessionMaster', 'voucher_id');
     }
 
-    public static function holdBooking(Request $request){
+    protected static function deleteHoldBooking($showTime_id){
+        $id = Booking::where('show_time_id', $showTime_id)
+                        ->where('user_id', Auth::user()->id)
+                        ->where('hold', 1)
+                        ->pluck('id');
+
+        for($x=0; $x<count($id); $x++){
+            $id_c = Booking::where('id', $id[$x])->pluck('voucher_id')->first();
+            Booking::findOrFail($id[$x])->delete();
+            if($id_c != null){ 
+                ConcessionMaster::deleteCon($id_c); 
+            }
+        }
+    }
+
+    protected static function getHoldSeats($showTime_id){
+        $seats = Seat::where('show_time_id', $showTime_id)
+                        ->where('user_id', Auth::user()->id)
+                        ->where('hold', 1)
+                        ->get();
+        return $seats;
+    }
+
+    protected static function getShowTimeDetails($showTime_id){
+        $show = ShowTime::where('id', $showTime_id)
+                        ->with('movies.distributers', 'tickets')
+                        ->get()->first();
+        return $show;
+    }
+
+    protected static function getPrice($seat, $showTimes){
+        if($seat->isComp == 1){
+            $ticket_price = 0;
+        }else{
+            if($seat->ticketType == 'adult price'){ 
+                 $ticket_price = $showTimes->tickets->adultPrice;
+            }else{ 
+                 $ticket_price = $showTimes->tickets->childPrice;
+            }
+        }
+        return $ticket_price;
+    }
+    
+
+    public static function holdBooking(Request $request){     
         if($request->deal_id != 0){
             $deal = Deal::where('id', $request->deal_id)->where('status', 1)->get()->first();
             $deal_type = json_decode($deal->type);
@@ -66,102 +110,91 @@ class Booking extends Model
                     $deal_ticket_qty += $deal_qty[$d];
                 }
             }
-            $reCount = $deal->buyTicket + $deal_ticket_qty;
+            $ticketQty = $deal_ticket_qty;
         }
-        
 
-        $seats = Seat::where('show_time_id', $request->showTime_id)->where('user_id', Auth::user()->id)->where('hold', 1)->get();
-        $showTimes = ShowTime::where('id', $request->showTime_id)->where('status', 1)->where('key', 'public')->with('movies', 'movies.distributers', 'tickets')->get()->first();
-        
-        
-        if($request->allow_comp == 'yes'){
-            $isComp = 1;
+        $seats = Booking::getHoldSeats($request->showTime_id);
+        Booking::deleteHoldBooking($request->showTime_id);
+        $showTimes = Booking::getShowTimeDetails($request->showTime_id);
+             
+
+        $countDown = count($seats);
+        if($request->deal_id != 0){
+            $afterThis = $deal->buyTicket;
         }else{
-            $isComp = 0;
+             $afterThis = 1;
         }
-        $count = 1;
         foreach ($seats as $seat){
 
-            $id = booking::where('show_time_id', $request->showTime_id)
-                                ->where('seatNumber', $seat->seatNumber)
-                                ->where('user_id', Auth::user()->id)
-                                ->pluck('id')->first();
-            if( $id == null ){
-                if($seat->isComp == 1){
-                    $ticket_price = 0;
-                }else{
-                    if($seat->ticketType == 'adult price'){ 
-                         $ticket_price = $showTimes->tickets->adultPrice;
-                    }else{ 
-                         $ticket_price = $showTimes->tickets->childPrice;
-                    }
-                }
-
-                if($request->deal_id != 0){
-                    if($deal->buyTicket < $count){
-                        for($u=0; $u<count($deal_type); $u++){
-                            if($deal_type[$u] == 'ticket'){
-                                $compli = 1;
-                                $deal_id = $deal->id;
-                                $ticket_price = 0;
-                            }
-                        }
-                    }else{
-                        $compli = $seat->isComp;
-                        $deal_id = null;
-                    }
-
-                    if($deal->buyTicket == $count){
-                        if(in_array('item', $deal_type) || in_array('package', $deal_type)){
-                            $voucherID = ConcessionMaster::createFreeItem($deal);
-                        }else{
-                             $voucherID = null;
-                        }
-                    }
-                }
-
-
-                $booking = new Booking;
-
-                $booking->show_time_id = $request->showTime_id;
-                $booking->user_id = Auth::user()->id;
-                $booking->ticket_id = $showTimes->ticket_id;
-                $booking->movie_id = $showTimes->movie_id;
-                $booking->distributer_id = $showTimes->movies->distributer_id;
-                $booking->screen_id = $showTimes->screen_id;
-                if($request->deal_id != 0){
-                    $booking->deal_id = $deal_id;
-                    if($deal->buyTicket == $count){
-                        $booking->voucher_id = $voucherID;
-                    }
-                }
-                $booking->ticketType = $seat->ticketType;
-                if($request->deal_id != 0){
-                    $booking->isComplimentary = $compli;
-                }else{
-                    $booking->isComplimentary = $seat->isComp;
-                }
-                $booking->seatNumber = $seat->seatNumber;
-                $booking->seatQty = 1;
-                $booking->price = $ticket_price;
-                $booking->date = date('Y-m-d');
-                $booking->showDate = $showTimes->date;
-                $booking->showTime = $showTimes->date.' '.$showTimes->time;
-                $booking->key =  $showTimes->key;
-                $booking->hold = 1;
-                $booking->status = 0;
-                $booking->save();
-            }
             if($request->deal_id != 0){
-                if($reCount == $count){
-                    $count = 1;
-                }else{
-                    $count++;
+                if($afterThis == 1){
+                    if(in_array('item', $deal_type) || in_array('package', $deal_type)){
+                        $voucherID = ConcessionMaster::createFreeItem($deal);
+                        $deal_id = $deal->id;
+                    }
                 }
             }
-        }
-       
+            
+            if($request->deal_id != 0){
+                $afterThis--;
+                //Checking Buy Ticket Qty Then Apply Deals
+                if($afterThis<0){
+                    if(in_array('ticket', $deal_type)){
+                        $isComp = 1;
+                        $deal_id = $deal->id;
+                        $ticket_price = 0;
+                        $voucherID = null;
+                    }
+
+                    // Handle The Duration Of Deal Tickets
+                    if($deal_ticket_qty == 0){
+                        $afterThis = $deal->buyTicket;
+                        $deal_ticket_qty = $ticketQty;
+                        $afterThis--;
+                    }else{
+                        $deal_ticket_qty--;
+                    }
+                }
+            }
+
+            if($afterThis>0){
+                $isComp = $seat->isComp;
+                $deal_id = null;
+                $voucherID = null;
+                $ticket_price = Booking::getPrice($seat, $showTimes);
+            }
+
+            
+            $booking = new Booking;
+
+            $booking->show_time_id = $request->showTime_id;
+            $booking->user_id = Auth::user()->id;
+            $booking->ticket_id = $showTimes->ticket_id;
+            $booking->movie_id = $showTimes->movie_id;
+            $booking->distributer_id = $showTimes->movies->distributer_id;
+            $booking->screen_id = $showTimes->screen_id;         
+            $booking->ticketType = $seat->ticketType;
+            $booking->seatNumber = $seat->seatNumber;
+            $booking->seatQty = 1;
+            $booking->deal_id = $deal_id;
+            $booking->price = $ticket_price;
+            $booking->voucher_id = $voucherID;
+            $booking->date = date('Y-m-d');
+            $booking->isComplimentary = $isComp;
+            $booking->showDate = $showTimes->date;
+            $booking->showTime = $showTimes->date.' '.$showTimes->time;
+            $booking->key =  $showTimes->key;
+            $booking->hold = 1;
+            $booking->status = 0;
+            
+            $booking->save();
+        
+    
+            $countDown--;
+        } 
     }
+
+    
 
     public static function book(Request $request){
 

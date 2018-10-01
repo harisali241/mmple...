@@ -45,7 +45,7 @@
 							<td>{{$con->users->firstName}}</td>
 							<td>{{$con->totalAmount }}</td>
 							<td>{{date('d-M-y h:i', strtotime($con->created_at))}}</td>
-							<td class="alignCenter"><a href="{{url('reprintConcesstion/'.$con->id)}}" target="_blank" class="edit_btn" style="color:white;text-decoration:none;">Reprint</a></td>
+							<td class="alignCenter"><a href="{{url('reprintConcession/'.$con->id)}}" target="_blank" class="edit_btn" style="color:white;text-decoration:none;">Reprint</a></td>
 							<td class="alignCenter">
 					            <textarea class="remarks"></textarea><br/><br/>
 					            <input type="hidden" class="id_to_delete" value="{{$con->id}}">

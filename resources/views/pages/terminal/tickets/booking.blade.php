@@ -24,7 +24,7 @@
 									
 									<div class="col-md-3 col-sm-3 nopadding">
 										<button class="btn upcoming" type="button">
-											  Upcoming <span class="badge"> {{$movieStatus}} </span>
+											  Upcoming <span class="badge"> {{count($movieStatus)}} </span>
 										</button>
 									</div>
 									
@@ -146,12 +146,12 @@
 					</div>
 					
 					<div class="col-md-6 padding5">
-						<div class="deal-bg" id="terminal" >
+						<div class="deal-bg" id="terminal">
 							<div class="col-md-12 col-sm-12 add-deals-head">
-								 <div class="col-md-9 col-sm-9 nopadding">	
+								<div class="col-md-9 col-sm-9 nopadding">	
 									<p>Add your Tickets (on particular basis)</p>
-									</div>
-									<div class="col-md-3 col-sm-3 nopadding">	
+								</div>
+								<div class="col-md-3 col-sm-3 nopadding">	
 									<div class="navbar-right dropdown settings ">
 									  <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img  src="{{ asset('assets/images/settings.png') }}"/></a>
 									  <ul class="dropdown-menu">
@@ -178,9 +178,9 @@
 									<p>Value</p>
 								</div>
 							</div>
-							{{-- <div style="overflow-y: scroll; scroll-behavior: smooth; height:400px;"> --}}
+							{{-- <div style="overflow-y: scroll; scroll-behavior: smooth; height:50vh;"> --}}
 							@foreach(getUserSelectedSeats() as $booking)
-								<div class="terminal_item add-movie-item add-deals-item">
+								<div class="terminal_item add-movie-item add-deals-item" >
 									@if(Session::has('message'))
 										<input type="hidden" value="{{Session::get('message')}}" class="terminal_m_adv_id">
 									@else
@@ -207,8 +207,8 @@
 								</div>
 							@endforeach
 
-							{{-- </div> --}}
-						
+							{{-- </div>
+ --}}						
 						</div>
 						
 						<div class="clear"></div>
@@ -848,7 +848,7 @@
 
 
 	$("#terminal").on('click','.ticket_delete', function() {
-		$("#hack").show();
+		//$("#hack").show();
 		setTimeout(function(){
 		  if( $("#hack").is(':visible') ){
 			$("#hack").hide(0);

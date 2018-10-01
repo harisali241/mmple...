@@ -7,6 +7,8 @@ use App\Models\Booking;
 use App\Models\PrintedTicket;
 use App\Models\ConcessionDetail;
 use App\Models\ConcessionMaster;
+use App\Models\Movie;
+use App\Models\Screen;
 use App\User;
 use Auth;
 
@@ -53,7 +55,10 @@ class PrintedTicketController extends Controller
     }
 
     public function cancelTicket(){
-        return view('pages.terminal.tickets.cancelTicket');
+        $movies = Movie::all();
+        $screens = Screen::all();
+        $users = User::all();
+        return view('pages.terminal.tickets.cancelTicket', compact('movies', 'screens', 'users'));
     }
 
     public function viewAndPrint_c(Request $request){

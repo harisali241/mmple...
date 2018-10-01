@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Movie;
+use App\Models\ShowTime;
 use App\Models\Deal;
 class BookTicketController extends Controller
 {
@@ -28,6 +29,8 @@ class BookTicketController extends Controller
             return redirect('viewReserve');
         }elseif(in_array('cancelConcession', getRoutePath())){
             return redirect('cancelConcession');
+        }elseif(in_array('voucherConcession', getRoutePath())){
+            return redirect('voucherConcession');
         }else{
             return redirect()->back()->withErrors('Access Denied');
         }
@@ -35,7 +38,13 @@ class BookTicketController extends Controller
 
     public function booking(){
     	$movies = Movie::where('status', 1)->with('distributers')->get();
-    	$movieStatus = Movie::where('status', 2)->pluck('id');
+    	$ms = ShowTime::where('status', 2)->with('movies')->get();
+        $movieStatus = [];
+        for($i=0; $i<count($ms); $i++){
+            if(!in_array($ms[$i]->movies->title, $movieStatus)){
+                array_push($movieStatus, $ms[$i]->movies->title);
+            }
+        }
         $deal = Deal::where('status', 1)->get()->first();
     	return view('pages.terminal.tickets.booking', compact('movies','movieStatus', 'deal'));
     }

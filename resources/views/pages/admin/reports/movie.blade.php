@@ -51,6 +51,7 @@
 					<td><strong>Weekly Movie Report</strong></td>
 					<td class="alignCenter">@if(in_array('weeklyMovieReport', getRoutePath()))<a class="edit_btn" href="{{ url('weeklyMovieReport') }}">View</a>@endif</td>
 				</tr>
+
 			</tbody>
 		</table>
 	</div>

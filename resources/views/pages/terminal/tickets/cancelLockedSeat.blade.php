@@ -95,7 +95,7 @@
 			var checkId = [];
 			$(document).ready(function(){
 				$('.multiCancel').on('click', function(){
-					var checkId = [];
+					checkId = [];
 					$(".container .allCancel").each(function () {
 						if($(this).is(':checked')){
 							checkId.push($(this).val());
@@ -156,6 +156,7 @@
 						type: 'json',
 						data: {'columToSearch':columToSearch, 'wordToSearch':wordToSearch, '_token': '{{csrf_token()}}'},
 						success: function(data){
+							console.log(data);
 							if(data != ''){
 								$('.tableView').show();
 								$('.searchable').append(data);

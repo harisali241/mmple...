@@ -71,9 +71,9 @@
 
 							<tr> 
 								<td>No.</td>
-								<td>Item Name</td>
 								<td>Qty</td>
 								<td>Price</td>
+								<td>Sales</td>
 							</tr> 
 						</thead>
 						<tbody class="searchable">

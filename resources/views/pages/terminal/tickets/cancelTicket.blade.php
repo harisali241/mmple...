@@ -25,57 +25,91 @@
 	 	</div>
 	</div><!--row-->
 
-  	<div class="col-sm-2" style="margin-left: 47px;">
-	  	<div class="search-btn input-group">
-			<select name="selection" class="form-control search-control columToSearch" style="">
-				<option value="count_asc">Search by Counts - Asc</option>
-				<option value="count_desc">Search by Counts - Desc</option>
-				<option value="id">Search by Ticket No</option>
-			</select>
+	<div class="row">
+		<div class="col-sm-1"></div>
+		<div class="col-sm-3">
+		  	<div class="search-btn input-group">
+				<input type="text" name="searchFilter" class="form-control search-control wordToSearch" placeholder="Search by Ticket No...">
+				<span class="input-group-btn">
+					<button class="btn btn-default search-btn search-btn-ticket" type="button"><img  src="{{ asset('assets/images/search-icon.png') }}"/></button>
+				</span>
+			</div>
 		</div>
-	</div>
-	<div class="col-sm-3">
-	  	<div class="search-btn input-group">
-			<input type="text" name="searchFilter" class="form-control search-control wordToSearch" placeholder="Search by count OR Ticket No...">
-			<span class="input-group-btn">
-				<button class="btn btn-default search-btn search-btn-ticket" type="button"><img  src="{{ asset('assets/images/search-icon.png') }}"/></button>
-			</span>
+		<div class="col-sm-3">
+			<button type="button" style="border:none;" class="edit_btn filters">Filter</button>
 		</div>
-	</div>
-
+		<div class="col-sm-3">
 			
-{{--     <style>
-        .userLoginPanel { display:none; }
-    </style> --}}
-				
-        <div class="row">
-        	<div style="float:right;margin-right:80px;margin-top:10px;margin-bottom:10px;">
-	            <a style="cursor:pointer;" type="button" class="edit_btn multiCancel" data-toggle="modal" data-target=".delete_confirm_modal">Multi Cancel</a>
-	        </div>
-            <div class="col-md-12 showNoRecord">
-                <table border="1" id="example" cellpadding="0" cellspacing="0" class="table table-hover tableView admin-table" style="display:none;">
-                    <thead>
-	                    <tr>
-	                    	<th></th>
-	                        <th>Ticket Id</th>
-	                        <th>Movie</th>
-	                        <th>Screen name</th>
-	                        <th>Show Date & time</th>
-	                        <th>Seat id</th>
-	                        <th>Printed date</th>
-	                        <th>Remarks & Cancel</th>
-	                    </tr>
-                    </thead>
-                    <tbody class="searchable">
-                    	
-                    </tbody>
-                </table>
-               
-			</div><!-- Container Close -->
 		</div>
+		<div class="col-sm-2">
+			<button type="button" style="border:none;" class="edit_btn multiCancel" data-toggle="modal" data-target=".delete_confirm_modal">Multi Cancel</button>
+		</div>
+	</div>
+	<div class="row form-container filter-box" style="display: none;">
+		<div class="col-xs-12" style="margin-bottom:15px;">
+			<h3 align="center">Filter</h3>
+			<div class="col-sm-1"></div>
+
+			<div class="col-sm-2">
+				<select name="movie_id" class="movie_id form-control search-control columToSearch" style="">
+					<option value="">Select Movie</option>
+					@foreach($movies as $movie)
+						<option value="{{$movie->id}}">{{$movie->title}}</option>
+					@endforeach
+				</select>
+			</div>
+			<div class="col-sm-2">
+				<select name="screen_id" class="screen_id form-control search-control columToSearch" style="">
+					<option value="">Select Screen</option>
+					@foreach($screens as $screen)
+						<option value="{{$screen->id}}">{{$screen->name}}</option>
+					@endforeach
+				</select>
+			</div> 
+			<div class="col-sm-2">
+				<select name="user_id" class="user_id form-control search-control columToSearch" style="">
+					<option value="">Select User</option>
+					@foreach($users as $user)
+						<option value="{{$user->id}}">{{$user->firstName}}</option>
+					@endforeach
+				</select>
+			</div> 
+			<div class="col-sm-2">
+				<input type="date" name="c_date" id="" class="c_date form-control" autocomplete="off">
+			</div>
+			<div class="col-sm-1">
+				<button type="button" style="border:none;" class="edit_btn search-filter">Search</button>
+			</div>
+		</div>
+	</div>
+			
+	<div class="row">
+    	
+        <div class="col-md-12 showNoRecord">
+            <table border="1" id="example" cellpadding="0" cellspacing="0" class="table table-hover tableView admin-table" style="display:none;">
+                <thead>
+                    <tr>
+                    	<th></th>
+                        <th>Ticket Id</th>
+                        <th>Movie</th>
+                        <th>Ticket Genrated By</th>
+                        <th>Screen name</th>
+                        <th>Show Date & time</th>
+                        <th>Seat id</th>
+                        <th>Printed date</th>
+                        <th>Remarks & Cancel</th>
+                    </tr>
+                </thead>
+                <tbody class="searchable">
+                	
+                </tbody>
+            </table>
+           
+		</div><!-- Container Close -->
+	</div>
 
 	<div class="delete_confirm_modal modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-		 <div class="modal-dialog modal-sm">
+		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
 			  Confirm Delete?
 			</div>
@@ -94,43 +128,44 @@
 @section('scripts')
 
 	<script type="text/javascript">
-			var checkId = [];
-			var multiRemarks = [];
-			$(document).ready(function(){
-				$('.multiCancel').on('click', function(){
-					checkId = [];
-					multiRemarks = [];
-					$(".container .allCancel").each(function () {
-						if($(this).is(':checked')){
-							checkId.push($(this).val());
-						}
-					});
-					$(".container .remarks").each(function () {
-						if($(this).parent().parent().parent().find('.idFromhere').find('.allCancel').is(':checked') ){
-							multiRemarks.push($(this).val());
-						}
-					});
+		var checkId = [];
+		var multiRemarks = [];
+		$(document).ready(function(){
+			$('.multiCancel').on('click', function(){
+				checkId = [];
+				multiRemarks = [];
+				$(".container .allCancel").each(function () {
+					if($(this).is(':checked')){
+						checkId.push($(this).val());
+					}
+				});
+				$(".container .remarks").each(function () {
+					if($(this).parent().parent().parent().find('.idFromhere').find('.allCancel').is(':checked') ){
+						multiRemarks.push($(this).val());
+					}
 				});
 			});
+		});
 
-			var id_to_delete;
+		var id_to_delete;
 
-			$(".container").on('click', '.img_delete',function() {
-				id_to_delete = $(this).parent().find('.id_to_delete').val();
-			});
+		$(".container").on('click', '.img_delete',function() {
+			id_to_delete = $(this).parent().find('.id_to_delete').val();
+		});
 
-			$(".modal-footer").on('click', '.btn_yes',function() {
-				console.log();
-				if(checkId[0] != undefined){
-					deleteSingle(checkId, multiRemarks);
-					checkId = [];
-					multiRemarks = [];
+		$(".modal-footer").on('click', '.btn_yes',function() {
+			console.log();
+			if(checkId[0] != undefined){
+				deleteSingle(checkId, multiRemarks);
+				checkId = [];
+				multiRemarks = [];
 
-				}else{
-					var remarks = $('#delete'+id_to_delete).find('.remarks').val();
-					deleteSingle(id_to_delete, remarks);
-				}
-			});
+			}else{
+				var remarks = $('#delete'+id_to_delete).find('.remarks').val();
+				deleteSingle(id_to_delete, remarks);
+			}
+		});
+
 		function deleteSingle(id, remarks){
 			$(document).ready(function(){
 				$.ajax({
@@ -139,6 +174,7 @@
 					type: 'json',
 					data: {'id':id, 'remarks':remarks, '_token': '{{csrf_token()}}'},
 					success: function(data){
+
 						if($.isArray(data)){
 							for(var i=0; i<data.length; i++){
 								$('.removeMe'+data[i]).remove();
@@ -158,15 +194,16 @@
 			$('.search-btn-ticket').on('click', function(){
 				$('.searchable').html('');
 				if( $('.wordToSearch').val() != '' ){
-					var columToSearch = $('.columToSearch').val();
+					var columToSearch = 'id';
 					var wordToSearch = $('.wordToSearch').val();
 					$('.searchable').html('');
 					$.ajax({
 						url: 'searchCancelTicket',
 						method: 'post',
 						type: 'json',
-						data: {'columToSearch':columToSearch, 'wordToSearch':wordToSearch, '_token': '{{csrf_token()}}'},
+						data: {'columToSearch':columToSearch, 'wordToSearch':wordToSearch, 'sqlQuery':null, '_token': '{{csrf_token()}}'},
 						success: function(data){
+							console.log(data);
 							if(data != ''){
 								$('.tableView').show();
 								$('.searchable').append(data);
@@ -198,7 +235,77 @@
 				//deleteSingle(checkId, multiRemarks);
 			});
 
+			$('.filters').on('click', function (){
+				if($('.filter-box').is(':hidden')){
+					$(".filter-box").slideDown( 300, function() {
+					    $('.filter-box').show();
+					});
+				}else{
+					$(".filter-box").slideUp( 300, function() {
+					    $('.filter-box').hide();
+					});
+					$('.movie_id').val('');
+					$('.screen_id').val('');
+					$('.user_id').val('');
+					$('.c_date').val('');
+
+				}
+			});
+
+			var movie_id = '';
+			var screen_id = '';
+			var user_id = '';
+			var c_date = '';
+
+			$('.movie_id').on('change', function (){
+				if($(this).val() != ''){
+					movie_id = `AND movie_id = "`+$(this).val()+`" `;
+				}else{
+					movie_id = '';
+				}
+			});
+			$('.screen_id').on('change', function (){
+				if($(this).val() != ''){
+					screen_id = `AND screen_id = "`+$(this).val()+`" `;
+				}else{
+					screen_id = '';
+				}
+			});
+			$('.user_id').on('change', function (){
+				if($(this).val() != ''){
+					user_id = `AND user_id = "`+$(this).val()+`" `;
+				}else{
+					user_id = '';
+				}
+			});
+
+			$('.search-filter').on('click', function(){
+				if($('.c_date').val() != ''){
+					c_date = $('.c_date').val();
+				}else{
+					c_date = '';
+				}
+
+				var sqlQuery = ' status = "1" '+movie_id+screen_id+user_id;
+				$.ajax({
+					url: 'searchCancelTicket',
+					method: 'post',
+					type: 'json',
+					data: {'sqlQuery':sqlQuery, 'c_date':c_date, '_token': '{{csrf_token()}}'},
+					success: function(data){
+						$('.searchable').html('');
+						if(data != ''){
+							$('.tableView').show();
+							$('.searchable').append(data);
+						}else{
+							$('.searchable').html('');
+						}
+					}
+				});
+			});
+
 		});
+
 	</script>
 
 @endsection

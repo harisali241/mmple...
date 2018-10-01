@@ -127,14 +127,16 @@ class User extends Authenticatable
 
         $user->save();
 
-        Permission::where('user_id', $user->id)->delete();
-        foreach ($request->permission as $permission) {
-            $per = new Permission;
-            $per->user_id = $user->id;
-            $per->menu_id = $permission;
-            $per->status = 1;
-            $per->save();
-        }
+        // if($user->id != 1){
+            Permission::where('user_id', $user->id)->delete();
+            foreach ($request->permission as $permission) {
+                $per = new Permission;
+                $per->user_id = $user->id;
+                $per->menu_id = $permission;
+                $per->status = 1;
+                $per->save();
+            }
+        // }
 
     }
 

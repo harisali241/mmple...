@@ -47,7 +47,7 @@ class CreateBookingsTable extends Migration
             $table->foreign('screen_id')->references('id')->on('screens');
             $table->foreign('distributer_id')->references('id')->on('distributers');
             $table->foreign('deal_id')->references('id')->on('deals');
-            $table->foreign('voucher_id')->references('id')->on('concession_masters');
+            $table->foreign('voucher_id')->references('id')->on('concession_masters')->onDelete('cascade');
         });
     }
 

@@ -174,5 +174,8 @@ Route::post('cashInHandByUserReq', 'ReportController@cashInHandByUserReq');
 Route::get('ticketCancellationByDay', 'ReportController@ticketCancellationByDay')->name('ticketCancellationByDay');
 Route::post('ticketCancellationByDayReq', 'ReportController@ticketCancellationByDayReq');
 
-// Route::get('ticketSalesByUser', 'ReportController@ticketSalesByUser')->name('ticketSalesByUser');
-// Route::post('ticketSalesByUserReq', 'ReportController@ticketSalesByUserReq');
+Route::get('dealReport', 'ReportController@dealReport')->name('dealReport');
+Route::post('dealReportReq', 'ReportController@dealReportReq');
+
+Route::get('ticketSalesByUser', 'ReportController@ticketSalesByUser')->name('ticketSalesByUser');
+Route::post('ticketSalesByUserReq', 'ReportController@ticketSalesByUserReq');

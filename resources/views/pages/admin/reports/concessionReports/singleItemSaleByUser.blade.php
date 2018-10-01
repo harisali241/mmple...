@@ -67,6 +67,7 @@
 							<th>Item Id</th>
 							<th>Item Name</th>
 							<th>Qty</th>
+							<th>Deal</th>
 							<th>Price</th>
 							<th>Sales</th>
 						</thead>
@@ -74,6 +75,7 @@
 						
 						</tbody>
 						<tr> 
+							<td></td>
 							<td></td>
 							<td></td>
 							<td></td>
@@ -149,8 +151,9 @@
 						$('.repDate').text('');
 						$('.c_date').text('')
 
-						html = '';
-						phtml = '';
+						var html = '';
+						var html2 = '';
+						var phtml = '';
 						var grandTotal = 0;
 						
 						var pdate = new Date(items[0].created_at).toDateString();
@@ -167,13 +170,27 @@
 						for(var i=0; i<items.length; i++){
 							var date = new Date(items[i].created_at)
 							var theDate = date.toDateString()+' ('+("0" + date.getHours()).slice(-2)+':'+("0" + date.getMinutes()).slice(-2)+')';
+
+							if(items[i].concession_masters.deal_id != null){
+								var itemType = JSON.parse(items[i].concession_masters.deals.type);
+								var itemQty = JSON.parse(items[i].concession_masters.deals.qty);
+								for (var x=0; x<itemType.length; x++) {
+									if(itemType[x] == 'item'){
+										//html2 = `<td align="center">`+itemQty[x]+`</td>`;
+										html2 = `<td align="center">Deal</td>`;
+									}
+								}
+							}else{
+								html2 = `<td align="center">-</td>`;
+							}
+
 							html += `
 								<tr>
 									<td>`+count+`</td>
 									<td>`+theDate+`</td>
 									<td>`+items[i].item_id+`</td>
 									<td>`+items[i].items.name+`</td>
-									<td>`+items[i].qty+`</td>
+									<td>`+items[i].qty+`</td>`+html2+`
 									<td>`+items[i].price+`</td>
 									<td>`+items[i].amount+`</td>
 								</tr>

@@ -118,7 +118,7 @@
 							<td>`+html2+`</td>
 							<td align="center" style="vertical-align:middle;">`+date+`</td>
 							<td align="center" style="vertical-align:middle;">
-								<a style="cursor:pointer;" onclick="reprint(`+data.id+`);" class="edit_btn" style="color:white;text-decoration:none;">Reprint</a>
+								<a style="cursor:pointer;" onclick="reprint(`+data.id+`);" class="edit_btn" style="color:white;text-decoration:none;">Print</a>
 							</td>
 						</tr>
 					`;

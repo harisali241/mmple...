@@ -11,8 +11,8 @@ class ConcessionDetail extends Model
         'concession_master_id', 'user_id', 'type', 'package_id', 'item_id', 'price', 'qty', 'amount', 'cancelUserId', 'cancelDate', 'status'
     ];
 
-    public function consession_masters(){
-    	return $this->belongsTo('App\Models\ConessionMasters','concession_master_id');
+    public function concession_masters(){
+    	return $this->belongsTo('App\Models\ConcessionMaster','concession_master_id');
     }
 
     public function items(){

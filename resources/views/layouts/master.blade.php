@@ -13,12 +13,12 @@
     <link href="{{ asset('assets/css/bootstrap.css') }}" rel="stylesheet">
 	<link href="{{ asset('assets/css/dashboard.css') }}" rel="stylesheet">
 	<!-- custom scrollbar stylesheet -->
-	<link rel="stylesheet" href="{{ asset('assets/css/jquery.mCustomScrollbar.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/timeline.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/timeline.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.datetimepicker.css') }}"/>
 
 	<script src="{{ asset('assets/js/jquery-1.11.1.js') }}"></script>
+	<link rel="stylesheet" href="{{ asset('assets/css/jquery.mCustomScrollbar.css') }}">
 	
   </head>
 
