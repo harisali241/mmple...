@@ -79,6 +79,8 @@ class TimingController extends Controller
             'trailerDuration' => "required",
             'intervalDuration' => "required",
             'cleanUpDuration' => "required",
+            'dayStartTime' => "required",
+            'dayEndTime' => "required",
         ]);
 
         Timing::updateTiming($request, $id);

@@ -88,7 +88,7 @@
 							
 						</thead>
 					</table>
-					<h3 style="text-align: right;margin-right: 55px;" class="total-seats">Total Seats:  <span class="grandTotal"> 0</span></h3>
+					<h3 style="text-align: right;margin-right: 55px;" class="total-seats">Total Seats:  <span class="grandTotal">0</span></h3>
 				</div><!-- /.table-responsive -->
 			</div>	
 		</div><!-- /col-md-12 -->
@@ -207,6 +207,7 @@
 						var addto = 0;
 						var tothis = 0;
 						var garb = [];
+						var setTotal = [];
 						for(var y=0; y<show.id.length; y++){
 							if(garb.indexOf(show.id[y]) > -1){
 								garb.push(show.id[y]);
@@ -216,7 +217,12 @@
 								});
 							}
 							$('.totals'+show.id[y]).text(addto/2);
-							grandTotal += addto/2;
+
+							if(!!(setTotal.indexOf(show.id[y])+1)){
+							}else{
+								grandTotal += addto/2;
+								setTotal.push(show.id[y]);
+							}
 							addto = 0;
 						}
 

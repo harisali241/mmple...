@@ -413,7 +413,7 @@
 				window.location.reload(1);
 			}
 	  	// After 5 secs
-		}, 7000);
+		}, 5000);
 	@endif
 	
 	if(diabled_popup == 'no'){

@@ -7,6 +7,48 @@ use App\Models\Seat;
 use App\Models\Item;
 use App\Models\Package;
 use App\Models\PrintedTicket;
+use App\Models\Timing;
+use Carbon\Carbon;
+
+function dayStartDate(){
+	$timing = Timing::where('id', 1)->first();
+	$c_dt = Carbon::createFromFormat('Y-m-d H:i:s',date('Y-m-d H:i:s'));
+	$s_hour = 24-date('H',strtotime($timing->dayStartTime));
+    $s_min = date('i',strtotime($timing->dayStartTime));
+    $s_sec = date('s',strtotime($timing->dayStartTime));
+    $dayStartDate = $c_dt->subDay(1)->addHour($s_hour)->addMinute($s_min)->addSecond($s_sec);
+    return $dayStartDate;
+}
+
+function dayEndDate(){
+	$timing = Timing::where('id', 1)->first();
+    $hour = date('H',strtotime($timing->dayEndTime));
+    $min = date('i',strtotime($timing->dayEndTime));
+    $sec = date('s',strtotime($timing->dayEndTime));
+	$c_dt = Carbon::createFromFormat('Y-m-d H:i:s',date('Y-m-d H:i:s'));
+    $dayEndDate = $c_dt->addDay(1)->subHour($hour)->subMinute($min)->subSecond($sec);
+    return $dayEndDate;
+}
+
+function dayStartTime($datetime){
+	$timing = Timing::where('id', 1)->first();
+	$c_dt = Carbon::createFromFormat('Y-m-d H:i:s',date('Y-m-d H:i:s',strtotime($datetime)));
+	$s_hour = date('H',strtotime($timing->dayStartTime));
+    $s_min = date('i',strtotime($timing->dayStartTime));
+    $s_sec = date('s',strtotime($timing->dayStartTime));
+    $dayStartDate = $c_dt->addHour($s_hour)->addMinute($s_min)->addSecond($s_sec);
+    return $dayStartDate;
+}
+
+function dayEndTime($datetime){
+	// $timing = Timing::where('id', 1)->first();
+	// $hour = 24+date('H',strtotime($timing->dayEndTime));
+	// $min = date('i',strtotime($timing->dayEndTime));
+	// $sec = date('s',strtotime($timing->dayEndTime));
+	$c_dt = Carbon::createFromFormat('Y-m-d H:i:s',date('Y-m-d H:i:s',strtotime(dayStartTime($datetime))));
+    $dayEndDate = $c_dt->addDay(1);
+    return $dayEndDate;
+}
 
 function unique_array($arrays){
 	$newArray = [];

@@ -12,11 +12,12 @@ use App\Models\Booking;
 use App\Models\AdvanceBooking;
 use App\Models\Screen;
 use App\User;
+use Carbon\Carbon;
+use App\Models\Timing;
 use App\Models\ConcessionDetail;
 use App\Models\ConcessionMaster;
 use App\Models\ShowTime;
 use App\Models\Report;
-use Carbon\Carbon;
 
 class ReportController extends Controller
 {
@@ -54,7 +55,6 @@ class ReportController extends Controller
     public function showsByTimeReports(Request $request){
     	$showTime = showTime::whereBetween('dateTime', array($request->startDate, $request->endDate) )->with('movies')->with('screens')->get();
         return response()->json($showTime);
-    	//return view('pages.admin.reports.movieReports.showsByTime', compact('showTime'));
     }
 
 
@@ -97,7 +97,7 @@ class ReportController extends Controller
     }
     public function itemSalesReq(Request $request){
         $date = date('Y-m-d', strtotime($request->date));
-        $c_detail = ConcessionDetail::whereDate('created_at', $date)->where('item_id','!=',null)->where('status', 1)->with('items', 'concession_masters.deals')->get();
+        $c_detail = ConcessionDetail::whereBetween('created_at', [ dayStartTime($request->date), dayEndTime($request->date) ])->where('item_id','!=',null)->where('status', 1)->with('items', 'concession_masters.deals')->get();
         return response()->json($c_detail);
     }
     
@@ -108,7 +108,7 @@ class ReportController extends Controller
     }
     public function singleItemSalesReq(Request $request){
         $date = date('Y-m-d', strtotime($request->date));
-        $c_detail = ConcessionDetail::whereDate('created_at', $date)->where('item_id', $request->id)->where('status', 1)->with('items')->get();
+        $c_detail = ConcessionDetail::whereBetween('created_at', [ dayStartTime($request->date), dayEndTime($request->date) ])->where('item_id', $request->id)->where('status', 1)->with('items')->get();
         return response()->json($c_detail);
     }
 
@@ -119,7 +119,7 @@ class ReportController extends Controller
     }
     public function singleItemSalesByUserReq(Request $request){
         $date = date('Y-m-d', strtotime($request->date));
-        $c_detail = ConcessionDetail::whereDate('created_at', $date)->where('item_id','!=',null)->where('status', 1)->where('user_id', $request->id)->with('items', 'concession_masters.deals')->get();
+        $c_detail = ConcessionDetail::whereBetween('created_at', [ dayStartTime($request->date), dayEndTime($request->date) ])->where('item_id','!=',null)->where('status', 1)->where('user_id', $request->id)->with('items', 'concession_masters.deals')->get();
         return response()->json($c_detail);
     }
 
@@ -130,7 +130,7 @@ class ReportController extends Controller
     }
     public function packageSalesReq(Request $request){
         $date = date('Y-m-d', strtotime($request->date));
-        $c_detail = ConcessionDetail::whereDate('created_at', $date)->where('package_id','!=',null)->where('status', 1)->with('packages', 'concession_masters.deals')->get();
+        $c_detail = ConcessionDetail::whereBetween('created_at', [ dayStartTime($request->date), dayEndTime($request->date) ])->where('package_id','!=',null)->where('status', 1)->with('packages', 'concession_masters.deals')->get();
         return response()->json($c_detail);
     }
     
@@ -141,7 +141,7 @@ class ReportController extends Controller
     }
     public function singlePackageSalesReq(Request $request){
         $date = date('Y-m-d', strtotime($request->date));
-        $c_detail = ConcessionDetail::whereDate('created_at', $date)->where('package_id', $request->id)->with('packages')->where('status', 1)->get();
+        $c_detail = ConcessionDetail::whereBetween('created_at', [ dayStartTime($request->date), dayEndTime($request->date) ])->where('package_id', $request->id)->with('packages')->where('status', 1)->get();
         return response()->json($c_detail);
     }
 
@@ -152,7 +152,7 @@ class ReportController extends Controller
     }
     public function packageSalesByUserReq(Request $request){
         $date = date('Y-m-d', strtotime($request->date));
-        $c_detail = ConcessionDetail::whereDate('created_at', $date)->where('package_id','!=',null)->where('user_id', $request->id)->where('status', 1)->with('packages' , 'concession_masters.deals')->get();
+        $c_detail = ConcessionDetail::whereBetween('created_at', [ dayStartTime($request->date), dayEndTime($request->date) ])->where('package_id','!=',null)->where('user_id', $request->id)->where('status', 1)->with('packages' , 'concession_masters.deals')->get();
         return response()->json($c_detail);
     }
 
@@ -163,7 +163,7 @@ class ReportController extends Controller
     }
     public function concessionCancellationByDayReq(Request $request){
         $date = date('Y-m-d', strtotime($request->date));
-        $c_detail = ConcessionMaster::whereDate('cancelDate', $date)->where('status', 0)->with('users')->get();
+        $c_detail = ConcessionMaster::whereBetween('created_at', [ dayStartTime($request->date), dayEndTime($request->date) ])->where('status', 0)->with('users')->get();
         return response()->json($c_detail);
     }
 
@@ -174,7 +174,7 @@ class ReportController extends Controller
     }
     public function concessionSaleByAllUserReq(Request $request){
         $date = date('Y-m-d', strtotime($request->date));
-        $c_detail = ConcessionMaster::whereDate('created_at', $date)->where('status', 1)->with('users')->get();
+        $c_detail = ConcessionMaster::whereBetween('created_at', [ dayStartTime($request->date), dayEndTime($request->date) ])->where('status', 1)->with('users')->get();
         return response()->json($c_detail);
     }
 
@@ -193,14 +193,14 @@ class ReportController extends Controller
         $seatQty = [];
         $movie = [];
         for($i=0; $i<count($screens); $i++){
-            $oneScreen = Booking::whereDate('created_at', $date)->where('status', 1)->where('hold', 0)->where('screen_id', $screens[$i])->with('screens', 'show_times')->get();
+            $oneScreen = Booking::whereBetween('created_at', [ dayStartTime($request->date), dayEndTime($request->date) ])->where('status', 1)->where('hold', 0)->where('screen_id', $screens[$i])->with('screens', 'show_times')->get();
             if( count($oneScreen) > 0){
                 array_push($screenArray, $oneScreen[$i]->screens->name);
             }
         }
         for($x=0; $x<count($screenArray); $x++){
             $id = Screen::where('name', $screenArray[$x])->pluck('id')->first();
-            $show_time_id = Booking::whereDate('created_at', $date)->where('status', 1)->where('hold', 0)->where('screen_id', $id)->with('screens', 'show_times', 'movies')->get();
+            $show_time_id = Booking::whereBetween('created_at', [ dayStartTime($request->date), dayEndTime($request->date) ])->where('status', 1)->where('hold', 0)->where('screen_id', $id)->with('screens', 'show_times', 'movies')->get();
             $ti = [];
             $per = [];
             $perCount = -1;
@@ -227,6 +227,7 @@ class ReportController extends Controller
 
 
     public function currentSeatBookingByDay(){
+        
         return view('pages.admin.reports.ticketReports.currentSeatBookingByDay');
     }
 
@@ -238,7 +239,7 @@ class ReportController extends Controller
     public function advanceBookingByDayReq(Request $request){
         $date = date('Y-m-d', strtotime($request->date));
         $now = date('Y-m-d h:i a'); 
-        $adv = AdvanceBooking::whereDate('created_at', $date)->where('cancel', 0)->with('show_times')->get();
+        $adv = AdvanceBooking::whereBetween('created_at', [ dayStartTime($request->date), dayEndTime($request->date) ])->where('cancel', 0)->with('show_times')->get();
         $show = [];
         $qty = [];
         $show_id = [];
@@ -269,7 +270,7 @@ class ReportController extends Controller
         $show = PrintedTicket::where('key', 'public')
                                 ->where('movie_id', $request->id)
                                 ->where('status', 1)
-                                ->whereDate('created_at', $date)
+                                ->whereBetween('created_at', [ dayStartTime($request->date), dayEndTime($request->date) ])
                                 ->with('show_times', 'screens','movies', 'bookings')
                                 ->orderBy('show_time_id', 'asc')
                                 ->get();
@@ -338,7 +339,7 @@ class ReportController extends Controller
         $show = PrintedTicket::where('key', 'advance')
                                 ->where('movie_id', $request->id)
                                 ->where('status', 1)
-                                ->whereDate('created_at', $date)
+                                ->whereBetween('created_at', [ dayStartTime($request->date), dayEndTime($request->date) ])
                                 ->with('show_times', 'screens','movies')
                                 ->orderBy('show_time_id', 'asc')
                                 ->get();
@@ -382,7 +383,7 @@ class ReportController extends Controller
         $now = date('Y-m-d h:i a');
         $record = [];
 
-        $allUser = PrintedTicket::where('status', 1)->whereDate('created_at', $date)->pluck('user_id')->toArray();
+        $allUser = PrintedTicket::where('status', 1)->whereBetween('created_at', [ dayStartTime($request->date), dayEndTime($request->date) ])->pluck('user_id')->toArray();
         $users_id = unique_array($allUser);
         foreach ($users_id as $id) {
             array_push($record, ['screen'=> Report::getScreenByUserByDate($id , $date)]);

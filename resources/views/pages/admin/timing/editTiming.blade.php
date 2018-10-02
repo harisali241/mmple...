@@ -37,7 +37,29 @@
 				<p style="font-size: 16px; padding: 5px;">These settings change your default settings for the non movie time of each show</p>
 			</div>
 
+
 			<div class="col-md-6">
+				<div class="form-group">
+					<label for="fixed_deal" class="col-sm-4 control-label">Day Start Time: </label>
+					<div class="col-sm-8">
+						 <input type="text" name="dayStartTime" class="date_p form-control" autocomplete="off" required value="{{$timing->dayStartTime}}">
+					</div>
+				</div>
+			</div>
+			<div class="clear"></div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="fixed_deal" class="col-sm-4 control-label">Day End Time: </label>
+					<div class="col-sm-8">
+						 <input type="text" name="dayEndTime" class="date_p form-control" autocomplete="off" required value="{{$timing->dayEndTime}}">
+					</div>
+				</div>
+			</div>
+			<div class="clear"></div>
+				
+
+			<div class="col-md-6" style="margin-top: 20px;">
 				<div class="col-md-12">	
 					<div class="form-group">
 						<label for="timing_cleanup" class="col-sm-4 control-label"><span>* </span>Trailor Duration: </label>
@@ -74,5 +96,21 @@
  </div><!-- form-container -->
 </div>
 </div>
+
+@endsection
+@section('scripts')
+
+<script type="text/javascript">
+	
+		$(".form-container").on('click', '.date_p', function(event) {
+			$('.date_p').datetimepicker({
+				datepicker:false,
+				timepicker:true,
+				format:'H:i',
+				});
+			$('.date_p').datetimepicker({step:10});
+		});
+
+</script>
 
 @endsection

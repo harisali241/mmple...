@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Item;
+use Carbon\Carbon;
 use App\Models\Ticket;
 use App\Models\ShowTime;
 use App\Models\Seat;
 use App\Models\Booking;
 use App\Models\Movie;
+use App\Models\Timing;
 use App\Models\PrintedTicket;
 use App\Models\AdvanceBooking;
 use App\Models\ConcessionMaster;
@@ -77,7 +79,11 @@ class AjaxController extends Controller
                 if($deal->startDateTime <= date('Y-m-d H:i') && $deal->endDateTime >= date('Y-m-d H:i')){
                     if(json_decode(count($deal->days)) != 0){
                         $day = json_decode($deal->days);
-                         if(in_array(date('D'), $day)){
+                        
+                        $dayStartDate = dayStartDate();
+                        $dayEndDate = dayEndDate();
+
+                        if(in_array(date('D',strtotime($dayEndDate)), $day) || in_array(date('D',strtotime($dayStartDate)), $day)){
                             array_push($validDeal, $deal->id);
                             // if($deal->dayStartTime == null || $deal->dayEndTime == null){
                             //     array_push($validDeal, $deal->id);

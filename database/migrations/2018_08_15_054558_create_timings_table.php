@@ -18,6 +18,8 @@ class CreateTimingsTable extends Migration
             $table->integer('trailerDuration');
             $table->integer('intervalDuration');
             $table->integer('cleanUpDuration');
+            $table->time('dayStartTime');
+            $table->time('dayEndTime');
             $table->timestamps();
         });
     }

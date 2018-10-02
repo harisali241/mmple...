@@ -42,7 +42,7 @@ class Report extends Model
 	}
    
 	public static function getScreenByUserByDate($id, $date){
-		$rep = PrintedTicket::whereDate('created_at', $date)->where('user_id', $id)->with('screens')->get();
+		$rep = PrintedTicket::whereBetween('created_at', [ dayStartTime($date), dayEndTime($date) ])->where('user_id', $id)->with('screens')->get();
 		$screen = [];
 		foreach($rep as $re){
 			if(!in_array($re->screens->name, $screen)){
@@ -54,7 +54,7 @@ class Report extends Model
 
 	public static function getTicketQtyByScreenByUserByDate($id, $date, $screen){
 		$screen_id = Screen::where('name', $screen)->pluck('id')->first();
-		$rep = PrintedTicket::whereDate('created_at', $date)
+		$rep = PrintedTicket::whereBetween('created_at', [ dayStartTime($date), dayEndTime($date) ])
 							->where('user_id', $id)
 							->where('screen_id', $screen_id)
 							->get();
@@ -63,7 +63,7 @@ class Report extends Model
 
 	public static function getTicketPriceByScreenByUserByDate($id, $date, $screen){
 		$screen_id = Screen::where('name', $screen)->pluck('id')->first();
-		$rep = PrintedTicket::whereDate('created_at', $date)
+		$rep = PrintedTicket::whereBetween('created_at', [ dayStartTime($date), dayEndTime($date) ])
 							->where('user_id', $id)
 							->where('screen_id', $screen_id)
 							->pluck('price');
@@ -76,7 +76,7 @@ class Report extends Model
 
 	public static function getDealQtyByScreenByUserByDate($id, $date, $screen){
 		$screen_id = Screen::where('name', $screen)->pluck('id')->first();
-		$rep = PrintedTicket::whereDate('created_at', $date)
+		$rep = PrintedTicket::whereBetween('created_at', [ dayStartTime($date), dayEndTime($date) ])
 							->where('user_id', $id)
 							->where('screen_id', $screen_id)
 							->with('bookings')
@@ -208,7 +208,7 @@ class Report extends Model
 		for($i=0; $i<count($screen); $i++){
 			$titleArray = [];
 			$showTime = [];
-			$movie_title = Booking::whereDate('created_at', $date)->with('screens', 'movies')->get()->where('screens.name', $screen[$i]);
+			$movie_title = Booking::whereBetween('created_at', [ dayStartTime($date), dayEndTime($date) ])->with('screens', 'movies')->get()->where('screens.name', $screen[$i]);
 			foreach($movie_title as $title){
 				if(!in_array($title->showTime, $showTime)){
 					array_push($showTime, $title->showTime);

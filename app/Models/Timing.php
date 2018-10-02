@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class Timing extends Model
 {
     protected $fillable = [
-        'trailerDuration', 'intervalDuration', 'cleanUpDuration'
+        'trailerDuration', 'intervalDuration', 'cleanUpDuration', 'dayStartTime', 'dayEndTime'
     ];
 
     public function show_times(){
@@ -21,6 +21,8 @@ class Timing extends Model
     	$timing->trailerDuration = request('trailerDuration');
     	$timing->intervalDuration = request('intervalDuration');
     	$timing->cleanUpDuration = request('cleanUpDuration');
+        $timing->dayStartTime = request('dayStartTime');
+        $timing->dayEndTime = request('dayEndTime');
     	$timing->save();
     }
 }

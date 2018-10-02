@@ -190,7 +190,7 @@
 
 		// Minus Button function for Offer Page
 		$("#content").on('click', '.minus-btn', function() {
-			$(this).parents('.row-el').parent('.row').remove();
+			$(this).parents('.row-el').remove();
 		});
 
 	</script>

@@ -89,6 +89,7 @@
 	  </div>
 	</div><!-- Modal -->
 </div><!-- container -->
+<br><br>
 
 @endsection
 @section('scripts')
