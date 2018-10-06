@@ -161,7 +161,7 @@ class Report extends Model
 		return $movie;
 	}
 
-	public static function getQtyMovies($id){
+	public static function getQtyMovies($id, $user_id){
 		$deal_qty = [];
 		$comp_qty = [];
 		$qty = [];
@@ -169,9 +169,9 @@ class Report extends Model
 		$comp_price = [];
 		$price = [];
 		for($i=0; $i<count($id); $i++){
-			$deal_count = Booking::where('movie_id', $id[$i])->where('deal_id', '!=', null)->with('tickets')->get();
-			$comp_count = Booking::where('movie_id', $id[$i])->where('deal_id', null)->where('isComplimentary', 1)->with('tickets')->get();
-			$count = Booking::where('movie_id', $id[$i])->get();
+			$deal_count = Booking::where('movie_id', $id[$i])->where('user_id', $user_id)->where('deal_id', '!=', null)->where('status', 1)->with('tickets')->get();
+			$comp_count = Booking::where('movie_id', $id[$i])->where('user_id', $user_id)->where('deal_id', null)->where('status', 1)->where('isComplimentary', 1)->with('tickets')->get();
+			$count = Booking::where('movie_id', $id[$i])->where('user_id', $user_id)->where('status', 1)->get();
 			$deal_price_i = 0;
 			$comp_price_i = 0;
 			$price_i = 0;

@@ -174,7 +174,7 @@
 					type: 'json',
 					data: {'id':id, 'remarks':remarks, '_token': '{{csrf_token()}}'},
 					success: function(data){
-
+						//console.log(data);
 						if($.isArray(data)){
 							for(var i=0; i<data.length; i++){
 								$('.removeMe'+data[i]).remove();
@@ -203,7 +203,7 @@
 						type: 'json',
 						data: {'columToSearch':columToSearch, 'wordToSearch':wordToSearch, 'sqlQuery':null, '_token': '{{csrf_token()}}'},
 						success: function(data){
-							console.log(data);
+							//console.log(data);
 							if(data != ''){
 								$('.tableView').show();
 								$('.searchable').append(data);

@@ -38,10 +38,10 @@ Route::resource('logo' , 'LogoController');
 Route::resource('slideShow' , 'SlideShowController');
 Route::resource('setting' , 'SettingController');
 
-
 //**************************** Terminals Route *********************************************
 Route::get('/terminal' , 'BookTicketController@terminal')->name('terminal');
 Route::get('/booking' , 'BookTicketController@booking')->name('bookTicket');
+Route::get('/customerScreen', 'BookTicketController@customerScreen')->name('customerScreen');
 Route::get('/reprintTickets' , 'BookTicketController@reprintTickets')->name('reprintTickets');
 Route::get('/cancelTicket' , 'PrintedTicketController@cancelTicket')->name('cancelTicket');
 Route::get('/cancelLockedSeat' , 'BookTicketController@cancelLockedSeat')->name('cancelLockedSeat');
@@ -108,9 +108,15 @@ Route::get('/printRecentTicket' , 'PrintedTicketController@printRecentTicket')->
 	/**/Route::post('/getShowTimeByMovie', 'AjaxController@getShowTimeByMovie');
 	/**///======Deals================================//
 
+	Route::post('/getSession','AjaxController@getSession');
+	Route::post('/endSessionID','AjaxController@endSession');
+
 //**************************** Ajax Route *********************************************
 
 //**************************** Reports Route ******************************************
+Route::get('profitNloss', 'ReportController@profitNloss')->name('profitNloss');
+Route::post('profitNlossReq', 'ReportController@profitNlossReq');
+
 Route::get('movieReport', 'ReportController@movie');
 Route::get('concessionReport', 'ReportController@concession');
 Route::get('customReport', 'ReportController@custom');

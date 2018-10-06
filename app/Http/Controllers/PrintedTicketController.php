@@ -11,6 +11,7 @@ use App\Models\Movie;
 use App\Models\Screen;
 use App\User;
 use Auth;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class PrintedTicketController extends Controller
 {	
@@ -19,6 +20,8 @@ class PrintedTicketController extends Controller
         $this->middleware('auth');
         //$this->middleware('userPermission')->except('store' , 'update');
     }
+
+
 
     public function viewAndPrint(Request $request){
     	$print = $request->printIT;
@@ -58,6 +61,7 @@ class PrintedTicketController extends Controller
         $movies = Movie::all();
         $screens = Screen::all();
         $users = User::all();
+        //jkkmdd(Image::make('public/assets/header-logo.png')->encode('data-url')) ; 
         return view('pages.terminal.tickets.cancelTicket', compact('movies', 'screens', 'users'));
     }
 

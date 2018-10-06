@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\ShowTime;
 use App\Models\Deal;
+use App\Models\SlideShow;
+
 class BookTicketController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('userPermission');
+        $this->middleware('userPermission')->except('customerScreen');;
     }
 
     public function terminal(){
@@ -51,6 +53,11 @@ class BookTicketController extends Controller
 
     public function cancelLockedSeat(){
         return view('pages.terminal.tickets.cancelLockedSeat');
+    }
+
+    public function customerScreen(){
+        $sliderImg = SlideShow::all();
+        return view('pages.terminal.tickets.userScreen', compact('sliderImg'));
     }
     
 }

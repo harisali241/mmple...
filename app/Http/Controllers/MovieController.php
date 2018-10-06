@@ -6,6 +6,8 @@ use App\Models\Movie;
 use Illuminate\Http\Request;
 use App\Models\Distributer;
 use App\Models\MoviePerson;
+use App\Models\WebMovie;
+use App\Models\Batch;
 use Auth;
 
 class MovieController extends Controller
@@ -22,8 +24,10 @@ class MovieController extends Controller
      */
     public function index()
     {   
-        $movies =  Movie::fetchMovies();
+
+        $movies =  Movie::fetchMovies();Batch::runBatch();
         return view('pages.admin.movie.viewMovies', compact('movies'));
+
     }
 
     /**
@@ -54,7 +58,9 @@ class MovieController extends Controller
             'poster' => 'required'
         ]);
 
-        Movie::createMovie($request);
+        $movie_id = Movie::createMovie($request);
+        Batch::createBatch($movie_id, 'web_movies', 'store');
+        Batch::runBatch();
         
         return redirect('movie/create')->withMessage('Added Movie Sucessfully');
     }
@@ -99,10 +105,11 @@ class MovieController extends Controller
             'distributer_id' => 'required',
             'genre' => 'required',
             'duration' => 'required',
-            'poster' => 'required'
         ]);
-        //dd($movie);
-        Movie::updateMovie($request, $movie);
+
+        $movie_id = Movie::updateMovie($request, $movie);
+        Batch::createBatch($movie_id, 'web_movies', 'update');
+        Batch::runBatch();
         
         return redirect('movie')->withMessage('Update Movie Sucessfully');
     }
@@ -117,6 +124,8 @@ class MovieController extends Controller
     {   
         $msg = Movie::deleteMovie($movie);
         if($msg[0] == 'message'){
+            Batch::createBatch($movie->id, 'web_movies', 'delete');
+            Batch::runBatch();
             return redirect('movie')->with('message', $msg[1]);
         }else{
             return redirect('movie')->withErrors($msg[1]);

@@ -16,8 +16,11 @@ use App\Models\AdvanceBooking;
 use App\Models\ConcessionMaster;
 use App\Models\ConcessionDetail;
 use App\Models\Deal;
+use Session;
 use Auth;
 use View;
+use App\Mail\CancelTicket;
+use Mail;
 
 class AjaxController extends Controller
 {
@@ -51,8 +54,19 @@ class AjaxController extends Controller
         return response()->json($movieStatus);
     }
 
+    public function getSession(){
+        return response()->json(Session::get('id'));
+    }
+    public function endSession(){
+        Session::forget('id');
+    }
+
     public function getScreenSeats(Request $request){
         //dd(date('Y-m-d H:i'));
+
+        Session::forget('id');
+        Session::put('id', $request->screen_id);
+
         $res = ShowTime::where('id',  $request->screen_id)
                         ->where('status', 1)
                         ->with(['bookings' => function($qua){
@@ -302,6 +316,7 @@ class AjaxController extends Controller
     }
     
     public function deleteTickets(Request $request){
+        // return response()->json($request);
         if(is_array($request->id)){
             $ticket = PrintedTicket::whereIn('id', $request->id)->get();
             $arr = [];
@@ -327,8 +342,7 @@ class AjaxController extends Controller
                     $conM->cancelUserId = Auth::user()->id;
                     $conM->cancelDate = date('Y-m-d');
                     $conM->save();
-                }
-                
+                }         
             }
             return response()->json($request->id);
         }else{
@@ -350,7 +364,8 @@ class AjaxController extends Controller
             $book->save();
 
             return response()->json($request->id);
-        }      
+        }
+        Mail::to('harisali241@gmail.com')->send(new CancelTicket($request));
     }
 
 //*******************************Cancel Ticket******************************************//

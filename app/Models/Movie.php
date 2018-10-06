@@ -52,6 +52,9 @@ class Movie extends Model
 
     public static function createMovie(Request $request){
 
+        // $file = $request->file('poster');
+        // dd(Image::make($file)->encode('data-url'));
+
     	$upload_dir = base_path() . '/public/assets/images/uploads/';
         
         if($request->hasFile('poster')){
@@ -90,6 +93,12 @@ class Movie extends Model
     	$movie->user_id = Auth::user()->id;
 
     	$movie->save();
+
+        $id = Movie::where('title', request('title'))
+                    ->orderBy('created_at', 'desc')
+                    ->pluck('id')->first();
+
+        return $id;
 
     }
 
@@ -136,7 +145,7 @@ class Movie extends Model
     	$movie->user_id = Auth::user()->id;
 
     	$movie->save();
-
+        return $movie->id;
     }
 
     public static function deleteMovie(Movie $movie){

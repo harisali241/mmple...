@@ -8,7 +8,23 @@ use App\Models\Item;
 use App\Models\Package;
 use App\Models\PrintedTicket;
 use App\Models\Timing;
+use App\Models\Batch;
 use Carbon\Carbon;
+
+
+function is_connected(){
+	try{
+		$connected = fopen("http://www.google.com:80/","r");
+		return 1;
+	}catch(Exception $e) {
+		return 0;
+	}	
+}
+
+function batch(){
+	Batch::runBatch();
+}
+
 
 function dayStartDate(){
 	$timing = Timing::where('id', 1)->first();

@@ -217,7 +217,7 @@
 	                dataType:'json',
 	                data:{'startDate':startDate, 'endDate':endDate, 'movie_id':movie_id, 'user_id' : user_id , '_token': '{{csrf_token()}}'},
 	                success: function (data) {
-	                	console.log(data);
+	                	//console.log(data);
 						$('.admin-table').show();
 						$('.searchable').html('');
 						$('.d_total').html(0);
@@ -248,7 +248,7 @@
 										</td>
 										<td style="text-align:center;vertical-align:middle;">
 											<span>Qty: `+(data.qtyNprice.qty[x]-data.qtyNprice.deal_qty[x]-data.qtyNprice.comp_qty[x])+`</span><br>
-											<span>Price: `+(data.qtyNprice.price[x]-data.qtyNprice.deal_price[x]-data.qtyNprice.comp_price[x])+`</span>
+											<span>Price: `+(data.qtyNprice.price[x])+`</span>
 										</td>
 										<td style="text-align:center;vertical-align:middle;">
 											<span>Qty: `+data.qtyNprice.comp_qty[x]+`</span><br>
@@ -256,16 +256,16 @@
 										</td>
 										<td style="text-align:center;vertical-align:middle;">
 											<span>Qty: `+data.qtyNprice.qty[x]+`</span><br>
-											<span>Price: `+data.qtyNprice.price[x]+`</span>
+											<span>Price: `+(+data.qtyNprice.price[x] + +data.qtyNprice.comp_price[x] + +data.qtyNprice.deal_price[x])+`</span>
 										</td>
-										<td style="text-align:center;vertical-align:middle;">`+(data.qtyNprice.price[x]-data.qtyNprice.deal_price[x]-data.qtyNprice.comp_price[x])+`</td>
+										<td style="text-align:center;vertical-align:middle;">`+(data.qtyNprice.price[x])+`</td>
 									</tr>
 								`;
-								grandTotal += (data.qtyNprice.price[x]-data.qtyNprice.deal_price[x]-data.qtyNprice.comp_price[x]);
+								grandTotal += (data.qtyNprice.price[x]);
 								d_total += data.qtyNprice.deal_price[x];
-								p_total += (data.qtyNprice.price[x]-data.qtyNprice.deal_price[x]-data.qtyNprice.comp_price[x]);
+								p_total += (data.qtyNprice.price[x]);
 								c_total += data.qtyNprice.comp_price[x];
-								t_total += data.qtyNprice.price[x];
+								t_total += +data.qtyNprice.price[x] + +data.qtyNprice.deal_price[x] + +data.qtyNprice.comp_price[x];
 							}
 						}
 

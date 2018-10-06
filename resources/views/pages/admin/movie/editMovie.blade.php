@@ -72,7 +72,7 @@
 						<div class="form-group">
 							<label for="movie_year" class="col-sm-4 control-label">Release date: </label>
 							<div class="col-sm-8">
-								{!! Form::text('releaseDate' , null ,['id' => 'movie_release_date' ,'class' => 'form-control datetimepicker']) !!}
+								{!! Form::text('releaseDate' , null ,['id' => 'movie_release_date' ,'class' => 'form-control datetimepicker',  'autocomplete'=>'off' ]) !!}
 							</div>
 						</div>
 					</div>
@@ -179,7 +179,7 @@
 					        <div class="form-group">
 								<label for="movie_synopsis" class="col-sm-2 control-label">Image: </label>
 								<div class="col-sm-10">
-									{!! Form::File('poster' , ['class' => 'form-control', 'style' => 'width:100%;height:33px;', 'required' => 'required']) !!}
+									{!! Form::File('poster' , ['class' => 'form-control', 'style' => 'width:100%;height:33px;']) !!}
 								</div>
 							</div>
 						@endif

@@ -384,22 +384,25 @@
 @section('scripts')
 
 <script>
-	var childWindow = "";
-    var newTabUrl="{{url('booking')}}";
+	
+	$( document ).ready(function() {
 
-    function openNewTab(){
-        childWindow = window.open(newTabUrl);
-    }
+		$('#fsModal').on('hidden.bs.modal', function () {
+		 	$.post('endSessionID', {'_token': '{{csrf_token()}}'}, function(data){});
+		});
 
-    // function refreshExistingTab(){
-    //     childWindow.location.href=newTabUrl;
-    // }
+	});
+
 </script>
 
 <script type="text/javascript">
 	
 	
 	$( document ).ready(function() {
+
+		$('.book-ticket-btn').on('click', function(){
+			$(this).parent().find('.screen_id').val()
+		});
 
 	var diabled_popup = $('.is_popup').val();
 	var refresh = true;
@@ -462,7 +465,7 @@
     	event.preventDefault();
     	var id = $(this).next('.screen_id').val();
     	$.post('/getScreenSeats', {'screen_id': id, '_token': '{{csrf_token()}}' },  function(dataArray) {
-	    	console.log(dataArray[1]);
+	    	//console.log(dataArray[1]);
     		//$('.seats-container').html(data.screen_id);
     		var data = dataArray[0];
 	    	var total_rows =  JSON.parse(data.screens.rows)
@@ -738,6 +741,7 @@
 	});
 	
 	$(".seats_btn_cancel").click(function(){
+		$.post('endSessionID', {'_token': '{{csrf_token()}}'}, function(data){});
 	 	$('#fsModal').modal('hide');
 	});
 
@@ -921,7 +925,7 @@
 				},5000);
 			var show_id = $('#selected_show').val();
 			var adv_id = $('.terminal_item').find('.terminal_m_adv_id').val();
-			console.log(adv_id);
+			//console.log(adv_id);
 			$.post('bookTickets', {'showTime_id': show_id, 'adv_id':adv_id, '_token': '{{csrf_token()}}' }, function(data){
 				$('.booking_id').val(JSON.stringify(data));
 				$('.directPrint').val('printIT');

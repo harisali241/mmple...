@@ -38,6 +38,27 @@ class ReportController extends Controller
     }
 
 
+    public function profitNloss(){
+        return view('pages.admin.reports.profitNloss');
+    }
+    public function profitNlossReq(Request $request){
+        $conM = ConcessionMaster::whereBetween('created_at', [date('Y-m-d', strtotime($request->startDate)), date('Y-m-d', strtotime($request->endDate))])->where('status', 1)->pluck('totalAmount');
+        $printedTicket = PrintedTicket::whereBetween('created_at', [date('Y-m-d', strtotime($request->startDate)), date('Y-m-d', strtotime($request->endDate))])->where('status', 1)->pluck('price');
+        $totalCon = 0;
+        $totalPrice = 0;
+        // dd($request);
+        foreach ($conM as $con) {
+            $totalCon += $con;
+        }
+        foreach ($printedTicket as $price) {
+            $totalPrice += $price;
+        }
+
+        $detail = ['con'=>$totalCon, 'ticket'=>$totalPrice];
+        return response()->json($detail);
+    }
+
+
     public function filmsByDistributor(){
     	$distributers = Distributer::all();
     	return view('pages.admin.reports.movieReports.filmsByDistributor', compact('distributers'));
@@ -529,7 +550,7 @@ class ReportController extends Controller
         $userName = User::where('id', $request->user_id)->pluck('firstName')->first();
 
         $movie = Report::getMovies($book);
-        $qtyNprice = Report::getQtyMovies($movie['movie_id']);
+        $qtyNprice = Report::getQtyMovies($movie['movie_id'], $request->user_id);
         
         $detail = ['movie'=>$movie['movie_name'], 'qtyNprice'=>$qtyNprice, 'startDate'=>$startDate, 'endDate'=>$endDate, 'now'=>$now, 'userName'=>$userName];
         return response()->json($detail);

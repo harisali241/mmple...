@@ -31,7 +31,7 @@
 					@if(in_array('terminal',getRoutePath()))<li><a href="{{url('terminal')}}">Terminal</a></li>@endif
 					{{-- <li><a href="view_expense.php">Expense</a></li>
 					<li><a href="view_payroll.php">Payroll</a></li> --}}
-					<li><a href="#.">Profit & loss</a></li>
+					@if(in_array('profitNloss',getRoutePath()))<li><a href="{{url('profitNloss')}}">Profit & loss</a></li>@endif
 					<li><a href="#." class="logout-btn">Logout</a></li>
 					<form action="{{url('logout')}}" method="post" class="logout">
 						{{csrf_field()}}

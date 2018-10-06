@@ -73,7 +73,7 @@
 						<div class="form-group">
 							<label for="movie_year" class="col-sm-4 control-label">Release date: </label>
 							<div class="col-sm-8">
-								<input type="text" name="releaseDate" id="movie_release_date" class="form-control datetimepicker" >
+								<input type="text" name="releaseDate" id="movie_release_date" class="form-control datetimepicker" autocomplete="off">
 							</div>
 						</div>
 					</div>

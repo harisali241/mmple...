@@ -50,6 +50,10 @@
 	<!--add movie actor jquery-->
 	<script type="text/javascript">
 		$(document).ready(function(){
+			setInterval(function() {
+				{{batch()}}
+		  	// After 5 secs
+			}, 600000);
 			$(".logout-btn").click(function(e){
 				e.preventDefault();
 				$('.logout').submit();
