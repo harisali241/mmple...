@@ -131,6 +131,7 @@
 		var checkId = [];
 		var multiRemarks = [];
 		$(document).ready(function(){
+			
 			$('.multiCancel').on('click', function(){
 				checkId = [];
 				multiRemarks = [];
@@ -159,14 +160,16 @@
 				deleteSingle(checkId, multiRemarks);
 				checkId = [];
 				multiRemarks = [];
-
+				$('#hack').show();
 			}else{
 				var remarks = $('#delete'+id_to_delete).find('.remarks').val();
 				deleteSingle(id_to_delete, remarks);
+				$('#hack').show();
 			}
 		});
 
 		function deleteSingle(id, remarks){
+			
 			$(document).ready(function(){
 				$.ajax({
 					url: 'deleteTickets',
@@ -183,7 +186,8 @@
 						}else{	
 							$('.removeMe'+data).remove();
 							$('.modal').modal('toggle');
-						}					
+						}
+						$('#hack').hide();					
 					}
 				});
 			});

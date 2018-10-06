@@ -344,7 +344,10 @@ class AjaxController extends Controller
                     $conM->save();
                 }         
             }
-            return response()->json($request->id);
+            sendCancellationEmail($request);
+            if (!Mail::failures()) {
+                return response()->json(true);
+            }
         }else{
             $ticket = PrintedTicket::where('id', $request->id)->get()->first();
             $seat_id = Seat::where('show_time_id', $ticket->show_time_id)
@@ -363,9 +366,11 @@ class AjaxController extends Controller
             $book->cancelUserId = Auth::user()->id;
             $book->save();
 
-            return response()->json($request->id);
+            sendCancellationEmail($request);
+            if (!Mail::failures()) {
+                return response()->json(true);
+            }
         }
-        Mail::to('harisali241@gmail.com')->send(new CancelTicket($request));
     }
 
 //*******************************Cancel Ticket******************************************//

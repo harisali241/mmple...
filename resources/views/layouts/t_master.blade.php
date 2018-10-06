@@ -23,7 +23,7 @@
   </head>
 
   <body>
-	<div style="display:none !important; background:url('{{asset('images/loading.gif')}}') no-repeat center center rgba(255,255,255,0.5);  top:0; z-index:100000000; left:0; width:100%; height:100%; position:absolute" id="hack"></div>
+	<div style="display:none !important; background:url('{{asset('images/loading.gif')}}') no-repeat center center rgba(255,255,255,0.5);  top:0; z-index:100000000; left:0; width:100%; height:100%; position:fixed" id="hack"></div>
   <!--header-->
 
 		<div class="wrapper">

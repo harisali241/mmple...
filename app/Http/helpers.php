@@ -10,7 +10,7 @@ use App\Models\PrintedTicket;
 use App\Models\Timing;
 use App\Models\Batch;
 use Carbon\Carbon;
-
+use App\Mail\CancelTicket;
 
 function is_connected(){
 	try{
@@ -23,6 +23,10 @@ function is_connected(){
 
 function batch(){
 	Batch::runBatch();
+}
+
+function sendCancellationEmail($request){
+	Mail::to('harisali241@gmail.com')->send(new CancelTicket($request));
 }
 
 
