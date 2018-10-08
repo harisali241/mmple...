@@ -10,7 +10,7 @@
 	
 </head>
 <body>
-
+	
 	@if($errors->any())
 		<div class="col-md-4 col-md-offset-4 paddingTop marginTop" style="margin-top:20px;"><div class="alert alert-danger" role="alert"> Invalid Username / Password </div></div>
 	@endif

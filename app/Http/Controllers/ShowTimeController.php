@@ -9,6 +9,7 @@ use App\Models\Screen;
 use App\Models\Voucher;
 use App\Models\Ticket;
 use App\Models\Seat;
+use App\Models\WebShowTime;
 use App\Models\Batch;
 
 class ShowTimeController extends Controller
@@ -24,7 +25,7 @@ class ShowTimeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {   
         $showTimes =  ShowTime::fetchPublicShowTime();
         $showTimesPag = ShowTime::fetchPublicShowTimePaginated();
         $movies = Movie::all();

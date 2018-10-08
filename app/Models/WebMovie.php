@@ -15,6 +15,9 @@ class WebMovie extends Model
         'title', 'movie_id', 'distributer_id', 'rating', 'releaseDate ', 'genre', 'duration', 'actor', 'role', 'poster', 'synopsis', 'trailor', 'status'
     ];
 
+    public function web_show_times(){
+        return $this->hasMany('App\Models\WebShowTime','web_movie_id');
+    }
 
     public static function createMovie($batch_id, $movie){
         if(is_connected()){

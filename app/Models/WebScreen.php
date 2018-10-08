@@ -13,6 +13,10 @@ class WebScreen extends Model
         'name' , 'screen_id', 'totalSeats', 'houseSeats', 'wheelChairSeats', 'image', 'rows', 'columns'
     ];
 
+    public function web_show_times(){
+        return $this->hasMany('App\Models\WebShowTime', 'web_screen_id');
+    }
+
     public static function createScreen($batch_id, $screen){
     	if(is_connected()){
         	$db = DB::connection('mysql2')
