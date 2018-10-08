@@ -212,7 +212,7 @@
 
 				$('#hack').show();
 				$.ajax({
-	                url: '/ticketSalesByUserReq',
+	                url: baseUrl+'/ticketSalesByUserReq',
 	                method:'POST',
 	                dataType:'json',
 	                data:{'startDate':startDate, 'endDate':endDate, 'movie_id':movie_id, 'user_id' : user_id , '_token': '{{csrf_token()}}'},

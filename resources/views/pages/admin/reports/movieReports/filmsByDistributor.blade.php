@@ -85,7 +85,7 @@
 				//console.log(id);
 				$('#hack').show();
 				$.ajax({
-	                url: '/filmsByDistributorReports',
+	                url: baseUrl+'/filmsByDistributorReports',
 	                method:'POST',
 	                dataType:'json',
 	                data:{ 'id' : id , '_token': '{{csrf_token()}}'},

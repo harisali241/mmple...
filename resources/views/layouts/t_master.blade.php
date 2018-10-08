@@ -49,7 +49,9 @@
 
 	<!--add movie actor jquery-->
 	<script type="text/javascript">
+		var baseUrl = '{{ url('/') }}';
 		$(document).ready(function(){
+			
 			setInterval(function() {
 				{{batch()}}
 		  	// After 5 secs

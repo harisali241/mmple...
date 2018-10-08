@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
+
 class Ticket extends Model
 {
     protected $fillable = [
@@ -35,6 +36,13 @@ class Ticket extends Model
     	$ticket->status = request('status');
 
     	$ticket->save();
+
+        $id = Ticket::where('title', request('title'))
+                    ->orderBy('created_at', 'desc')
+                    ->pluck('id')->first();
+
+        return $id;
+
     }
 
     public static function updateTicket(Request $request, $id){
@@ -50,5 +58,6 @@ class Ticket extends Model
     	$ticket->status = request('status');
 
     	$ticket->save();
+        return $id;
     }
 }

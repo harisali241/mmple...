@@ -52,6 +52,12 @@ class Screen extends Model
     	$screen->columns = json_encode( request('columns') );
 
     	$screen->save();
+
+        $id = Screen::where('name', request('name'))
+                    ->orderBy('created_at', 'desc')
+                    ->pluck('id')->first();
+        return $id;
+
     }
 
     public static function updateScreen(Request $request, Screen $screen){
@@ -84,6 +90,8 @@ class Screen extends Model
     	$screen->columns = json_encode( request('columns') );
 
     	$screen->save();
+
+        return $screen->id;
     }
 
 }

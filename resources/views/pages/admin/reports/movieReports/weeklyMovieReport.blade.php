@@ -141,7 +141,7 @@
 			var id = $('.goRecord').val();
 			
 			$.ajax({
-				url: 'weeklyMovieReports',
+				url: baseUrl+'weeklyMovieReports',
 				method: 'post',
 				dataType: 'json',
 				data:{'id':id, '_token':'{{csrf_token()}}'},

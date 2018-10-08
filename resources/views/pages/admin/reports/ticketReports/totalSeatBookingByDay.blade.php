@@ -171,7 +171,7 @@
 				//console.log(date);
 				$('#hack').show();
 				$.ajax({
-	                url: '/totalSeatBookingByDayReq',
+	                url: baseUrl+'/totalSeatBookingByDayReq',
 	                method:'POST',
 	                dataType:'json',
 	                data:{ 'date' : date , '_token': '{{csrf_token()}}'},

@@ -131,7 +131,7 @@
 			var date = $('.goDate').val();
 			$('#hack').show();
 			$.ajax({
-				url: 'concessionCancellationByDayReq',
+				url: baseUrl+'concessionCancellationByDayReq',
 				method: 'post',
 				dataType: 'json',
 				data:{'date':date, '_token':'{{csrf_token()}}'},

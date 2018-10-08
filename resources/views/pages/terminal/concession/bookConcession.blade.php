@@ -412,7 +412,7 @@
 						con_price.push($(this).find('.con_item_price').val());
 						con_qty.push($(this).find('.con_item_qty').val());		
 				});
-				$.post('/bookCon', {'type_id':con_id, 'type':con_type, 'price':con_price, 'qty':con_qty, 'total_v':total_v, '_token': '{{csrf_token()}}' }, function(data){
+				$.post(baseUrl+'/bookCon', {'type_id':con_id, 'type':con_type, 'price':con_price, 'qty':con_qty, 'total_v':total_v, '_token': '{{csrf_token()}}' }, function(data){
 					subtotalcalc ();
 					$('.expression1').val(0);
 					$('.expression2').val(0);	
@@ -442,7 +442,7 @@
 						con_price.push($(this).find('.con_item_price').val());
 						con_qty.push($(this).find('.con_item_qty').val());				
 				});
-				$.post('/bookCon', {'type_id':con_id, 'type':con_type, 'price':con_price, 'qty':con_qty, 'total_v':total_v, '_token': '{{csrf_token()}}' }, function(data){
+				$.post(baseUrl+'/bookCon', {'type_id':con_id, 'type':con_type, 'price':con_price, 'qty':con_qty, 'total_v':total_v, '_token': '{{csrf_token()}}' }, function(data){
 					subtotalcalc ();
 					$('.expression1').val(0);
 					$('.expression2').val(0);	

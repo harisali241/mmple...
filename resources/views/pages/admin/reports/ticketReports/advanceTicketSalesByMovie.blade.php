@@ -172,7 +172,7 @@
 				var id = $('.goMovie').val();
 				$('#hack').show();
 				$.ajax({
-	                url: '/advanceTicketSalesByMovieReq',
+	                url: baseUrl+'/advanceTicketSalesByMovieReq',
 	                method:'POST',
 	                dataType:'json',
 	                data:{'id':id, 'date' : date , '_token': '{{csrf_token()}}'},

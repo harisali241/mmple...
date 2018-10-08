@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Screen;
 use App\Models\ShowTime;
 use Illuminate\Http\Request;
+use App\Models\Batch;
+use DB;
 
 class ScreenController extends Controller
 {   
@@ -49,7 +51,9 @@ class ScreenController extends Controller
             'columns' => 'required'
         ]);
 
-        Screen::createScreen($request);
+        $screen_id = Screen::createScreen($request);
+        Batch::createBatch($screen_id, 'web_screens', 'store');
+        Batch::runBatch();
         
         return redirect('screen/create')->withMessage('Added Screen Sucessfully');
     }
@@ -93,7 +97,9 @@ class ScreenController extends Controller
             'columns' => 'required'
         ]);
 
-        Screen::updateScreen($request, $screen);
+        $screen_id = Screen::updateScreen($request, $screen);
+        Batch::createBatch($screen_id, 'web_screens', 'update');
+        Batch::runBatch();
         
         return redirect('screen')->withMessage('Update Screen Sucessfully');
     }
@@ -111,6 +117,8 @@ class ScreenController extends Controller
             return redirect('/screen')->withErrors('Screen has assigned showtimes!');
         }else{
             Screen::findOrFail($screen->id)->delete();
+            Batch::createBatch($screen->id, 'web_screens', 'delete');
+            Batch::runBatch();
             return redirect('/screen')->withMessage('Deleted Screen Sucessfully');
         }
         

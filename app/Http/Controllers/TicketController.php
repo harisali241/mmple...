@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use App\Models\ShowTime;
 use Illuminate\Http\Request;
+use App\Models\Batch;
 
 class TicketController extends Controller
 {
@@ -49,7 +50,9 @@ class TicketController extends Controller
             'type' => 'required',
         ]);
 
-        Ticket::createTicket($request);
+        $ticket_id = Ticket::createTicket($request);
+        Batch::createBatch($ticket_id, 'web_tickets', 'store');
+        Batch::runBatch();
         
         return redirect('ticket/create')->withMessage('Added Ticket Sucessfully');
     }
@@ -93,7 +96,10 @@ class TicketController extends Controller
             'type' => 'required',
         ]);
 
-        Ticket::updateTicket($request, $id);
+        $ticket_id = Ticket::updateTicket($request, $id);
+        Batch::createBatch($ticket_id, 'web_tickets', 'update');
+        Batch::runBatch();
+
         return redirect('ticket')->withMessage('Update Ticket Sucessfully');
     }
 
@@ -108,6 +114,8 @@ class TicketController extends Controller
         $s_id = ShowTime::where('ticket_id', $ticket->id)->get();
         if(count($s_id) <= 0){
             Ticket::findOrFail($ticket->id)->delete();
+            Batch::createBatch($ticket->id, 'web_tickets', 'delete');
+            Batch::runBatch();
             return redirect('ticket')->withMessage('Delete Ticket Sucessfully');
         }else{
             return redirect('ticket')->withErrors('Ticket type present in showtimes!');

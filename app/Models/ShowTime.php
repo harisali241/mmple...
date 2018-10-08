@@ -9,11 +9,12 @@ use App\Models\Screen;
 use App\Models\Voucher;
 use App\Models\Ticket;
 use Carbon\Carbon;
+use App\Models\Batch;
 
 class ShowTime extends Model
 {
     protected $fillable = [
-        'movie_id', 'screen_id', 'ticket_id', 'voucher_id', 'timing_id', 'date', 'time', 'day', 'dateTime', 'complimentrySeat', 'key', 'color', 'sale', 'status'
+        'movie_id', 'screen_id', 'ticket_id', 'voucher_id', 'timing_id', 'date', 'time', 'day', 'dateTime', 'endDateTime', 'complimentrySeat', 'key', 'color', 'sale', 'status'
     ];
 
     public function printed_tickets(){
@@ -123,6 +124,13 @@ class ShowTime extends Model
 		    	$showTime->color = $request->color;
 		    	$showTime->status = $request->status;
 		    	$showTime->save();
+
+		    	$show_id = ShowTime::where('time', $showTime->time)
+						    	->orderBy('created_at', 'desc')
+						    	->pluck('id')->first();
+
+		    	Batch::createBatch($show_id, 'web_show_times', 'store');
+        		Batch::runBatch();
 			}
 		}
     }
@@ -158,6 +166,10 @@ class ShowTime extends Model
 	    	$showTime->color = $request->color;
 	    	$showTime->status = $request->status;
 	    	$showTime->save();
+
+	    	Batch::createBatch($showTime->id, 'web_show_times', 'update');
+        	Batch::runBatch();
+
     	}else{
     		return 'DateTime May Conflict';
     	}

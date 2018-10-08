@@ -51,6 +51,7 @@
 	<script src="{{ asset('js/showTime_scripts.js') }}"></script>
 	<!--add movie actor jquery-->
 	<script type="text/javascript">
+	var baseUrl = '{{ url('/') }}';
 		$(document).ready(function(){
 
 			setInterval(function() {

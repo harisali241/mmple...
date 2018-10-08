@@ -125,7 +125,7 @@
 			var date = $('.goRecord').val();
 			$('#hack').show();
 			$.ajax({
-				url: 'packageSalesReq',
+				url: baseUrl+'packageSalesReq',
 				method: 'post',
 				dataType: 'json',
 				data:{'date':date, '_token':'{{csrf_token()}}'},

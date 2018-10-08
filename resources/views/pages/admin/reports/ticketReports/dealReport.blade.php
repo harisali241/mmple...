@@ -179,7 +179,7 @@
 				var id = $('.goUser').val();
 				$('#hack').show();
 				$.ajax({
-	                url: '/dealReportReq',
+	                url: baseUrl+'/dealReportReq',
 	                method:'POST',
 	                dataType:'json',
 	                data:{ 'id':id, 'startDate' : startDate , 'endDate' : endDate , '_token': '{{csrf_token()}}'},

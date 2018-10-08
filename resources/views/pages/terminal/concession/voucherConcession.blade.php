@@ -84,7 +84,7 @@
 		var id = $('.wordToSearch').val();
 		if(id != ''){
 			$.ajax({
-				url: 'voucherRecord',
+				url: baseUrl+'voucherRecord',
 				method: 'post',
 				data: {'id':id, '_token': '{{csrf_token()}}' },
 				dataType: 'json',

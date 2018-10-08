@@ -107,7 +107,7 @@
 			var date = $('.goDate').val();
 			$('#hack').show();
 			$.ajax({
-				url: 'concessionSaleByAllUserReq',
+				url: baseUrl+'concessionSaleByAllUserReq',
 				method: 'post',
 				dataType: 'json',
 				data:{'date':date, '_token':'{{csrf_token()}}'},

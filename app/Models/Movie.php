@@ -157,6 +157,9 @@ class Movie extends Model
         
             File::delete($upload_dir .'/'. $movie->poster);
             File::delete($upload_dir .'/m_'. $movie->poster);
+            if(file_exists("./../web_mmplex/public/uploads/".$movie->poster)){
+                File::delete("./../web_mmplex/public/uploads/".$movie->poster);
+            }
 
             Movie::findOrFail($movie->id)->delete();
             return $msg = [ '0' => 'message', '1' => 'Delete Movie Sucessfully'];

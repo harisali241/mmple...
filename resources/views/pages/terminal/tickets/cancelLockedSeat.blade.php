@@ -123,7 +123,7 @@
 		function deleteSingle(id){
 			$(document).ready(function(){
 				$.ajax({
-					url: 'deleteLockedSeat',
+					url: baseUrl+'deleteLockedSeat',
 					method: 'post',
 					type: 'json',
 					data: {'id':id, '_token': '{{csrf_token()}}'},
@@ -151,7 +151,7 @@
 					var wordToSearch = $('.wordToSearch').val();
 					$('.searchable').html('');
 					$.ajax({
-						url: 'searchCancelSeat',
+						url: baseUrl+'searchCancelSeat',
 						method: 'post',
 						type: 'json',
 						data: {'columToSearch':columToSearch, 'wordToSearch':wordToSearch, '_token': '{{csrf_token()}}'},

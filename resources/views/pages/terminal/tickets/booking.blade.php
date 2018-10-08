@@ -388,7 +388,7 @@
 	$( document ).ready(function() {
 
 		$('#fsModal').on('hidden.bs.modal', function () {
-		 	$.post('endSessionID', {'_token': '{{csrf_token()}}'}, function(data){});
+		 	$.post(baseUrl+'endSessionID', {'_token': '{{csrf_token()}}'}, function(data){});
 		});
 
 	});
@@ -464,7 +464,7 @@
 	$(".movies-showing").on('click', '.book-ticket-btn',function(event) {
     	event.preventDefault();
     	var id = $(this).next('.screen_id').val();
-    	$.post('/getScreenSeats', {'screen_id': id, '_token': '{{csrf_token()}}' },  function(dataArray) {
+    	$.post(baseUrl+'/getScreenSeats', {'screen_id': id, '_token': '{{csrf_token()}}' },  function(dataArray) {
 	    	//console.log(dataArray[1]);
     		//$('.seats-container').html(data.screen_id);
     		var data = dataArray[0];
@@ -610,7 +610,7 @@
 					  }
 				  }
 				},5000);
-	    		$.post('getAllSeat', {'showTime_id': show_id, 'currentSeatNumber': current_val, '_token': '{{csrf_token()}}' }, function(data4){
+	    		$.post(baseUrl+'getAllSeat', {'showTime_id': show_id, 'currentSeatNumber': current_val, '_token': '{{csrf_token()}}' }, function(data4){
 			    	if(data4 == true){
 			    		currentelement.addClass('uncheck');
 			    		This.parent().find('img').attr("src", "{{asset('assets/images/hold_seats.png')}}");
@@ -626,7 +626,7 @@
 			  			$('#locked_warning').hide();
 			    		$('.uncheck').attr('checked', true);
 			    		currentelement.removeClass('uncheck');
-			    		$.post('holdSeats', {'showTime_id': show_id, 'currentSeatNumber': current_val,'ticket_adult':ticket_adult,'allow_comp':allow_comp ,'_token': '{{csrf_token()}}'}, function(data){
+			    		$.post(baseUrl+'holdSeats', {'showTime_id': show_id, 'currentSeatNumber': current_val,'ticket_adult':ticket_adult,'allow_comp':allow_comp ,'_token': '{{csrf_token()}}'}, function(data){
 							//console.log(data);
 							This.parent().find('img').attr("src", "{{asset('assets/images/selecting_seats.png')}}");
 							This.parent().find('img').css('opacity', '1');
@@ -655,7 +655,7 @@
 					  }
 				  }
 				}, 5000);
-	    		$.post('deleteSeat', {'showTime_id': show_id,'currentSeatNumber': current_val, '_token': '{{csrf_token()}}'}, function(data){
+	    		$.post(baseUrl+'deleteSeat', {'showTime_id': show_id,'currentSeatNumber': current_val, '_token': '{{csrf_token()}}'}, function(data){
 					//console.log(data);
 					This.parent().find('img').attr("src", "{{asset('assets/images/empty_seats.png')}}");
 					This.removeClass('current');
@@ -741,7 +741,7 @@
 	});
 	
 	$(".seats_btn_cancel").click(function(){
-		$.post('endSessionID', {'_token': '{{csrf_token()}}'}, function(data){});
+		$.post(baseUrl+'endSessionID', {'_token': '{{csrf_token()}}'}, function(data){});
 	 	$('#fsModal').modal('hide');
 	});
 
@@ -753,7 +753,7 @@
 			$("#hack").hide(0);
 		  }
 		},5000);
-		$.post('cancelAllSelectedSeats', {'showTime_id': show_id, '_token': '{{csrf_token()}}' }, function(data4){
+		$.post(baseUrl+'cancelAllSelectedSeats', {'showTime_id': show_id, '_token': '{{csrf_token()}}' }, function(data4){
 			if(data4){
 				$("#hack").hide();
 				$('#fsModal').modal('hide');
@@ -811,7 +811,7 @@
 	       	}
 	       
 			var qty = 1;
-			$.post('/holdBookingAndGetSeats', {'showTime_id': shw_id, 'deal_id':Alldeal, '_token': '{{csrf_token()}}' },  function(bookings) {
+			$.post(baseUrl+'/holdBookingAndGetSeats', {'showTime_id': shw_id, 'deal_id':Alldeal, '_token': '{{csrf_token()}}' },  function(bookings) {
 				//console.log(bookings);
 
 				$('#terminal').find('.terminal_item').remove();
@@ -861,7 +861,7 @@
 		var This = $(this); 
 		var showTime_id = $(this).parent().parent().parent('.terminal_item').find('.terminal_m_show_id').val();
 		var seatNum = $(this).parent().parent().parent('.terminal_item').find('.terminal_m_seats').val();
-		$.post('/ticketDelete', {'showTime_id': showTime_id , 'seatNum': seatNum, '_token': '{{csrf_token()}}' },  function(data) {
+		$.post(baseUrl+'/ticketDelete', {'showTime_id': showTime_id , 'seatNum': seatNum, '_token': '{{csrf_token()}}' },  function(data) {
 			$(This).parent().parent().parent('.terminal_item').remove();
 			var total_items = $('.terminal_item').length;
 			if(total_items == 0){
@@ -885,7 +885,7 @@
 				$("#hack").hide(0);
 			  }
 			},5000);
- 			$.post('/removeAdvHoldBooking', { '_token': '{{csrf_token()}}' }, function(reload){
+ 			$.post(baseUrl+'/removeAdvHoldBooking', { '_token': '{{csrf_token()}}' }, function(reload){
  				$("#hack").hide();
  				location.reload();
  			});
@@ -897,7 +897,7 @@
 				$("#hack").hide(0);
 			  }
 			},5000);
-			$.post('cancelAllSelectedSeats', {'showTime_id': show_id, '_token': '{{csrf_token()}}' }, function(data4){
+			$.post(baseUrl+'cancelAllSelectedSeats', {'showTime_id': show_id, '_token': '{{csrf_token()}}' }, function(data4){
 				if(data4){
 					$("#hack").hide();
 					$('#fsModal').modal('hide');
@@ -926,7 +926,7 @@
 			var show_id = $('#selected_show').val();
 			var adv_id = $('.terminal_item').find('.terminal_m_adv_id').val();
 			//console.log(adv_id);
-			$.post('bookTickets', {'showTime_id': show_id, 'adv_id':adv_id, '_token': '{{csrf_token()}}' }, function(data){
+			$.post(baseUrl+'bookTickets', {'showTime_id': show_id, 'adv_id':adv_id, '_token': '{{csrf_token()}}' }, function(data){
 				$('.booking_id').val(JSON.stringify(data));
 				$('.directPrint').val('printIT');
 				$('.reeprint').val('');
@@ -951,7 +951,7 @@
 				},5000);
 			var show_id = $('#selected_show').val();
 			var adv_id = $('.terminal_m_adv_id').val();
-			$.post('bookTickets', {'showTime_id': show_id, 'adv_id':adv_id, '_token': '{{csrf_token()}}' }, function(data){
+			$.post(baseUrl+'bookTickets', {'showTime_id': show_id, 'adv_id':adv_id, '_token': '{{csrf_token()}}' }, function(data){
 				$('.booking_id').val(JSON.stringify(data));
 				$('.directPrint').val('');
 				$('.reeprint').val('');

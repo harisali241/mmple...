@@ -186,7 +186,7 @@
 				var id = $('.goMovie').val();
 				//$('#hack').show();
 				$.ajax({
-	                url: '/ticketCancellationByDayReq',
+	                url: baseUrl+'/ticketCancellationByDayReq',
 	                method:'POST',
 	                dataType:'json',
 	                data:{'date' : date , '_token': '{{csrf_token()}}'},

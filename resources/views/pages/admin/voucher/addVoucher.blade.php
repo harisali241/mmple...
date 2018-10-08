@@ -323,7 +323,7 @@
 		    var itemName = $('#'+control_id).val();
 		    //console.log(control_id);
 		  	$.ajax({
-                url: '/getItemPrice',
+                url: baseUrl+'/getItemPrice',
                 method:'POST',
                 dataType:'json',
                 data:{ 'itemName' : itemName , '_token': '{{csrf_token()}}' },
@@ -341,7 +341,7 @@
 		    var ticketPrice = $('#'+control_id).val();
 
 		   $.ajax({
-                url: '/getTicketPrice',
+                url: baseUrl+'/getTicketPrice',
                 method:'POST',
                 dataType:'json',
                 data:{ 'ticketPrice' : ticketPrice , '_token': '{{csrf_token()}}' },

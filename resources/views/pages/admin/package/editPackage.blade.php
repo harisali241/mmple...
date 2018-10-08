@@ -326,7 +326,7 @@
 			    var itemName = $('#'+control_id).val();
 
 			    $.ajax({
-                    url: '/getItemPrice',
+                    url: baseUrl+'/getItemPrice',
                     method:'POST',
                     dataType:'json',
                     data:{ 'itemName' : itemName , '_token': '{{csrf_token()}}' },

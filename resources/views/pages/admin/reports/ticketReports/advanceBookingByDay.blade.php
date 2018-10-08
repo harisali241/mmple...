@@ -157,7 +157,7 @@
 				//console.log(date);
 				//$('#hack').show();
 				$.ajax({
-	                url: '/advanceBookingByDayReq',
+	                url: baseUrl+'/advanceBookingByDayReq',
 	                method:'POST',
 	                dataType:'json',
 	                data:{ 'date' : date , '_token': '{{csrf_token()}}'},

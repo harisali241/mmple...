@@ -142,7 +142,7 @@
 				var id = $('.goMovie').val();
 				$('#hack').show();
 				$.ajax({
-	                url: '/cashInHandByDayReq',
+	                url: baseUrl+'/cashInHandByDayReq',
 	                method:'POST',
 	                dataType:'json',
 	                data:{'id':id, 'date' : date , '_token': '{{csrf_token()}}'},

@@ -169,12 +169,12 @@
 
 		$(".modal-footer").on('click', '.btn_yes',function() {
 			var id_to_delete = $('.id_to_delete').val();
-			console.log(id_to_delete);
-			$.post('ajax.php', {'to_delete': id_to_delete, 'action': 'del_record'}, function(data) {
+			//console.log(id_to_delete);
+			// $.post(baseUrl+'ajax.php', {'to_delete': id_to_delete, 'action': 'del_record'}, function(data) {
 					
-					console.log(data);
-					$("#mainform").find("input[type=text], textarea").val("");
-			});
+			// 		console.log(data);
+			// 		$("#mainform").find("input[type=text], textarea").val("");
+			// });
 		});
 	</script>	
 @endsection

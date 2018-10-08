@@ -332,7 +332,7 @@
 			var html = '';
 			var date = new Date('1776, 6, 4, 12, 30, 0, 0')
 			$.ajax({
-				url: '/getShowTimeByMovie',
+				url: baseUrl+'/getShowTimeByMovie',
 				method: 'post',
 				dataType: 'json',
 				data: {'id':id, '_token':'{{csrf_token()}}'},

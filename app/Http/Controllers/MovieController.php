@@ -9,6 +9,7 @@ use App\Models\MoviePerson;
 use App\Models\WebMovie;
 use App\Models\Batch;
 use Auth;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class MovieController extends Controller
 {   
@@ -24,8 +25,7 @@ class MovieController extends Controller
      */
     public function index()
     {   
-
-        $movies =  Movie::fetchMovies();Batch::runBatch();
+        $movies =  Movie::fetchMovies();
         return view('pages.admin.movie.viewMovies', compact('movies'));
 
     }

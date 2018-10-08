@@ -141,7 +141,7 @@
 			if(date != null && id != null){
 				$('#hack').show();
 				$.ajax({
-					url: 'singleItemSalesReq',
+					url: baseUrl+'singleItemSalesReq',
 					method: 'post',
 					dataType: 'json',
 					data:{'date':date, 'id':id, '_token':'{{csrf_token()}}'},

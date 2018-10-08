@@ -9,6 +9,7 @@ use App\Models\Screen;
 use App\Models\Voucher;
 use App\Models\Ticket;
 use App\Models\Seat;
+use App\Models\Batch;
 
 class ShowTimeController extends Controller
 {   
@@ -172,6 +173,8 @@ class ShowTimeController extends Controller
 
         if(count($s_id) <= 0){
             ShowTime::findOrFail($showTime->id)->delete();
+            Batch::createBatch($showTime->id, 'web_show_times', 'delete');
+            Batch::runBatch();
             return redirect('showTime')->withMessage('Delete Show Time Sucessfully');
         }else{
             return redirect('showTime')->withErrors('Sorry Showtime has tickets booked!');

@@ -172,7 +172,7 @@
 			
 			$(document).ready(function(){
 				$.ajax({
-					url: 'deleteTickets',
+					url: baseUrl+'deleteTickets',
 					method: 'post',
 					type: 'json',
 					data: {'id':id, 'remarks':remarks, '_token': '{{csrf_token()}}'},
@@ -202,7 +202,7 @@
 					var wordToSearch = $('.wordToSearch').val();
 					$('.searchable').html('');
 					$.ajax({
-						url: 'searchCancelTicket',
+						url: baseUrl+'searchCancelTicket',
 						method: 'post',
 						type: 'json',
 						data: {'columToSearch':columToSearch, 'wordToSearch':wordToSearch, 'sqlQuery':null, '_token': '{{csrf_token()}}'},
@@ -292,7 +292,7 @@
 
 				var sqlQuery = ' status = "1" '+movie_id+screen_id+user_id;
 				$.ajax({
-					url: 'searchCancelTicket',
+					url: baseUrl+'searchCancelTicket',
 					method: 'post',
 					type: 'json',
 					data: {'sqlQuery':sqlQuery, 'c_date':c_date, '_token': '{{csrf_token()}}'},

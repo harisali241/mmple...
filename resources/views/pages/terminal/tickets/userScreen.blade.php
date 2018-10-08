@@ -97,12 +97,12 @@
 		 
 		setInterval(function() {
 					
-	 		$.post('/getSession', {'_token': '{{csrf_token()}}' },  function(session) {
+	 		$.post(baseUrl+'/getSession', {'_token': '{{csrf_token()}}' },  function(session) {
 	 			var id = session;
 	 			if(id.length > 0){
 	 				$('.welcome').hide();
 	 				$('#seat_diagram').show();
-		 			$.post('/getScreenSeats', {'screen_id': id, '_token': '{{csrf_token()}}' },  function(dataArray) {
+		 			$.post(baseUrl+'/getScreenSeats', {'screen_id': id, '_token': '{{csrf_token()}}' },  function(dataArray) {
 				    	console.log(dataArray[1]);
 			    		//$('.seats-container').html(data.screen_id);
 			    		var data = dataArray[0];

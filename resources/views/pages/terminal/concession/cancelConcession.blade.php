@@ -96,7 +96,7 @@
 
 	$(".modal-footer").on('click', '.btn_yes',function() {
 		$.ajax({
-			url: 'cancelCon',
+			url: baseUrl+'cancelCon',
 			method: 'post',
 			data: {'id':id, 'remarks':remarks, '_token': '{{csrf_token()}}' },
 			dataType: 'json',

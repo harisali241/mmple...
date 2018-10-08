@@ -108,7 +108,7 @@
 				
 				//$('#hack').show();
 				$.ajax({
-	                url: '/profitNlossReq',
+	                url: baseUrl+'/profitNlossReq',
 	                method:'POST',
 	                dataType:'json',
 	                data:{ 'startDate' : startDate , 'endDate':endDate, '_token': '{{csrf_token()}}'},

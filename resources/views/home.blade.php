@@ -377,7 +377,7 @@
 		$(document).ready(function(){
 			setInterval(function() {
 				$.ajax({
-					url: 'dashbordMovies',
+					url: baseUrl+'dashbordMovies',
 					method: 'post',
 					type: 'json',
 					data: {'_token': '{{csrf_token()}}'},
@@ -387,7 +387,7 @@
 				});
 
 				$.ajax({
-					url: 'dashbordTopSellers',
+					url: baseUrl+'dashbordTopSellers',
 					method: 'post',
 					type: 'json',
 					data: {'_token': '{{csrf_token()}}'},
@@ -397,7 +397,7 @@
 				});
 
 				$.ajax({
-					url: 'dashbordticketSales',
+					url: baseUrl+'dashbordticketSales',
 					method: 'post',
 					type: 'json',
 					data: {'_token': '{{csrf_token()}}'},
@@ -407,7 +407,7 @@
 				});
 
 				$.ajax({
-					url: 'dashbordConSales',
+					url: baseUrl+'dashbordConSales',
 					method: 'post',
 					type: 'json',
 					data: {'_token': '{{csrf_token()}}'},
