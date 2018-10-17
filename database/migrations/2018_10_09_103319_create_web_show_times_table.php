@@ -26,12 +26,12 @@ class CreateWebShowTimesTable extends Migration
             $table->string('day');
             $table->boolean('complimentrySeat');
             $table->string('key');
-            $table->integer('sale')->nullable();
+            $table->string('sale')->nullable();
             $table->timestamps();
 
-            $table->foreign('movie_id')->references('id')->on('web_movies');
-            $table->foreign('screen_id')->references('id')->on('web_screens');
-            $table->foreign('ticket_id')->references('id')->on('web_tickets');
+            // $table->foreign('ticket_id')->references('ticket_id')->on('web_tickets');
+            // $table->foreign('movie_id')->references('movie_id')->on('web_movies');
+            // $table->foreign('screen_id')->references('screen_id')->on('web_screens');
         });
     }
 

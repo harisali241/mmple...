@@ -92,6 +92,7 @@
 
 <script>
     $( document ).ready(function() {
+    	var baseUrl = '{{url('/')}}';
 		var its_seats = [];
         $('#seat_diagram').show();
 		 

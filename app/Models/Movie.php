@@ -20,16 +20,16 @@ class Movie extends Model
         return $this->hasMany('App\Models\PrintedTicket');
     }
 
+    public function show_times(){
+        return $this->hasMany('App\Models\ShowTime','movie_id');
+    }
+    
     public function deals(){
         return $this->hasMany('App\Models\Deal');
     }
 
     public function distributers(){
-    	return $this->belongsTo('App\Models\Distributer','distributer_id');
-    }
-
-    public function show_times(){
-        return $this->hasMany('App\Models\ShowTime','movie_id');
+        return $this->belongsTo('App\Models\Distributer','distributer_id');
     }
 
     public function bookings(){

@@ -206,9 +206,7 @@
 									</div>
 								</div>
 							@endforeach
-
-							{{-- </div>
- --}}						
+						
 						</div>
 						
 						<div class="clear"></div>

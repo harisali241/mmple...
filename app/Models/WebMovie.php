@@ -16,7 +16,7 @@ class WebMovie extends Model
     ];
 
     public function web_show_times(){
-        return $this->hasMany('App\Models\WebShowTime','web_movie_id');
+        return $this->hasMany('App\Models\WebShowTime','movie_id');
     }
 
     public static function createMovie($batch_id, $movie){

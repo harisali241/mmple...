@@ -49,7 +49,7 @@
 
 	<!--add movie actor jquery-->
 	<script type="text/javascript">
-		var baseUrl = '{{ url('/') }}';
+		var baseUrl = '{{ url('/') }}/';
 		$(document).ready(function(){
 			
 			setInterval(function() {
